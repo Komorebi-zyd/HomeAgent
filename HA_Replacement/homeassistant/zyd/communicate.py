@@ -4,8 +4,9 @@ import socket
 import json
 import time
 
-IP = "192.168.56.1"
-PORT = 8080
+# HomeAgent IP and Port
+IP = "192.168.77.254"
+PORT = 8081
 BUFFER_SIZE = 1048576
 COMMUNICATE_FLOW = [
     "get_entities",

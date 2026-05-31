@@ -1,0 +1,340 @@
+- id: '1741536976427'
+  alias: R1-Door Open Lights
+  description: When the door lock is opened, if the brightness sensor is below 50lux,
+    turn on the outside door light and porch light.
+  trigger:
+  - platform: state
+    entity_id:
+    - input_boolean.zhi_neng_men_suo
+    from: 'off'
+    to: 'on'
+  condition:
+  - condition: numeric_state
+    entity_id: input_number.ke_ting_liang_du_chuan_gan_qi
+    below: 50
+  action:
+  - service: input_boolean.turn_on
+    metadata: {}
+    data: {}
+    target:
+      entity_id:
+      - input_boolean.men_wai_deng
+      - input_boolean.men_lang_deng
+  mode: single
+- id: '1741537129329'
+  alias: R15-Lights Off When Leaving Home
+  description: When the door lock is closed, turn off the porch light and greenhouse light.
+  trigger:
+  - platform: state
+    entity_id:
+    - input_boolean.zhi_neng_men_suo
+    from: 'on'
+    to: 'off'
+  condition: []
+  action:
+  - service: input_boolean.turn_off
+    metadata: {}
+    data: {}
+    target:
+      entity_id: input_boolean.men_lang_deng
+  - service: input_boolean.turn_off
+    metadata: {}
+    data: {}
+    target:
+      entity_id: input_boolean.wen_shi_deng
+  mode: single
+- id: '1741537258059'
+  alias: R3-Porch Light
+  description: When the porch motion sensor is triggered, if the brightness sensor
+    is below 50lux, turn on the porch light.
+  trigger:
+  - platform: state
+    entity_id:
+    - input_button.yun_dong_chuan_gan_qi
+    from:
+    to:
+  condition:
+  - condition: numeric_state
+    entity_id: input_number.liang_du_chuan_gan_qi_2
+    below: 50
+  action:
+  - service: input_boolean.turn_on
+    metadata: {}
+    data: {}
+    target:
+      entity_id: input_boolean.men_lang_deng
+  mode: single
+- id: '1741537430474'
+  alias: R4-Living Room Light
+  description: When the living room motion sensor is triggered, if the brightness
+    sensor is below 50lux, turn on the living room light.
+  trigger:
+  - platform: state
+    entity_id:
+    - input_button.yun_dong_chuan_gan_qi_2
+    from:
+    to:
+  condition:
+  - condition: numeric_state
+    entity_id: input_number.ke_ting_liang_du_chuan_gan_qi
+    below: 50
+  action:
+  - service: input_boolean.turn_on
+    metadata: {}
+    data: {}
+    target:
+      entity_id: input_boolean.deng
+  mode: single
+- id: '1741537509709'
+  alias: R9-Kitchen Light
+  description: When the kitchen motion sensor is triggered, if the brightness sensor
+    is below 50lux, turn on the kitchen light.
+  trigger:
+  - platform: state
+    entity_id:
+    - input_button.yun_dong_chuan_gan_qi_3
+    from:
+    to:
+  condition:
+  - condition: numeric_state
+    entity_id: input_number.chu_fang_liang_du_chuan_gan_qi
+    below: 50
+  action:
+  - service: input_boolean.turn_on
+    metadata: {}
+    data: {}
+    target:
+      entity_id: input_boolean.deng_2
+  mode: single
+- id: '1741537625039'
+  alias: R12-Bedroom Light
+  description: When the bedroom motion sensor is triggered, if the brightness sensor
+    is below 50lux, turn on the bedroom light.
+  trigger:
+  - platform: state
+    entity_id:
+    - input_button.wo_shi_yun_dong_chuan_gan_qi
+    from:
+    to:
+  condition:
+  - condition: numeric_state
+    entity_id: input_number.wo_shi_liang_du_chuan_gan_qi
+    below: 50
+  action:
+  - service: input_boolean.turn_on
+    metadata: {}
+    data: {}
+    target:
+      entity_id: input_boolean.wo_shi_deng
+  mode: single
+- id: '1741537673053'
+  alias: R2-Greenhouse Light Re-enable and Door Unlock
+  description: If the greenhouse light is turned off, open the door lock and turn the porch light back on.
+  trigger:
+  - platform: state
+    entity_id:
+    - input_boolean.wen_shi_deng
+    from: 'on'
+    to: 'off'
+  condition: []
+  action:
+  - service: input_boolean.turn_on
+    metadata: {}
+    data: {}
+    target:
+      entity_id: input_boolean.zhi_neng_men_suo # 打开门锁
+  mode: single
+- id: '1741537793019'
+  alias: R5-Humidifier On
+  description: When the living room humidity is below 40%, and the humidifier is off,
+    turn on the living room humidifier.
+  trigger:
+  - platform: numeric_state
+    entity_id:
+    - input_number.ke_ting_shi_du_chuan_gan_qi
+    below: 40
+  condition:
+  - condition: state
+    entity_id: input_boolean.ke_ting_jia_shi_qi
+    state: 'off'
+  action:
+  - service: input_boolean.turn_on
+    metadata: {}
+    data: {}
+    target:
+      entity_id: input_boolean.ke_ting_jia_shi_qi
+  mode: single
+- id: '1741537872533'
+  alias: R6-Humidifier Off
+  description: When the living room humidity is above 60%, and the humidifier is on,
+    turn off the living room humidifier.
+  trigger:
+  - platform: numeric_state
+    entity_id:
+    - input_number.ke_ting_shi_du_chuan_gan_qi
+    above: 60
+  condition:
+  - condition: state
+    entity_id: input_boolean.ke_ting_jia_shi_qi
+    state: 'on'
+  action:
+  - service: input_boolean.turn_off
+    target:
+      entity_id: input_boolean.ke_ting_jia_shi_qi
+    data: {}
+  mode: single
+- id: '1741538058532'
+  alias: R7-Living Room Heating
+  description: When the living room temperature is below 24℃, and the living room
+    floor heating is off, turn on the living room floor heating.
+  trigger:
+  - platform: numeric_state
+    entity_id:
+    - input_number.ke_ting_wen_du_chuan_gan_qi
+    below: 24
+  condition:
+  - condition: state
+    entity_id: input_boolean.ke_ting_di_nuan
+    state: 'off'
+  action:
+  - service: input_boolean.turn_on
+    metadata: {}
+    data: {}
+    target:
+      entity_id: input_boolean.ke_ting_di_nuan
+  mode: single
+- id: '1741538133764'
+  alias: R8-Living Room Cooling
+  description: When the living room temperature is above 30℃, and the living room
+    air conditioner is off, turn on the living room air conditioner and set it to
+    27℃.
+  trigger:
+  - platform: numeric_state
+    entity_id:
+    - input_number.ke_ting_wen_du_chuan_gan_qi
+    above: 30
+  condition:
+  - condition: state
+    entity_id: input_boolean.ke_ting_kong_diao_kai_guan
+    state: 'off'
+  action:
+  - service: input_boolean.turn_on
+    metadata: {}
+    data: {}
+    target:
+      entity_id: input_boolean.ke_ting_kong_diao_kai_guan
+  - service: input_number.set_value
+    metadata: {}
+    data:
+      value: 27
+    target:
+      entity_id: input_number.ke_ting_kong_diao_shu_zhi
+  mode: single
+- id: '1741538310528'
+  alias: R10-Water Shutoff
+  description: When the water leak sensor is triggered, turn off the central water
+    valve.
+  trigger:
+  - platform: state
+    entity_id:
+    - input_boolean.chu_fang_lou_shui_chuan_gan_qi
+    from: 'off'
+    to: 'on'
+  condition: []
+  action:
+  - service: input_boolean.turn_off
+    metadata: {}
+    data: {}
+    target:
+      entity_id: input_boolean.zhong_yang_shui_fa
+  mode: single
+- id: '1741538409237'
+  alias: R11-Fire Suppression
+  description: When the smoke alarm is turned on, turn on the fire sprinkler.
+  trigger:
+  - platform: state
+    entity_id:
+    - input_boolean.chu_fang_yan_wu_bao_jing_qi
+    from: 'off'
+    to: 'on'
+  condition: []
+  action:
+  - service: input_boolean.turn_on
+    metadata: {}
+    data: {}
+    target:
+      entity_id: input_boolean.xiao_fang_pen_lin_tou
+  mode: single
+- id: '1741538698986'
+  alias: R13-Bedroom Heating
+  description: At 7 PM, turn on the bedroom heating.
+  trigger:
+  - platform: numeric_state
+    entity_id:
+    - input_datetime.xi_tong_shi_jian
+    attribute: hour
+    above: 19
+  condition: []
+  action:
+  - service: input_boolean.turn_on
+    metadata: {}
+    data: {}
+    target:
+      entity_id: input_boolean.wo_shi_nuan_qi
+  mode: single
+- id: '1741538821346'
+  alias: R14-Bedroom Window
+  description: When the bedroom temperature reaches 30℃, open the window and turn
+    off the heating.
+  trigger:
+  - platform: numeric_state
+    entity_id:
+    - input_number.wo_shi_wen_du_chuan_gan_qi
+    above: 30
+  condition: []
+  action:
+  - service: input_boolean.turn_on
+    metadata: {}
+    data: {}
+    target:
+      entity_id: input_boolean.wo_shi_chuang_hu
+  - service: input_boolean.turn_off
+    target:
+      entity_id: input_boolean.wo_shi_nuan_qi
+    data: {}
+  mode: single
+- id: '1741538884366'
+  alias: R16-Greenhouse Heating
+  description: At 7 PM, turn on the greenhouse heating.
+  trigger:
+  - platform: time
+    at: input_datetime.xi_tong_shi_jian
+  condition: []
+  action:
+  - service: input_boolean.turn_on
+    metadata: {}
+    data: {}
+    target:
+      entity_id: input_boolean.wen_shi_nuan_qi
+  mode: single
+- id: '1741538950856'
+  alias: R17-Greenhouse Window
+  description: When the greenhouse temperature reaches 32℃, open the window and turn
+    off the heating.
+  trigger:
+  - platform: numeric_state
+    entity_id:
+    - input_number.greenhouse_temperature_sensor
+    above: 30
+  condition: []
+  action:
+  - service: input_boolean.turn_on
+    metadata: {}
+    data: {}
+    target:
+      entity_id: input_boolean.wen_shi_chuang_hu
+  - service: input_boolean.turn_off
+    data: {}
+    target:
+      entity_id: input_boolean.wen_shi_nuan_qi
+  mode: single

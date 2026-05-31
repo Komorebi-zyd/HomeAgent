@@ -1,0 +1,13 @@
+{
+  "version": 1,
+  "minor_version": 1,
+  "key": "auth_provider.homeassistant",
+  "data": {
+    "users": [
+      {
+        "username": "cst-zyd",
+        "password": "JDJiJDEyJEVBb3NXYzFRQnJNU3NQU0VBWjZlc08vcUx4WVB0YjF0WTgxVmE3bUtyb0RjZEQ3bGI1V05h"
+      }
+    ]
+  }
+}

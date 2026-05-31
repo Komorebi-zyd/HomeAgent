@@ -1,0 +1,108 @@
+{
+  "version": 1,
+  "minor_version": 1,
+  "key": "input_number",
+  "data": {
+    "items": [
+      {
+        "id": "liang_du_chuan_gan_qi",
+        "min": 0.0,
+        "max": 100.0,
+        "name": "Outside Light Sensor",
+        "icon": "mdi:alarm-light-outline",
+        "mode": "slider",
+        "step": 1.0
+      },
+      {
+        "id": "liang_du_chuan_gan_qi_2",
+        "min": 0.0,
+        "max": 100.0,
+        "name": "Porch Light Sensor",
+        "icon": "mdi:alarm-light-outline",
+        "mode": "slider",
+        "step": 1.0
+      },
+      {
+        "id": "ke_ting_shi_du_chuan_gan_qi",
+        "min": 0.0,
+        "max": 100.0,
+        "name": "Living Room Humidity Sensor",
+        "icon": "mdi:cloud-percent-outline",
+        "mode": "slider",
+        "step": 1.0
+      },
+      {
+        "id": "ke_ting_wen_du_chuan_gan_qi",
+        "min": 0.0,
+        "max": 100.0,
+        "name": "Living Room Temperature Sensor",
+        "icon": "mdi:car-brake-temperature",
+        "mode": "slider",
+        "step": 1.0
+      },
+      {
+        "id": "ke_ting_kong_diao_shu_zhi",
+        "min": 0.0,
+        "max": 100.0,
+        "name": "Living Room Air Conditioner Value",
+        "icon": "mdi:air-conditioner",
+        "mode": "slider",
+        "step": 1.0
+      },
+      {
+        "id": "chu_fang_liang_du_chuan_gan_qi",
+        "min": 0.0,
+        "max": 100.0,
+        "name": "Kitchen Light Sensor",
+        "icon": "mdi:alarm-light-outline",
+        "mode": "slider",
+        "step": 1.0
+      },
+      {
+        "id": "wo_shi_liang_du_chuan_gan_qi",
+        "min": 0.0,
+        "max": 100.0,
+        "name": "Bedroom Light Sensor",
+        "icon": "mdi:alarm-light-outline",
+        "mode": "slider",
+        "step": 1.0
+      },
+      {
+        "id": "wo_shi_wen_du_chuan_gan_qi",
+        "min": 0.0,
+        "max": 100.0,
+        "name": "Bedroom Temperature Sensor",
+        "icon": "mdi:car-brake-temperature",
+        "mode": "slider",
+        "step": 1.0
+      },
+      {
+        "id": "ke_ting_liang_du_chuan_gan_qi",
+        "min": 0.0,
+        "max": 100.0,
+        "name": "Living Room Light Sensor",
+        "icon": "mdi:alarm-light-outline",
+        "mode": "slider",
+        "step": 1.0
+      },
+      {
+        "id": "greenhouse_temperature_sensor",
+        "min": 0.0,
+        "max": 100.0,
+        "name": "Greenhouse Temperature Sensor",
+        "icon": "mdi:car-brake-temperature",
+        "mode": "slider",
+        "step": 1.0
+      },
+      {
+        "id": "wen_shi_liang_du_chuan_gan_qi",
+        "min": 0.0,
+        "max": 100.0,
+        "name": "Light Sensor",
+        "icon": "mdi:alarm-light-outline",
+        "step": 1.0,
+        "mode": "slider"
+      }
+    ]
+  }
+}

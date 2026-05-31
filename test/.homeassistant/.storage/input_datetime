@@ -1,0 +1,16 @@
+{
+  "version": 1,
+  "minor_version": 1,
+  "key": "input_datetime",
+  "data": {
+    "items": [
+      {
+        "id": "xi_tong_shi_jian",
+        "has_date": false,
+        "name": "System time",
+        "icon": "mdi:home-clock",
+        "has_time": true
+      }
+    ]
+  }
+}

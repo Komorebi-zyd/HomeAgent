@@ -1,0 +1,198 @@
+{
+  "version": 1,
+  "minor_version": 1,
+  "key": "core.config_entries",
+  "data": {
+    "entries": [
+      {
+        "entry_id": "c89af8bb9b37fd55aa6993177a8df77a",
+        "version": 1,
+        "minor_version": 1,
+        "domain": "sun",
+        "title": "Sun",
+        "data": {},
+        "options": {},
+        "pref_disable_new_entities": false,
+        "pref_disable_polling": false,
+        "source": "import",
+        "unique_id": null,
+        "disabled_by": null
+      },
+      {
+        "entry_id": "426630aa23cdd3d669da1c75913bdecc",
+        "version": 1,
+        "minor_version": 1,
+        "domain": "shopping_list",
+        "title": "Shopping list",
+        "data": {},
+        "options": {},
+        "pref_disable_new_entities": false,
+        "pref_disable_polling": false,
+        "source": "onboarding",
+        "unique_id": "shopping_list",
+        "disabled_by": null
+      },
+      {
+        "entry_id": "314db3c5242bc1817f01c11b2216734b",
+        "version": 1,
+        "minor_version": 1,
+        "domain": "google_translate",
+        "title": "Google Translate text-to-speech",
+        "data": {
+          "language": "en",
+          "tld": "com"
+        },
+        "options": {},
+        "pref_disable_new_entities": false,
+        "pref_disable_polling": false,
+        "source": "onboarding",
+        "unique_id": null,
+        "disabled_by": null
+      },
+      {
+        "entry_id": "ec8b5d29408cf8f2303ea41e5afca2eb",
+        "version": 1,
+        "minor_version": 1,
+        "domain": "mobile_app",
+        "title": "V2001A",
+        "data": {
+          "app_id": "io.homeassistant.companion.android",
+          "app_name": "Home Assistant",
+          "app_version": "2024.2.3-full (12198)",
+          "device_name": "V2001A",
+          "manufacturer": "vivo",
+          "model": "V2001A",
+          "os_name": "Android",
+          "os_version": "33",
+          "supports_encryption": false,
+          "app_data": {
+            "push_websocket_channel": true
+          },
+          "device_id": "0c9131eb4dfcd915",
+          "webhook_id": "d99af71545ed3ba015d98d4097c843d5357efbb92c95d5dd60e116492b6f93b9",
+          "user_id": "37f89dcc73f94eeb9f50625e8a7298d9"
+        },
+        "options": {},
+        "pref_disable_new_entities": false,
+        "pref_disable_polling": false,
+        "source": "registration",
+        "unique_id": "io.homeassistant.companion.android-0c9131eb4dfcd915",
+        "disabled_by": null
+      },
+      {
+        "entry_id": "76fcd00c8948fa8160008efb5dc8807e",
+        "version": 1,
+        "minor_version": 1,
+        "domain": "dlna_dmr",
+        "title": "ZYD-DESKTOP",
+        "data": {
+          "url": "http://192.168.137.1:2869/upnphost/udhisapi.dll?content=uuid:9d7d6ee9-a428-4710-bc3e-1d0f0aecaf39",
+          "device_id": "uuid:9d7d6ee9-a428-4710-bc3e-1d0f0aecaf39",
+          "type": "urn:schemas-upnp-org:device:MediaRenderer:1",
+          "mac": "3a:68:93:95:22:48"
+        },
+        "options": {},
+        "pref_disable_new_entities": false,
+        "pref_disable_polling": false,
+        "source": "ssdp",
+        "unique_id": "uuid:9d7d6ee9-a428-4710-bc3e-1d0f0aecaf39",
+        "disabled_by": null
+      },
+      {
+        "entry_id": "fbfb5fdb3bcfa7fad6a46dcc07b2c27a",
+        "version": 1,
+        "minor_version": 1,
+        "domain": "dlna_dmr",
+        "title": "ZYD-DESKTOP",
+        "data": {
+          "url": "http://192.168.137.1:2869/upnphost/udhisapi.dll?content=uuid:56f491ca-76f1-42b0-b47e-e20f4487983c",
+          "device_id": "uuid:56f491ca-76f1-42b0-b47e-e20f4487983c",
+          "type": "urn:schemas-upnp-org:device:MediaRenderer:1",
+          "mac": "3a:68:93:95:22:48"
+        },
+        "options": {},
+        "pref_disable_new_entities": false,
+        "pref_disable_polling": false,
+        "source": "ignore",
+        "unique_id": "uuid:56f491ca-76f1-42b0-b47e-e20f4487983c",
+        "disabled_by": null
+      },
+      {
+        "entry_id": "0629584ba41d4140e187f736095ca5d6",
+        "version": 1,
+        "minor_version": 1,
+        "domain": "dlna_dmr",
+        "title": "ZYD-DESKTOP",
+        "data": {
+          "url": "http://192.168.137.1:2869/upnphost/udhisapi.dll?content=uuid:d4f81067-8185-4422-8425-25c316588bde",
+          "device_id": "uuid:d4f81067-8185-4422-8425-25c316588bde",
+          "type": "urn:schemas-upnp-org:device:MediaRenderer:1",
+          "mac": "3a:68:93:95:22:48"
+        },
+        "options": {},
+        "pref_disable_new_entities": false,
+        "pref_disable_polling": false,
+        "source": "ignore",
+        "unique_id": "uuid:d4f81067-8185-4422-8425-25c316588bde",
+        "disabled_by": null
+      },
+      {
+        "entry_id": "2a1968fff3bdf82828c90dc8f683f390",
+        "version": 1,
+        "minor_version": 1,
+        "domain": "dlna_dmr",
+        "title": "ZYD-DESKTOP",
+        "data": {
+          "url": "http://192.168.137.1:2869/upnphost/udhisapi.dll?content=uuid:324be5f8-a9f6-4b1a-ae09-02cc8924f4ca",
+          "device_id": "uuid:324be5f8-a9f6-4b1a-ae09-02cc8924f4ca",
+          "type": "urn:schemas-upnp-org:device:MediaRenderer:1",
+          "mac": "3a:68:93:95:22:48"
+        },
+        "options": {},
+        "pref_disable_new_entities": false,
+        "pref_disable_polling": false,
+        "source": "ignore",
+        "unique_id": "uuid:324be5f8-a9f6-4b1a-ae09-02cc8924f4ca",
+        "disabled_by": null
+      },
+      {
+        "entry_id": "3974b1467ddded591b8634073ec449ee",
+        "version": 1,
+        "minor_version": 1,
+        "domain": "dlna_dmr",
+        "title": "ZYD-DESKTOP",
+        "data": {
+          "url": "http://192.168.137.1:2869/upnphost/udhisapi.dll?content=uuid:abd904e9-b609-4e08-a9b1-a328e072aefe",
+          "device_id": "uuid:abd904e9-b609-4e08-a9b1-a328e072aefe",
+          "type": "urn:schemas-upnp-org:device:MediaRenderer:1",
+          "mac": "3a:68:93:95:22:48"
+        },
+        "options": {},
+        "pref_disable_new_entities": false,
+        "pref_disable_polling": false,
+        "source": "ignore",
+        "unique_id": "uuid:abd904e9-b609-4e08-a9b1-a328e072aefe",
+        "disabled_by": null
+      },
+      {
+        "entry_id": "bc83d358013f3b2d28ade9c9bce10857",
+        "version": 1,
+        "minor_version": 1,
+        "domain": "dlna_dmr",
+        "title": "fe80::823a:1f34:619c:df85%2",
+        "data": {
+          "url": "http://192.168.137.1:2869/upnphost/udhisapi.dll?content=uuid:0d705f88-afbf-46a9-b08c-f408bc1ede50",
+          "device_id": "uuid:0d705f88-afbf-46a9-b08c-f408bc1ede50",
+          "type": "urn:schemas-upnp-org:device:MediaRenderer:1",
+          "mac": "3a:68:93:95:22:48"
+        },
+        "options": {},
+        "pref_disable_new_entities": false,
+        "pref_disable_polling": false,
+        "source": "ignore",
+        "unique_id": "uuid:0d705f88-afbf-46a9-b08c-f408bc1ede50",
+        "disabled_by": null
+      }
+    ]
+  }
+}

@@ -1,0 +1,35 @@
+{
+    "version": 1,
+    "minor_version": 1,
+    "key": "input_button",
+    "data": {
+      "items": [
+        {
+          "id": "yun_dong_chuan_gan_qi",
+          "name": "Porch Motion Sensor",
+          "icon": "mdi:motion-sensor"
+        },
+        {
+          "id": "yun_dong_chuan_gan_qi_2",
+          "name": "Living Room Motion Sensor",
+          "icon": "mdi:motion-sensor"
+        },
+        {
+          "id": "yun_dong_chuan_gan_qi_3",
+          "name": "Kitchen Motion Sensor",
+          "icon": "mdi:motion-sensor"
+        },
+        {
+          "id": "yun_dong_chuan_gan_qi_5",
+          "name": "Greenhouse Motion Sensor",
+          "icon": "mdi:motion-sensor"
+        },
+        {
+          "id": "wo_shi_yun_dong_chuan_gan_qi",
+          "name": "Bedroom Motion Sensor",
+          "icon": "mdi:motion-sensor"
+        }
+      ]
+    }
+  }
+  

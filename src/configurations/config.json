@@ -1,0 +1,30 @@
+{
+  "system_path": {
+    "home_path": "./configurations/home",
+    "image_path": "./images"
+  },
+  "input_files": {
+    "automations": "./configurations/automations.yaml"
+  },
+  "output_files": {
+    "devices": "devices.json",
+    "channels": "channels.json",
+    "zones": "zones.json",
+    "tcae": "tcae.json",
+    "rule_association_graph": "rule_association_graph.json",
+    "normal_config": "normal_config.json",
+    "unexpected_state_transition_graph": "unexpected_state_transition_graph.json"
+  },
+  "channels": [
+    "temperature",
+    "humidity",
+    "pressure",
+    "light",
+    "sound",
+    "motion"
+  ],
+  "system_prompts": {
+    "channels_binding": "",
+    "normal_config": ""
+  }
+}

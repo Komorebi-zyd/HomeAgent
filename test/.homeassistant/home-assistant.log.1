@@ -1,0 +1,26 @@
+2026-05-26 12:37:23.247 WARNING (Recorder) [homeassistant.components.recorder.util] The system could not validate that the sqlite3 database at //home/cst-zyd/.homeassistant/home-assistant_v2.db was shutdown cleanly
+2026-05-26 12:37:23.273 WARNING (Recorder) [homeassistant.components.recorder.util] Ended unfinished session (id=534 from 2026-05-26 04:36:32.971371)
+2026-05-26 12:37:35.334 WARNING (MainThread) [homeassistant.components.media_player] Setup of media_player platform dlna_dmr is taking over 10 seconds.
+2026-05-26 12:37:42.515 WARNING (MainThread) [homeassistant.bootstrap] Support for the running Python version 3.11.6 is deprecated and will be removed in Home Assistant 2024.4; Please upgrade Python to 3.12
+2026-05-26 12:38:49.594 ERROR (MainThread) [root] Uncaught exception
+Traceback (most recent call last):
+  File "/srv/homeassistant/bin/hass", line 8, in <module>
+    sys.exit(main())
+             ^^^^^^
+  File "/srv/homeassistant/lib/python3.11/site-packages/homeassistant/__main__.py", line 209, in main
+    exit_code = runner.run(runtime_conf)
+                ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/srv/homeassistant/lib/python3.11/site-packages/homeassistant/runner.py", line 188, in run
+    return loop.run_until_complete(setup_and_run_hass(runtime_config))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.11/asyncio/base_events.py", line 640, in run_until_complete
+    self.run_forever()
+  File "/usr/lib/python3.11/asyncio/base_events.py", line 607, in run_forever
+    self._run_once()
+  File "/usr/lib/python3.11/asyncio/base_events.py", line 1884, in _run_once
+    event_list = self._selector.select(timeout)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.11/selectors.py", line 468, in select
+    fd_event_list = self._selector.poll(timeout, max_ev)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+KeyboardInterrupt

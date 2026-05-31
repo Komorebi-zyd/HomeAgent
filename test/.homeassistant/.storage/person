@@ -1,0 +1,18 @@
+{
+  "version": 2,
+  "minor_version": 1,
+  "key": "person",
+  "data": {
+    "items": [
+      {
+        "id": "cst_zyd",
+        "name": "cst-zyd",
+        "user_id": "37f89dcc73f94eeb9f50625e8a7298d9",
+        "device_trackers": [
+          "device_tracker.v2001a"
+        ],
+        "picture": null
+      }
+    ]
+  }
+}

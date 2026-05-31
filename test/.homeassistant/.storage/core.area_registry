@@ -1,0 +1,58 @@
+{
+  "version": 1,
+  "minor_version": 4,
+  "key": "core.area_registry",
+  "data": {
+    "areas": [
+      {
+        "aliases": [],
+        "icon": null,
+        "id": "ke_ting",
+        "name": "Living Room",
+        "picture": null
+      },
+      {
+        "aliases": [],
+        "icon": null,
+        "id": "chu_fang",
+        "name": "Kitchen",
+        "picture": null
+      },
+      {
+        "aliases": [],
+        "icon": null,
+        "id": "wo_shi",
+        "name": "Bedroom",
+        "picture": null
+      },
+      {
+        "aliases": [],
+        "icon": null,
+        "id": "men_wai",
+        "name": "Outdoor",
+        "picture": null
+      },
+      {
+        "aliases": [],
+        "icon": null,
+        "id": "men_lang",
+        "name": "Porch",
+        "picture": null
+      },
+      {
+        "aliases": [],
+        "icon": null,
+        "id": "wen_shi",
+        "name": "Greenhouse",
+        "picture": null
+      },
+      {
+        "aliases": [],
+        "icon": "mdi:home",
+        "id": "xi_tong",
+        "name": "System",
+        "picture": null
+      }
+    ]
+  }
+}

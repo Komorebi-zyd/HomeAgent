@@ -1,0 +1,4 @@
+2026-05-26 12:38:53.253 WARNING (Recorder) [homeassistant.components.recorder.util] The system could not validate that the sqlite3 database at //home/cst-zyd/.homeassistant/home-assistant_v2.db was shutdown cleanly
+2026-05-26 12:38:53.295 WARNING (Recorder) [homeassistant.components.recorder.util] Ended unfinished session (id=535 from 2026-05-26 04:37:23.242895)
+2026-05-26 12:39:05.466 WARNING (MainThread) [homeassistant.components.media_player] Setup of media_player platform dlna_dmr is taking over 10 seconds.
+2026-05-26 12:39:12.512 WARNING (MainThread) [homeassistant.bootstrap] Support for the running Python version 3.11.6 is deprecated and will be removed in Home Assistant 2024.4; Please upgrade Python to 3.12

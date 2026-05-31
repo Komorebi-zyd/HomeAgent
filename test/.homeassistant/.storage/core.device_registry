@@ -1,0 +1,89 @@
+{
+  "version": 1,
+  "minor_version": 4,
+  "key": "core.device_registry",
+  "data": {
+    "devices": [
+      {
+        "area_id": null,
+        "config_entries": [
+          "c89af8bb9b37fd55aa6993177a8df77a"
+        ],
+        "configuration_url": null,
+        "connections": [],
+        "disabled_by": null,
+        "entry_type": "service",
+        "hw_version": null,
+        "id": "4a811c62b0384e5197f3a71244cd10f8",
+        "identifiers": [
+          [
+            "sun",
+            "c89af8bb9b37fd55aa6993177a8df77a"
+          ]
+        ],
+        "manufacturer": null,
+        "model": null,
+        "name_by_user": null,
+        "name": "Sun",
+        "serial_number": null,
+        "sw_version": null,
+        "via_device_id": null
+      },
+      {
+        "area_id": null,
+        "config_entries": [
+          "ec8b5d29408cf8f2303ea41e5afca2eb"
+        ],
+        "configuration_url": null,
+        "connections": [],
+        "disabled_by": null,
+        "entry_type": null,
+        "hw_version": null,
+        "id": "c652785e81a81abd8e36997f0a468b7c",
+        "identifiers": [
+          [
+            "mobile_app",
+            "0c9131eb4dfcd915"
+          ]
+        ],
+        "manufacturer": "vivo",
+        "model": "V2001A",
+        "name_by_user": null,
+        "name": "V2001A",
+        "serial_number": null,
+        "sw_version": "33",
+        "via_device_id": null
+      },
+      {
+        "area_id": "ke_ting",
+        "config_entries": [
+          "76fcd00c8948fa8160008efb5dc8807e"
+        ],
+        "configuration_url": null,
+        "connections": [
+          [
+            "mac",
+            "3a:68:93:95:22:48"
+          ],
+          [
+            "upnp",
+            "uuid:9d7d6ee9-a428-4710-bc3e-1d0f0aecaf39"
+          ]
+        ],
+        "disabled_by": null,
+        "entry_type": null,
+        "hw_version": null,
+        "id": "dc9fa82bed606db87ad482c0991c823f",
+        "identifiers": [],
+        "manufacturer": "Microsoft Corporation",
+        "model": "Windows Digital Media Renderer",
+        "name_by_user": null,
+        "name": "ZYD-DESKTOP",
+        "serial_number": null,
+        "sw_version": null,
+        "via_device_id": null
+      }
+    ],
+    "deleted_devices": []
+  }
+}

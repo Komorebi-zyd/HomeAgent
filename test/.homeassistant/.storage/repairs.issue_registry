@@ -1,0 +1,16 @@
+{
+  "version": 1,
+  "minor_version": 2,
+  "key": "repairs.issue_registry",
+  "data": {
+    "issues": [
+      {
+        "created": "2024-02-22T13:33:22.656531+00:00",
+        "dismissed_version": "2024.2.2",
+        "domain": "homeassistant",
+        "is_persistent": false,
+        "issue_id": "python_version"
+      }
+    ]
+  }
+}

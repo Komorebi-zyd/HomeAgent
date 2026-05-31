@@ -1,0 +1,94 @@
+{
+  "version": 1,
+  "minor_version": 1,
+  "key": "input_boolean",
+  "data": {
+    "items": [
+      {
+        "id": "men_wai_deng",
+        "name": "Outside Door Light",
+        "icon": "mdi:globe-light-outline"
+      },
+      {
+        "id": "men_lang_deng",
+        "name": "Porch Light",
+        "icon": "mdi:ceiling-light-outline"
+      },
+      {
+        "id": "deng",
+        "name": "Living Room Light",
+        "icon": "mdi:vanity-light"
+      },
+      {
+        "id": "deng_2",
+        "name": "Kitchen Light",
+        "icon": "mdi:ceiling-light"
+      },
+      {
+        "id": "ke_ting_jia_shi_qi",
+        "name": "Living Room Humidifier",
+        "icon": "mdi:air-humidifier"
+      },
+      {
+        "id": "ke_ting_di_nuan",
+        "name": "Living Room Floor Heating",
+        "icon": "mdi:heating-coil"
+      },
+      {
+        "id": "ke_ting_kong_diao_kai_guan",
+        "name": "Living Room Air Conditioner Switch",
+        "icon": "mdi:air-conditioner"
+      },
+      {
+        "id": "chu_fang_lou_shui_chuan_gan_qi",
+        "name": "Kitchen Water Leak Sensor",
+        "icon": "mdi:pipe-leak"
+      },
+      {
+        "id": "xiao_fang_pen_lin_tou",
+        "name": "Fire Sprinkler",
+        "icon": "mdi:sprinkler-fire"
+      },
+      {
+        "id": "wo_shi_deng",
+        "name": "Bedroom Light",
+        "icon": "mdi:dome-light"
+      },
+      {
+        "id": "wo_shi_nuan_qi",
+        "name": "Bedroom Heater",
+        "icon": "mdi:radiator"
+      },
+      {
+        "id": "wo_shi_chuang_hu",
+        "name": "Bedroom Window",
+        "icon": "mdi:window-closed-variant"
+      },
+      {
+        "id": "wen_shi_deng",
+        "name": "Greenhouse Light",
+        "icon": "mdi:ceiling-fan-light"
+      },
+      {
+        "id": "wen_shi_nuan_qi",
+        "name": "Greenhouse Heater",
+        "icon": "mdi:radiator"
+      },
+      {
+        "id": "wen_shi_chuang_hu",
+        "name": "Greenhouse Window",
+        "icon": "mdi:roller-shade"
+      },
+      {
+        "id": "zhi_neng_men_suo",
+        "name": "Smart Door Lock",
+        "icon": "mdi:lock"
+      },
+      {
+        "id": "chu_fang_yan_wu_bao_jing_qi",
+        "name": "Kitchen Smoke Alarm",
+        "icon": "mdi:smoke"
+      }
+    ]
+  }
+}
