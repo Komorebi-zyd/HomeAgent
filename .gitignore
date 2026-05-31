@@ -1,2 +1,5 @@
 ex-paper.pdf
 *.pptx
+__pycache__/
+*.py[cod]
+src/.env
