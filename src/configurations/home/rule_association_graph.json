@@ -1,0 +1,2191 @@
+{
+  "schema_version": "1.0",
+  "generated_at": "2026-05-31T18:06:48.728690+00:00",
+  "graph_type": "Rule Association Graph",
+  "abbreviation": "RAG",
+  "nodes": [
+    {
+      "node_id": "automation.r10_water_shutoff::A",
+      "node_type": "action",
+      "label": "R10-Water Shutoff / Action",
+      "rule_uid": "automation.r10_water_shutoff",
+      "rule_alias": "R10-Water Shutoff",
+      "component": "A"
+    },
+    {
+      "node_id": "automation.r10_water_shutoff::T",
+      "node_type": "trigger",
+      "label": "R10-Water Shutoff / Trigger",
+      "rule_uid": "automation.r10_water_shutoff",
+      "rule_alias": "R10-Water Shutoff",
+      "component": "T"
+    },
+    {
+      "node_id": "automation.r11_fire_suppression::A",
+      "node_type": "action",
+      "label": "R11-Fire Suppression / Action",
+      "rule_uid": "automation.r11_fire_suppression",
+      "rule_alias": "R11-Fire Suppression",
+      "component": "A"
+    },
+    {
+      "node_id": "automation.r11_fire_suppression::T",
+      "node_type": "trigger",
+      "label": "R11-Fire Suppression / Trigger",
+      "rule_uid": "automation.r11_fire_suppression",
+      "rule_alias": "R11-Fire Suppression",
+      "component": "T"
+    },
+    {
+      "node_id": "automation.r12_bedroom_light::A",
+      "node_type": "action",
+      "label": "R12-Bedroom Light / Action",
+      "rule_uid": "automation.r12_bedroom_light",
+      "rule_alias": "R12-Bedroom Light",
+      "component": "A"
+    },
+    {
+      "node_id": "automation.r12_bedroom_light::C",
+      "node_type": "condition",
+      "label": "R12-Bedroom Light / Condition",
+      "rule_uid": "automation.r12_bedroom_light",
+      "rule_alias": "R12-Bedroom Light",
+      "component": "C"
+    },
+    {
+      "node_id": "automation.r12_bedroom_light::T",
+      "node_type": "trigger",
+      "label": "R12-Bedroom Light / Trigger",
+      "rule_uid": "automation.r12_bedroom_light",
+      "rule_alias": "R12-Bedroom Light",
+      "component": "T"
+    },
+    {
+      "node_id": "automation.r13_bedroom_heating::A",
+      "node_type": "action",
+      "label": "R13-Bedroom Heating / Action",
+      "rule_uid": "automation.r13_bedroom_heating",
+      "rule_alias": "R13-Bedroom Heating",
+      "component": "A"
+    },
+    {
+      "node_id": "automation.r13_bedroom_heating::T",
+      "node_type": "trigger",
+      "label": "R13-Bedroom Heating / Trigger",
+      "rule_uid": "automation.r13_bedroom_heating",
+      "rule_alias": "R13-Bedroom Heating",
+      "component": "T"
+    },
+    {
+      "node_id": "automation.r14_bedroom_window::A",
+      "node_type": "action",
+      "label": "R14-Bedroom Window / Action",
+      "rule_uid": "automation.r14_bedroom_window",
+      "rule_alias": "R14-Bedroom Window",
+      "component": "A"
+    },
+    {
+      "node_id": "automation.r14_bedroom_window::T",
+      "node_type": "trigger",
+      "label": "R14-Bedroom Window / Trigger",
+      "rule_uid": "automation.r14_bedroom_window",
+      "rule_alias": "R14-Bedroom Window",
+      "component": "T"
+    },
+    {
+      "node_id": "automation.r15_lights_off_when_leaving_home::A",
+      "node_type": "action",
+      "label": "R15-Lights Off When Leaving Home / Action",
+      "rule_uid": "automation.r15_lights_off_when_leaving_home",
+      "rule_alias": "R15-Lights Off When Leaving Home",
+      "component": "A"
+    },
+    {
+      "node_id": "automation.r15_lights_off_when_leaving_home::T",
+      "node_type": "trigger",
+      "label": "R15-Lights Off When Leaving Home / Trigger",
+      "rule_uid": "automation.r15_lights_off_when_leaving_home",
+      "rule_alias": "R15-Lights Off When Leaving Home",
+      "component": "T"
+    },
+    {
+      "node_id": "automation.r16_greenhouse_heating::A",
+      "node_type": "action",
+      "label": "R16-Greenhouse Heating / Action",
+      "rule_uid": "automation.r16_greenhouse_heating",
+      "rule_alias": "R16-Greenhouse Heating",
+      "component": "A"
+    },
+    {
+      "node_id": "automation.r16_greenhouse_heating::T",
+      "node_type": "trigger",
+      "label": "R16-Greenhouse Heating / Trigger",
+      "rule_uid": "automation.r16_greenhouse_heating",
+      "rule_alias": "R16-Greenhouse Heating",
+      "component": "T"
+    },
+    {
+      "node_id": "automation.r17_greenhouse_window::A",
+      "node_type": "action",
+      "label": "R17-Greenhouse Window / Action",
+      "rule_uid": "automation.r17_greenhouse_window",
+      "rule_alias": "R17-Greenhouse Window",
+      "component": "A"
+    },
+    {
+      "node_id": "automation.r17_greenhouse_window::T",
+      "node_type": "trigger",
+      "label": "R17-Greenhouse Window / Trigger",
+      "rule_uid": "automation.r17_greenhouse_window",
+      "rule_alias": "R17-Greenhouse Window",
+      "component": "T"
+    },
+    {
+      "node_id": "automation.r1_door_open_lights::A",
+      "node_type": "action",
+      "label": "R1-Door Open Lights / Action",
+      "rule_uid": "automation.r1_door_open_lights",
+      "rule_alias": "R1-Door Open Lights",
+      "component": "A"
+    },
+    {
+      "node_id": "automation.r1_door_open_lights::C",
+      "node_type": "condition",
+      "label": "R1-Door Open Lights / Condition",
+      "rule_uid": "automation.r1_door_open_lights",
+      "rule_alias": "R1-Door Open Lights",
+      "component": "C"
+    },
+    {
+      "node_id": "automation.r1_door_open_lights::T",
+      "node_type": "trigger",
+      "label": "R1-Door Open Lights / Trigger",
+      "rule_uid": "automation.r1_door_open_lights",
+      "rule_alias": "R1-Door Open Lights",
+      "component": "T"
+    },
+    {
+      "node_id": "automation.r2_greenhouse_light_re_enable_and_door_unlock::A",
+      "node_type": "action",
+      "label": "R2-Greenhouse Light Re-enable and Door Unlock / Action",
+      "rule_uid": "automation.r2_greenhouse_light_re_enable_and_door_unlock",
+      "rule_alias": "R2-Greenhouse Light Re-enable and Door Unlock",
+      "component": "A"
+    },
+    {
+      "node_id": "automation.r2_greenhouse_light_re_enable_and_door_unlock::T",
+      "node_type": "trigger",
+      "label": "R2-Greenhouse Light Re-enable and Door Unlock / Trigger",
+      "rule_uid": "automation.r2_greenhouse_light_re_enable_and_door_unlock",
+      "rule_alias": "R2-Greenhouse Light Re-enable and Door Unlock",
+      "component": "T"
+    },
+    {
+      "node_id": "automation.r3_porch_light::A",
+      "node_type": "action",
+      "label": "R3-Porch Light / Action",
+      "rule_uid": "automation.r3_porch_light",
+      "rule_alias": "R3-Porch Light",
+      "component": "A"
+    },
+    {
+      "node_id": "automation.r3_porch_light::C",
+      "node_type": "condition",
+      "label": "R3-Porch Light / Condition",
+      "rule_uid": "automation.r3_porch_light",
+      "rule_alias": "R3-Porch Light",
+      "component": "C"
+    },
+    {
+      "node_id": "automation.r3_porch_light::T",
+      "node_type": "trigger",
+      "label": "R3-Porch Light / Trigger",
+      "rule_uid": "automation.r3_porch_light",
+      "rule_alias": "R3-Porch Light",
+      "component": "T"
+    },
+    {
+      "node_id": "automation.r4_living_room_light::A",
+      "node_type": "action",
+      "label": "R4-Living Room Light / Action",
+      "rule_uid": "automation.r4_living_room_light",
+      "rule_alias": "R4-Living Room Light",
+      "component": "A"
+    },
+    {
+      "node_id": "automation.r4_living_room_light::C",
+      "node_type": "condition",
+      "label": "R4-Living Room Light / Condition",
+      "rule_uid": "automation.r4_living_room_light",
+      "rule_alias": "R4-Living Room Light",
+      "component": "C"
+    },
+    {
+      "node_id": "automation.r4_living_room_light::T",
+      "node_type": "trigger",
+      "label": "R4-Living Room Light / Trigger",
+      "rule_uid": "automation.r4_living_room_light",
+      "rule_alias": "R4-Living Room Light",
+      "component": "T"
+    },
+    {
+      "node_id": "automation.r5_humidifier_on::A",
+      "node_type": "action",
+      "label": "R5-Humidifier On / Action",
+      "rule_uid": "automation.r5_humidifier_on",
+      "rule_alias": "R5-Humidifier On",
+      "component": "A"
+    },
+    {
+      "node_id": "automation.r5_humidifier_on::C",
+      "node_type": "condition",
+      "label": "R5-Humidifier On / Condition",
+      "rule_uid": "automation.r5_humidifier_on",
+      "rule_alias": "R5-Humidifier On",
+      "component": "C"
+    },
+    {
+      "node_id": "automation.r5_humidifier_on::T",
+      "node_type": "trigger",
+      "label": "R5-Humidifier On / Trigger",
+      "rule_uid": "automation.r5_humidifier_on",
+      "rule_alias": "R5-Humidifier On",
+      "component": "T"
+    },
+    {
+      "node_id": "automation.r6_humidifier_off::A",
+      "node_type": "action",
+      "label": "R6-Humidifier Off / Action",
+      "rule_uid": "automation.r6_humidifier_off",
+      "rule_alias": "R6-Humidifier Off",
+      "component": "A"
+    },
+    {
+      "node_id": "automation.r6_humidifier_off::C",
+      "node_type": "condition",
+      "label": "R6-Humidifier Off / Condition",
+      "rule_uid": "automation.r6_humidifier_off",
+      "rule_alias": "R6-Humidifier Off",
+      "component": "C"
+    },
+    {
+      "node_id": "automation.r6_humidifier_off::T",
+      "node_type": "trigger",
+      "label": "R6-Humidifier Off / Trigger",
+      "rule_uid": "automation.r6_humidifier_off",
+      "rule_alias": "R6-Humidifier Off",
+      "component": "T"
+    },
+    {
+      "node_id": "automation.r7_living_room_heating::A",
+      "node_type": "action",
+      "label": "R7-Living Room Heating / Action",
+      "rule_uid": "automation.r7_living_room_heating",
+      "rule_alias": "R7-Living Room Heating",
+      "component": "A"
+    },
+    {
+      "node_id": "automation.r7_living_room_heating::C",
+      "node_type": "condition",
+      "label": "R7-Living Room Heating / Condition",
+      "rule_uid": "automation.r7_living_room_heating",
+      "rule_alias": "R7-Living Room Heating",
+      "component": "C"
+    },
+    {
+      "node_id": "automation.r7_living_room_heating::T",
+      "node_type": "trigger",
+      "label": "R7-Living Room Heating / Trigger",
+      "rule_uid": "automation.r7_living_room_heating",
+      "rule_alias": "R7-Living Room Heating",
+      "component": "T"
+    },
+    {
+      "node_id": "automation.r8_living_room_cooling::A",
+      "node_type": "action",
+      "label": "R8-Living Room Cooling / Action",
+      "rule_uid": "automation.r8_living_room_cooling",
+      "rule_alias": "R8-Living Room Cooling",
+      "component": "A"
+    },
+    {
+      "node_id": "automation.r8_living_room_cooling::C",
+      "node_type": "condition",
+      "label": "R8-Living Room Cooling / Condition",
+      "rule_uid": "automation.r8_living_room_cooling",
+      "rule_alias": "R8-Living Room Cooling",
+      "component": "C"
+    },
+    {
+      "node_id": "automation.r8_living_room_cooling::T",
+      "node_type": "trigger",
+      "label": "R8-Living Room Cooling / Trigger",
+      "rule_uid": "automation.r8_living_room_cooling",
+      "rule_alias": "R8-Living Room Cooling",
+      "component": "T"
+    },
+    {
+      "node_id": "automation.r9_kitchen_light::A",
+      "node_type": "action",
+      "label": "R9-Kitchen Light / Action",
+      "rule_uid": "automation.r9_kitchen_light",
+      "rule_alias": "R9-Kitchen Light",
+      "component": "A"
+    },
+    {
+      "node_id": "automation.r9_kitchen_light::C",
+      "node_type": "condition",
+      "label": "R9-Kitchen Light / Condition",
+      "rule_uid": "automation.r9_kitchen_light",
+      "rule_alias": "R9-Kitchen Light",
+      "component": "C"
+    },
+    {
+      "node_id": "automation.r9_kitchen_light::T",
+      "node_type": "trigger",
+      "label": "R9-Kitchen Light / Trigger",
+      "rule_uid": "automation.r9_kitchen_light",
+      "rule_alias": "R9-Kitchen Light",
+      "component": "T"
+    },
+    {
+      "node_id": "env::home::humidity",
+      "node_type": "environment",
+      "label": "home / humidity",
+      "zone": "home",
+      "channel": "humidity"
+    },
+    {
+      "node_id": "env::home::light",
+      "node_type": "environment",
+      "label": "home / light",
+      "zone": "home",
+      "channel": "light"
+    },
+    {
+      "node_id": "env::home::smoke",
+      "node_type": "environment",
+      "label": "home / smoke",
+      "zone": "home",
+      "channel": "smoke"
+    },
+    {
+      "node_id": "env::home::temperature",
+      "node_type": "environment",
+      "label": "home / temperature",
+      "zone": "home",
+      "channel": "temperature"
+    },
+    {
+      "node_id": "env::home::water_flow",
+      "node_type": "environment",
+      "label": "home / water_flow",
+      "zone": "home",
+      "channel": "water_flow"
+    }
+  ],
+  "edges": [
+    {
+      "edge_id": "e00001",
+      "source": "automation.r10_water_shutoff::A",
+      "target": "env::home::water_flow",
+      "edge_group": "assoc",
+      "kind": "env-association",
+      "polarity": -1,
+      "metadata": {
+        "rule_from": "automation.r10_water_shutoff",
+        "effect_entity_id": "input_boolean.zhong_yang_shui_fa",
+        "effect_operation": "turn_off",
+        "zone": "home",
+        "channel": "water_flow",
+        "direction": "-1",
+        "mu": 1,
+        "lambda": 0,
+        "duration": "inf",
+        "confidence": 0.95,
+        "reason": "Closing valve stops water supply.",
+        "effect_entity_id_display": "input_boolean.zhong_yang_shui_fa"
+      }
+    },
+    {
+      "edge_id": "e00002",
+      "source": "automation.r10_water_shutoff::T",
+      "target": "automation.r10_water_shutoff::A",
+      "edge_group": "intra",
+      "kind": "flow",
+      "polarity": 1,
+      "metadata": {
+        "rule_uid": "automation.r10_water_shutoff",
+        "description": "trigger-to-action internal flow"
+      }
+    },
+    {
+      "edge_id": "e00003",
+      "source": "automation.r11_fire_suppression::A",
+      "target": "env::home::smoke",
+      "edge_group": "assoc",
+      "kind": "env-association",
+      "polarity": -1,
+      "metadata": {
+        "rule_from": "automation.r11_fire_suppression",
+        "effect_entity_id": "input_boolean.xiao_fang_pen_lin_tou",
+        "effect_operation": "turn_on",
+        "zone": "home",
+        "channel": "smoke",
+        "direction": "-1",
+        "mu": 1,
+        "lambda": 0,
+        "duration": "inf",
+        "confidence": 0.6,
+        "reason": "Water suppresses fire and smoke generation.",
+        "effect_entity_id_display": "Fire Sprinkler (input_boolean.xiao_fang_pen_lin_tou)"
+      }
+    },
+    {
+      "edge_id": "e00004",
+      "source": "automation.r11_fire_suppression::A",
+      "target": "env::home::water_flow",
+      "edge_group": "assoc",
+      "kind": "env-association",
+      "polarity": 1,
+      "metadata": {
+        "rule_from": "automation.r11_fire_suppression",
+        "effect_entity_id": "input_boolean.xiao_fang_pen_lin_tou",
+        "effect_operation": "turn_on",
+        "zone": "home",
+        "channel": "water_flow",
+        "direction": "+1",
+        "mu": 1,
+        "lambda": 0,
+        "duration": "inf",
+        "confidence": 0.9,
+        "reason": "Fire sprinkler releases water.",
+        "effect_entity_id_display": "Fire Sprinkler (input_boolean.xiao_fang_pen_lin_tou)"
+      }
+    },
+    {
+      "edge_id": "e00005",
+      "source": "automation.r11_fire_suppression::T",
+      "target": "automation.r11_fire_suppression::A",
+      "edge_group": "intra",
+      "kind": "flow",
+      "polarity": 1,
+      "metadata": {
+        "rule_uid": "automation.r11_fire_suppression",
+        "description": "trigger-to-action internal flow"
+      }
+    },
+    {
+      "edge_id": "e00006",
+      "source": "automation.r12_bedroom_light::A",
+      "target": "env::home::light",
+      "edge_group": "assoc",
+      "kind": "env-association",
+      "polarity": 1,
+      "metadata": {
+        "rule_from": "automation.r12_bedroom_light",
+        "effect_entity_id": "input_boolean.wo_shi_deng",
+        "effect_operation": "turn_on",
+        "zone": "home",
+        "channel": "light",
+        "direction": "+1",
+        "mu": 1,
+        "lambda": 0,
+        "duration": "inf",
+        "confidence": 0.95,
+        "reason": "Turning on light increases illumination.",
+        "effect_entity_id_display": "Bedroom Light (input_boolean.wo_shi_deng)"
+      }
+    },
+    {
+      "edge_id": "e00007",
+      "source": "automation.r12_bedroom_light::C",
+      "target": "automation.r12_bedroom_light::A",
+      "edge_group": "intra",
+      "kind": "flow",
+      "polarity": 1,
+      "metadata": {
+        "rule_uid": "automation.r12_bedroom_light",
+        "description": "condition-to-action internal flow"
+      }
+    },
+    {
+      "edge_id": "e00008",
+      "source": "automation.r12_bedroom_light::T",
+      "target": "automation.r12_bedroom_light::C",
+      "edge_group": "intra",
+      "kind": "flow",
+      "polarity": 1,
+      "metadata": {
+        "rule_uid": "automation.r12_bedroom_light",
+        "description": "trigger-to-condition internal flow"
+      }
+    },
+    {
+      "edge_id": "e00009",
+      "source": "automation.r13_bedroom_heating::A",
+      "target": "automation.r14_bedroom_window::A",
+      "edge_group": "assoc",
+      "kind": "direct-action",
+      "polarity": -1,
+      "metadata": {
+        "rule_from": "automation.r13_bedroom_heating",
+        "rule_to": "automation.r14_bedroom_window",
+        "target_entity": "input_boolean.wo_shi_nuan_qi",
+        "operation_from": "turn_on",
+        "operation_to": "turn_off",
+        "post_from": "on",
+        "post_to": "off",
+        "target_entity_display": "Bedroom Heater (input_boolean.wo_shi_nuan_qi)"
+      }
+    },
+    {
+      "edge_id": "e00010",
+      "source": "automation.r13_bedroom_heating::A",
+      "target": "env::home::temperature",
+      "edge_group": "assoc",
+      "kind": "env-association",
+      "polarity": 1,
+      "metadata": {
+        "rule_from": "automation.r13_bedroom_heating",
+        "effect_entity_id": "input_boolean.wo_shi_nuan_qi",
+        "effect_operation": "turn_on",
+        "zone": "home",
+        "channel": "temperature",
+        "direction": "+1",
+        "mu": 1,
+        "lambda": 0,
+        "duration": "inf",
+        "confidence": 0.9,
+        "reason": "Activating heater increases temperature.",
+        "effect_entity_id_display": "Bedroom Heater (input_boolean.wo_shi_nuan_qi)"
+      }
+    },
+    {
+      "edge_id": "e00011",
+      "source": "automation.r13_bedroom_heating::T",
+      "target": "automation.r13_bedroom_heating::A",
+      "edge_group": "intra",
+      "kind": "flow",
+      "polarity": 1,
+      "metadata": {
+        "rule_uid": "automation.r13_bedroom_heating",
+        "description": "trigger-to-action internal flow"
+      }
+    },
+    {
+      "edge_id": "e00012",
+      "source": "automation.r14_bedroom_window::A",
+      "target": "automation.r13_bedroom_heating::A",
+      "edge_group": "assoc",
+      "kind": "direct-action",
+      "polarity": -1,
+      "metadata": {
+        "rule_from": "automation.r14_bedroom_window",
+        "rule_to": "automation.r13_bedroom_heating",
+        "target_entity": "input_boolean.wo_shi_nuan_qi",
+        "operation_from": "turn_off",
+        "operation_to": "turn_on",
+        "post_from": "off",
+        "post_to": "on",
+        "target_entity_display": "Bedroom Heater (input_boolean.wo_shi_nuan_qi)"
+      }
+    },
+    {
+      "edge_id": "e00013",
+      "source": "automation.r14_bedroom_window::A",
+      "target": "env::home::temperature",
+      "edge_group": "assoc",
+      "kind": "env-association",
+      "polarity": -1,
+      "metadata": {
+        "rule_from": "automation.r14_bedroom_window",
+        "effect_entity_id": "input_boolean.wo_shi_chuang_hu",
+        "effect_operation": "turn_on",
+        "zone": "home",
+        "channel": "temperature",
+        "direction": "-1",
+        "mu": 1,
+        "lambda": 0,
+        "duration": "inf",
+        "confidence": 0.7,
+        "reason": "Opening window during high heat usually facilitates cooling.",
+        "effect_entity_id_display": "Bedroom Window (input_boolean.wo_shi_chuang_hu)"
+      }
+    },
+    {
+      "edge_id": "e00014",
+      "source": "automation.r14_bedroom_window::A",
+      "target": "env::home::temperature",
+      "edge_group": "assoc",
+      "kind": "env-association",
+      "polarity": -1,
+      "metadata": {
+        "rule_from": "automation.r14_bedroom_window",
+        "effect_entity_id": "input_boolean.wo_shi_nuan_qi",
+        "effect_operation": "turn_off",
+        "zone": "home",
+        "channel": "temperature",
+        "direction": "-1",
+        "mu": 1,
+        "lambda": 0,
+        "duration": "inf",
+        "confidence": 0.8,
+        "reason": "Turning off heater stops heating.",
+        "effect_entity_id_display": "Bedroom Heater (input_boolean.wo_shi_nuan_qi)"
+      }
+    },
+    {
+      "edge_id": "e00015",
+      "source": "automation.r14_bedroom_window::T",
+      "target": "automation.r14_bedroom_window::A",
+      "edge_group": "intra",
+      "kind": "flow",
+      "polarity": 1,
+      "metadata": {
+        "rule_uid": "automation.r14_bedroom_window",
+        "description": "trigger-to-action internal flow"
+      }
+    },
+    {
+      "edge_id": "e00016",
+      "source": "automation.r15_lights_off_when_leaving_home::A",
+      "target": "automation.r1_door_open_lights::A",
+      "edge_group": "assoc",
+      "kind": "direct-action",
+      "polarity": -1,
+      "metadata": {
+        "rule_from": "automation.r15_lights_off_when_leaving_home",
+        "rule_to": "automation.r1_door_open_lights",
+        "target_entity": "input_boolean.men_lang_deng",
+        "operation_from": "turn_off",
+        "operation_to": "turn_on",
+        "post_from": "off",
+        "post_to": "on",
+        "target_entity_display": "Porch Light (input_boolean.men_lang_deng)"
+      }
+    },
+    {
+      "edge_id": "e00017",
+      "source": "automation.r15_lights_off_when_leaving_home::A",
+      "target": "automation.r2_greenhouse_light_re_enable_and_door_unlock::T",
+      "edge_group": "assoc",
+      "kind": "direct-trigger",
+      "polarity": 1,
+      "metadata": {
+        "rule_from": "automation.r15_lights_off_when_leaving_home",
+        "rule_to": "automation.r2_greenhouse_light_re_enable_and_door_unlock",
+        "target_entity": "input_boolean.wen_shi_deng",
+        "operation": "turn_off",
+        "post": "off",
+        "trigger": {
+          "type": "state",
+          "entity_id": "input_boolean.wen_shi_deng",
+          "from": "on",
+          "to": "off"
+        },
+        "target_entity_display": "Greenhouse Light (input_boolean.wen_shi_deng)"
+      }
+    },
+    {
+      "edge_id": "e00018",
+      "source": "automation.r15_lights_off_when_leaving_home::A",
+      "target": "automation.r3_porch_light::A",
+      "edge_group": "assoc",
+      "kind": "direct-action",
+      "polarity": -1,
+      "metadata": {
+        "rule_from": "automation.r15_lights_off_when_leaving_home",
+        "rule_to": "automation.r3_porch_light",
+        "target_entity": "input_boolean.men_lang_deng",
+        "operation_from": "turn_off",
+        "operation_to": "turn_on",
+        "post_from": "off",
+        "post_to": "on",
+        "target_entity_display": "Porch Light (input_boolean.men_lang_deng)"
+      }
+    },
+    {
+      "edge_id": "e00019",
+      "source": "automation.r15_lights_off_when_leaving_home::A",
+      "target": "env::home::light",
+      "edge_group": "assoc",
+      "kind": "env-association",
+      "polarity": -1,
+      "metadata": {
+        "rule_from": "automation.r15_lights_off_when_leaving_home",
+        "effect_entity_id": "input_boolean.men_lang_deng",
+        "effect_operation": "turn_off",
+        "zone": "home",
+        "channel": "light",
+        "direction": "-1",
+        "mu": 1,
+        "lambda": 0,
+        "duration": "inf",
+        "confidence": 0.95,
+        "reason": "Turning off light decreases illumination.",
+        "effect_entity_id_display": "Porch Light (input_boolean.men_lang_deng)"
+      }
+    },
+    {
+      "edge_id": "e00020",
+      "source": "automation.r15_lights_off_when_leaving_home::A",
+      "target": "env::home::light",
+      "edge_group": "assoc",
+      "kind": "env-association",
+      "polarity": -1,
+      "metadata": {
+        "rule_from": "automation.r15_lights_off_when_leaving_home",
+        "effect_entity_id": "input_boolean.wen_shi_deng",
+        "effect_operation": "turn_off",
+        "zone": "home",
+        "channel": "light",
+        "direction": "-1",
+        "mu": 1,
+        "lambda": 0,
+        "duration": "inf",
+        "confidence": 0.95,
+        "reason": "Turning off light decreases illumination.",
+        "effect_entity_id_display": "Greenhouse Light (input_boolean.wen_shi_deng)"
+      }
+    },
+    {
+      "edge_id": "e00021",
+      "source": "automation.r15_lights_off_when_leaving_home::T",
+      "target": "automation.r15_lights_off_when_leaving_home::A",
+      "edge_group": "intra",
+      "kind": "flow",
+      "polarity": 1,
+      "metadata": {
+        "rule_uid": "automation.r15_lights_off_when_leaving_home",
+        "description": "trigger-to-action internal flow"
+      }
+    },
+    {
+      "edge_id": "e00022",
+      "source": "automation.r16_greenhouse_heating::A",
+      "target": "automation.r17_greenhouse_window::A",
+      "edge_group": "assoc",
+      "kind": "direct-action",
+      "polarity": -1,
+      "metadata": {
+        "rule_from": "automation.r16_greenhouse_heating",
+        "rule_to": "automation.r17_greenhouse_window",
+        "target_entity": "input_boolean.wen_shi_nuan_qi",
+        "operation_from": "turn_on",
+        "operation_to": "turn_off",
+        "post_from": "on",
+        "post_to": "off",
+        "target_entity_display": "Greenhouse Heater (input_boolean.wen_shi_nuan_qi)"
+      }
+    },
+    {
+      "edge_id": "e00023",
+      "source": "automation.r16_greenhouse_heating::A",
+      "target": "env::home::temperature",
+      "edge_group": "assoc",
+      "kind": "env-association",
+      "polarity": 1,
+      "metadata": {
+        "rule_from": "automation.r16_greenhouse_heating",
+        "effect_entity_id": "input_boolean.wen_shi_nuan_qi",
+        "effect_operation": "turn_on",
+        "zone": "home",
+        "channel": "temperature",
+        "direction": "+1",
+        "mu": 1,
+        "lambda": 0,
+        "duration": "inf",
+        "confidence": 0.9,
+        "reason": "Activating heater increases temperature.",
+        "effect_entity_id_display": "Greenhouse Heater (input_boolean.wen_shi_nuan_qi)"
+      }
+    },
+    {
+      "edge_id": "e00024",
+      "source": "automation.r16_greenhouse_heating::T",
+      "target": "automation.r16_greenhouse_heating::A",
+      "edge_group": "intra",
+      "kind": "flow",
+      "polarity": 1,
+      "metadata": {
+        "rule_uid": "automation.r16_greenhouse_heating",
+        "description": "trigger-to-action internal flow"
+      }
+    },
+    {
+      "edge_id": "e00025",
+      "source": "automation.r17_greenhouse_window::A",
+      "target": "automation.r16_greenhouse_heating::A",
+      "edge_group": "assoc",
+      "kind": "direct-action",
+      "polarity": -1,
+      "metadata": {
+        "rule_from": "automation.r17_greenhouse_window",
+        "rule_to": "automation.r16_greenhouse_heating",
+        "target_entity": "input_boolean.wen_shi_nuan_qi",
+        "operation_from": "turn_off",
+        "operation_to": "turn_on",
+        "post_from": "off",
+        "post_to": "on",
+        "target_entity_display": "Greenhouse Heater (input_boolean.wen_shi_nuan_qi)"
+      }
+    },
+    {
+      "edge_id": "e00026",
+      "source": "automation.r17_greenhouse_window::A",
+      "target": "env::home::temperature",
+      "edge_group": "assoc",
+      "kind": "env-association",
+      "polarity": -1,
+      "metadata": {
+        "rule_from": "automation.r17_greenhouse_window",
+        "effect_entity_id": "input_boolean.wen_shi_chuang_hu",
+        "effect_operation": "turn_on",
+        "zone": "home",
+        "channel": "temperature",
+        "direction": "-1",
+        "mu": 1,
+        "lambda": 0,
+        "duration": "inf",
+        "confidence": 0.7,
+        "reason": "Opening window during high heat usually facilitates cooling.",
+        "effect_entity_id_display": "Greenhouse Window (input_boolean.wen_shi_chuang_hu)"
+      }
+    },
+    {
+      "edge_id": "e00027",
+      "source": "automation.r17_greenhouse_window::A",
+      "target": "env::home::temperature",
+      "edge_group": "assoc",
+      "kind": "env-association",
+      "polarity": -1,
+      "metadata": {
+        "rule_from": "automation.r17_greenhouse_window",
+        "effect_entity_id": "input_boolean.wen_shi_nuan_qi",
+        "effect_operation": "turn_off",
+        "zone": "home",
+        "channel": "temperature",
+        "direction": "-1",
+        "mu": 1,
+        "lambda": 0,
+        "duration": "inf",
+        "confidence": 0.8,
+        "reason": "Turning off heater stops heating.",
+        "effect_entity_id_display": "Greenhouse Heater (input_boolean.wen_shi_nuan_qi)"
+      }
+    },
+    {
+      "edge_id": "e00028",
+      "source": "automation.r17_greenhouse_window::T",
+      "target": "automation.r17_greenhouse_window::A",
+      "edge_group": "intra",
+      "kind": "flow",
+      "polarity": 1,
+      "metadata": {
+        "rule_uid": "automation.r17_greenhouse_window",
+        "description": "trigger-to-action internal flow"
+      }
+    },
+    {
+      "edge_id": "e00029",
+      "source": "automation.r1_door_open_lights::A",
+      "target": "automation.r15_lights_off_when_leaving_home::A",
+      "edge_group": "assoc",
+      "kind": "direct-action",
+      "polarity": -1,
+      "metadata": {
+        "rule_from": "automation.r1_door_open_lights",
+        "rule_to": "automation.r15_lights_off_when_leaving_home",
+        "target_entity": "input_boolean.men_lang_deng",
+        "operation_from": "turn_on",
+        "operation_to": "turn_off",
+        "post_from": "on",
+        "post_to": "off",
+        "target_entity_display": "Porch Light (input_boolean.men_lang_deng)"
+      }
+    },
+    {
+      "edge_id": "e00030",
+      "source": "automation.r1_door_open_lights::A",
+      "target": "automation.r3_porch_light::A",
+      "edge_group": "assoc",
+      "kind": "direct-action",
+      "polarity": 1,
+      "metadata": {
+        "rule_from": "automation.r1_door_open_lights",
+        "rule_to": "automation.r3_porch_light",
+        "target_entity": "input_boolean.men_lang_deng",
+        "operation_from": "turn_on",
+        "operation_to": "turn_on",
+        "post_from": "on",
+        "post_to": "on",
+        "target_entity_display": "Porch Light (input_boolean.men_lang_deng)"
+      }
+    },
+    {
+      "edge_id": "e00031",
+      "source": "automation.r1_door_open_lights::A",
+      "target": "env::home::light",
+      "edge_group": "assoc",
+      "kind": "env-association",
+      "polarity": 1,
+      "metadata": {
+        "rule_from": "automation.r1_door_open_lights",
+        "effect_entity_id": "input_boolean.men_lang_deng",
+        "effect_operation": "turn_on",
+        "zone": "home",
+        "channel": "light",
+        "direction": "+1",
+        "mu": 1,
+        "lambda": 0,
+        "duration": "inf",
+        "confidence": 0.95,
+        "reason": "Turning on light increases illumination.",
+        "effect_entity_id_display": "Porch Light (input_boolean.men_lang_deng)"
+      }
+    },
+    {
+      "edge_id": "e00032",
+      "source": "automation.r1_door_open_lights::A",
+      "target": "env::home::light",
+      "edge_group": "assoc",
+      "kind": "env-association",
+      "polarity": 1,
+      "metadata": {
+        "rule_from": "automation.r1_door_open_lights",
+        "effect_entity_id": "input_boolean.men_wai_deng",
+        "effect_operation": "turn_on",
+        "zone": "home",
+        "channel": "light",
+        "direction": "+1",
+        "mu": 1,
+        "lambda": 0,
+        "duration": "inf",
+        "confidence": 0.95,
+        "reason": "Turning on light increases illumination.",
+        "effect_entity_id_display": "Outside Door Light (input_boolean.men_wai_deng)"
+      }
+    },
+    {
+      "edge_id": "e00033",
+      "source": "automation.r1_door_open_lights::C",
+      "target": "automation.r1_door_open_lights::A",
+      "edge_group": "intra",
+      "kind": "flow",
+      "polarity": 1,
+      "metadata": {
+        "rule_uid": "automation.r1_door_open_lights",
+        "description": "condition-to-action internal flow"
+      }
+    },
+    {
+      "edge_id": "e00034",
+      "source": "automation.r1_door_open_lights::T",
+      "target": "automation.r1_door_open_lights::C",
+      "edge_group": "intra",
+      "kind": "flow",
+      "polarity": 1,
+      "metadata": {
+        "rule_uid": "automation.r1_door_open_lights",
+        "description": "trigger-to-condition internal flow"
+      }
+    },
+    {
+      "edge_id": "e00035",
+      "source": "automation.r2_greenhouse_light_re_enable_and_door_unlock::A",
+      "target": "automation.r1_door_open_lights::T",
+      "edge_group": "assoc",
+      "kind": "direct-trigger",
+      "polarity": 1,
+      "metadata": {
+        "rule_from": "automation.r2_greenhouse_light_re_enable_and_door_unlock",
+        "rule_to": "automation.r1_door_open_lights",
+        "target_entity": "input_boolean.zhi_neng_men_suo",
+        "operation": "turn_on",
+        "post": "on",
+        "trigger": {
+          "type": "state",
+          "entity_id": "input_boolean.zhi_neng_men_suo",
+          "from": "off",
+          "to": "on"
+        },
+        "target_entity_display": "Smart Door Lock (input_boolean.zhi_neng_men_suo)"
+      }
+    },
+    {
+      "edge_id": "e00036",
+      "source": "automation.r2_greenhouse_light_re_enable_and_door_unlock::T",
+      "target": "automation.r2_greenhouse_light_re_enable_and_door_unlock::A",
+      "edge_group": "intra",
+      "kind": "flow",
+      "polarity": 1,
+      "metadata": {
+        "rule_uid": "automation.r2_greenhouse_light_re_enable_and_door_unlock",
+        "description": "trigger-to-action internal flow"
+      }
+    },
+    {
+      "edge_id": "e00037",
+      "source": "automation.r3_porch_light::A",
+      "target": "automation.r15_lights_off_when_leaving_home::A",
+      "edge_group": "assoc",
+      "kind": "direct-action",
+      "polarity": -1,
+      "metadata": {
+        "rule_from": "automation.r3_porch_light",
+        "rule_to": "automation.r15_lights_off_when_leaving_home",
+        "target_entity": "input_boolean.men_lang_deng",
+        "operation_from": "turn_on",
+        "operation_to": "turn_off",
+        "post_from": "on",
+        "post_to": "off",
+        "target_entity_display": "Porch Light (input_boolean.men_lang_deng)"
+      }
+    },
+    {
+      "edge_id": "e00038",
+      "source": "automation.r3_porch_light::A",
+      "target": "automation.r1_door_open_lights::A",
+      "edge_group": "assoc",
+      "kind": "direct-action",
+      "polarity": 1,
+      "metadata": {
+        "rule_from": "automation.r3_porch_light",
+        "rule_to": "automation.r1_door_open_lights",
+        "target_entity": "input_boolean.men_lang_deng",
+        "operation_from": "turn_on",
+        "operation_to": "turn_on",
+        "post_from": "on",
+        "post_to": "on",
+        "target_entity_display": "Porch Light (input_boolean.men_lang_deng)"
+      }
+    },
+    {
+      "edge_id": "e00039",
+      "source": "automation.r3_porch_light::A",
+      "target": "env::home::light",
+      "edge_group": "assoc",
+      "kind": "env-association",
+      "polarity": 1,
+      "metadata": {
+        "rule_from": "automation.r3_porch_light",
+        "effect_entity_id": "input_boolean.men_lang_deng",
+        "effect_operation": "turn_on",
+        "zone": "home",
+        "channel": "light",
+        "direction": "+1",
+        "mu": 1,
+        "lambda": 0,
+        "duration": "inf",
+        "confidence": 0.95,
+        "reason": "Turning on light increases illumination.",
+        "effect_entity_id_display": "Porch Light (input_boolean.men_lang_deng)"
+      }
+    },
+    {
+      "edge_id": "e00040",
+      "source": "automation.r3_porch_light::C",
+      "target": "automation.r3_porch_light::A",
+      "edge_group": "intra",
+      "kind": "flow",
+      "polarity": 1,
+      "metadata": {
+        "rule_uid": "automation.r3_porch_light",
+        "description": "condition-to-action internal flow"
+      }
+    },
+    {
+      "edge_id": "e00041",
+      "source": "automation.r3_porch_light::T",
+      "target": "automation.r3_porch_light::C",
+      "edge_group": "intra",
+      "kind": "flow",
+      "polarity": 1,
+      "metadata": {
+        "rule_uid": "automation.r3_porch_light",
+        "description": "trigger-to-condition internal flow"
+      }
+    },
+    {
+      "edge_id": "e00042",
+      "source": "automation.r4_living_room_light::A",
+      "target": "env::home::light",
+      "edge_group": "assoc",
+      "kind": "env-association",
+      "polarity": 1,
+      "metadata": {
+        "rule_from": "automation.r4_living_room_light",
+        "effect_entity_id": "input_boolean.deng",
+        "effect_operation": "turn_on",
+        "zone": "home",
+        "channel": "light",
+        "direction": "+1",
+        "mu": 1,
+        "lambda": 0,
+        "duration": "inf",
+        "confidence": 0.95,
+        "reason": "Turning on a light increases environmental illumination.",
+        "effect_entity_id_display": "Living Room Light (input_boolean.deng)"
+      }
+    },
+    {
+      "edge_id": "e00043",
+      "source": "automation.r4_living_room_light::C",
+      "target": "automation.r4_living_room_light::A",
+      "edge_group": "intra",
+      "kind": "flow",
+      "polarity": 1,
+      "metadata": {
+        "rule_uid": "automation.r4_living_room_light",
+        "description": "condition-to-action internal flow"
+      }
+    },
+    {
+      "edge_id": "e00044",
+      "source": "automation.r4_living_room_light::T",
+      "target": "automation.r4_living_room_light::C",
+      "edge_group": "intra",
+      "kind": "flow",
+      "polarity": 1,
+      "metadata": {
+        "rule_uid": "automation.r4_living_room_light",
+        "description": "trigger-to-condition internal flow"
+      }
+    },
+    {
+      "edge_id": "e00045",
+      "source": "automation.r5_humidifier_on::A",
+      "target": "automation.r6_humidifier_off::A",
+      "edge_group": "assoc",
+      "kind": "direct-action",
+      "polarity": -1,
+      "metadata": {
+        "rule_from": "automation.r5_humidifier_on",
+        "rule_to": "automation.r6_humidifier_off",
+        "target_entity": "input_boolean.ke_ting_jia_shi_qi",
+        "operation_from": "turn_on",
+        "operation_to": "turn_off",
+        "post_from": "on",
+        "post_to": "off",
+        "target_entity_display": "Living Room Humidifier (input_boolean.ke_ting_jia_shi_qi)"
+      }
+    },
+    {
+      "edge_id": "e00046",
+      "source": "automation.r5_humidifier_on::A",
+      "target": "automation.r6_humidifier_off::C",
+      "edge_group": "assoc",
+      "kind": "direct-condition-allow",
+      "polarity": 1,
+      "metadata": {
+        "rule_from": "automation.r5_humidifier_on",
+        "rule_to": "automation.r6_humidifier_off",
+        "target_entity": "input_boolean.ke_ting_jia_shi_qi",
+        "operation": "turn_on",
+        "post": "on",
+        "condition": {
+          "type": "state",
+          "entity_id": "input_boolean.ke_ting_jia_shi_qi",
+          "state": "on"
+        },
+        "target_entity_display": "Living Room Humidifier (input_boolean.ke_ting_jia_shi_qi)"
+      }
+    },
+    {
+      "edge_id": "e00047",
+      "source": "automation.r5_humidifier_on::A",
+      "target": "env::home::humidity",
+      "edge_group": "assoc",
+      "kind": "env-association",
+      "polarity": 1,
+      "metadata": {
+        "rule_from": "automation.r5_humidifier_on",
+        "effect_entity_id": "input_boolean.ke_ting_jia_shi_qi",
+        "effect_operation": "turn_on",
+        "zone": "home",
+        "channel": "humidity",
+        "direction": "+1",
+        "mu": 1,
+        "lambda": 0,
+        "duration": "inf",
+        "confidence": 0.9,
+        "reason": "Activating humidifier increases humidity.",
+        "effect_entity_id_display": "Living Room Humidifier (input_boolean.ke_ting_jia_shi_qi)"
+      }
+    },
+    {
+      "edge_id": "e00048",
+      "source": "automation.r5_humidifier_on::C",
+      "target": "automation.r5_humidifier_on::A",
+      "edge_group": "intra",
+      "kind": "flow",
+      "polarity": 1,
+      "metadata": {
+        "rule_uid": "automation.r5_humidifier_on",
+        "description": "condition-to-action internal flow"
+      }
+    },
+    {
+      "edge_id": "e00049",
+      "source": "automation.r5_humidifier_on::T",
+      "target": "automation.r5_humidifier_on::C",
+      "edge_group": "intra",
+      "kind": "flow",
+      "polarity": 1,
+      "metadata": {
+        "rule_uid": "automation.r5_humidifier_on",
+        "description": "trigger-to-condition internal flow"
+      }
+    },
+    {
+      "edge_id": "e00050",
+      "source": "automation.r6_humidifier_off::A",
+      "target": "automation.r5_humidifier_on::A",
+      "edge_group": "assoc",
+      "kind": "direct-action",
+      "polarity": -1,
+      "metadata": {
+        "rule_from": "automation.r6_humidifier_off",
+        "rule_to": "automation.r5_humidifier_on",
+        "target_entity": "input_boolean.ke_ting_jia_shi_qi",
+        "operation_from": "turn_off",
+        "operation_to": "turn_on",
+        "post_from": "off",
+        "post_to": "on",
+        "target_entity_display": "Living Room Humidifier (input_boolean.ke_ting_jia_shi_qi)"
+      }
+    },
+    {
+      "edge_id": "e00051",
+      "source": "automation.r6_humidifier_off::A",
+      "target": "automation.r5_humidifier_on::C",
+      "edge_group": "assoc",
+      "kind": "direct-condition-allow",
+      "polarity": 1,
+      "metadata": {
+        "rule_from": "automation.r6_humidifier_off",
+        "rule_to": "automation.r5_humidifier_on",
+        "target_entity": "input_boolean.ke_ting_jia_shi_qi",
+        "operation": "turn_off",
+        "post": "off",
+        "condition": {
+          "type": "state",
+          "entity_id": "input_boolean.ke_ting_jia_shi_qi",
+          "state": "off"
+        },
+        "target_entity_display": "Living Room Humidifier (input_boolean.ke_ting_jia_shi_qi)"
+      }
+    },
+    {
+      "edge_id": "e00052",
+      "source": "automation.r6_humidifier_off::A",
+      "target": "env::home::humidity",
+      "edge_group": "assoc",
+      "kind": "env-association",
+      "polarity": -1,
+      "metadata": {
+        "rule_from": "automation.r6_humidifier_off",
+        "effect_entity_id": "input_boolean.ke_ting_jia_shi_qi",
+        "effect_operation": "turn_off",
+        "zone": "home",
+        "channel": "humidity",
+        "direction": "-1",
+        "mu": 1,
+        "lambda": 0,
+        "duration": "inf",
+        "confidence": 0.7,
+        "reason": "Turning off humidifier stops increasing humidity (natural decrease).",
+        "effect_entity_id_display": "Living Room Humidifier (input_boolean.ke_ting_jia_shi_qi)"
+      }
+    },
+    {
+      "edge_id": "e00053",
+      "source": "automation.r6_humidifier_off::C",
+      "target": "automation.r6_humidifier_off::A",
+      "edge_group": "intra",
+      "kind": "flow",
+      "polarity": 1,
+      "metadata": {
+        "rule_uid": "automation.r6_humidifier_off",
+        "description": "condition-to-action internal flow"
+      }
+    },
+    {
+      "edge_id": "e00054",
+      "source": "automation.r6_humidifier_off::T",
+      "target": "automation.r6_humidifier_off::C",
+      "edge_group": "intra",
+      "kind": "flow",
+      "polarity": 1,
+      "metadata": {
+        "rule_uid": "automation.r6_humidifier_off",
+        "description": "trigger-to-condition internal flow"
+      }
+    },
+    {
+      "edge_id": "e00055",
+      "source": "automation.r7_living_room_heating::A",
+      "target": "env::home::temperature",
+      "edge_group": "assoc",
+      "kind": "env-association",
+      "polarity": 1,
+      "metadata": {
+        "rule_from": "automation.r7_living_room_heating",
+        "effect_entity_id": "input_boolean.ke_ting_di_nuan",
+        "effect_operation": "turn_on",
+        "zone": "home",
+        "channel": "temperature",
+        "direction": "+1",
+        "mu": 1,
+        "lambda": 0,
+        "duration": "inf",
+        "confidence": 0.9,
+        "reason": "Activating heating increases room temperature.",
+        "effect_entity_id_display": "Living Room Floor Heating (input_boolean.ke_ting_di_nuan)"
+      }
+    },
+    {
+      "edge_id": "e00056",
+      "source": "automation.r7_living_room_heating::C",
+      "target": "automation.r7_living_room_heating::A",
+      "edge_group": "intra",
+      "kind": "flow",
+      "polarity": 1,
+      "metadata": {
+        "rule_uid": "automation.r7_living_room_heating",
+        "description": "condition-to-action internal flow"
+      }
+    },
+    {
+      "edge_id": "e00057",
+      "source": "automation.r7_living_room_heating::T",
+      "target": "automation.r7_living_room_heating::C",
+      "edge_group": "intra",
+      "kind": "flow",
+      "polarity": 1,
+      "metadata": {
+        "rule_uid": "automation.r7_living_room_heating",
+        "description": "trigger-to-condition internal flow"
+      }
+    },
+    {
+      "edge_id": "e00058",
+      "source": "automation.r8_living_room_cooling::A",
+      "target": "env::home::temperature",
+      "edge_group": "assoc",
+      "kind": "env-association",
+      "polarity": -1,
+      "metadata": {
+        "rule_from": "automation.r8_living_room_cooling",
+        "effect_entity_id": "input_boolean.ke_ting_kong_diao_kai_guan",
+        "effect_operation": "turn_on",
+        "zone": "home",
+        "channel": "temperature",
+        "direction": "-1",
+        "mu": 1,
+        "lambda": 0,
+        "duration": "inf",
+        "confidence": 0.85,
+        "reason": "AC turns on in high heat to cool the environment.",
+        "effect_entity_id_display": "Living Room Air Conditioner Switch (input_boolean.ke_ting_kong_diao_kai_guan)"
+      }
+    },
+    {
+      "edge_id": "e00059",
+      "source": "automation.r8_living_room_cooling::C",
+      "target": "automation.r8_living_room_cooling::A",
+      "edge_group": "intra",
+      "kind": "flow",
+      "polarity": 1,
+      "metadata": {
+        "rule_uid": "automation.r8_living_room_cooling",
+        "description": "condition-to-action internal flow"
+      }
+    },
+    {
+      "edge_id": "e00060",
+      "source": "automation.r8_living_room_cooling::T",
+      "target": "automation.r8_living_room_cooling::C",
+      "edge_group": "intra",
+      "kind": "flow",
+      "polarity": 1,
+      "metadata": {
+        "rule_uid": "automation.r8_living_room_cooling",
+        "description": "trigger-to-condition internal flow"
+      }
+    },
+    {
+      "edge_id": "e00061",
+      "source": "automation.r9_kitchen_light::A",
+      "target": "env::home::light",
+      "edge_group": "assoc",
+      "kind": "env-association",
+      "polarity": 1,
+      "metadata": {
+        "rule_from": "automation.r9_kitchen_light",
+        "effect_entity_id": "input_boolean.deng_2",
+        "effect_operation": "turn_on",
+        "zone": "home",
+        "channel": "light",
+        "direction": "+1",
+        "mu": 1,
+        "lambda": 0,
+        "duration": "inf",
+        "confidence": 0.95,
+        "reason": "Turning on a light increases environmental illumination.",
+        "effect_entity_id_display": "Kitchen Light (input_boolean.deng_2)"
+      }
+    },
+    {
+      "edge_id": "e00062",
+      "source": "automation.r9_kitchen_light::C",
+      "target": "automation.r9_kitchen_light::A",
+      "edge_group": "intra",
+      "kind": "flow",
+      "polarity": 1,
+      "metadata": {
+        "rule_uid": "automation.r9_kitchen_light",
+        "description": "condition-to-action internal flow"
+      }
+    },
+    {
+      "edge_id": "e00063",
+      "source": "automation.r9_kitchen_light::T",
+      "target": "automation.r9_kitchen_light::C",
+      "edge_group": "intra",
+      "kind": "flow",
+      "polarity": 1,
+      "metadata": {
+        "rule_uid": "automation.r9_kitchen_light",
+        "description": "trigger-to-condition internal flow"
+      }
+    },
+    {
+      "edge_id": "e00064",
+      "source": "env::home::humidity",
+      "target": "automation.r5_humidifier_on::A",
+      "edge_group": "assoc",
+      "kind": "indirect-action",
+      "polarity": 1,
+      "metadata": {
+        "rule_from": "automation.r5_humidifier_on",
+        "effect_entity_id": "input_boolean.ke_ting_jia_shi_qi",
+        "effect_operation": "turn_on",
+        "zone": "home",
+        "channel": "humidity",
+        "direction": "+1",
+        "mu": 1,
+        "lambda": 0,
+        "duration": "inf",
+        "confidence": 0.9,
+        "reason": "Activating humidifier increases humidity.",
+        "effect_entity_id_display": "Living Room Humidifier (input_boolean.ke_ting_jia_shi_qi)"
+      }
+    },
+    {
+      "edge_id": "e00065",
+      "source": "env::home::humidity",
+      "target": "automation.r5_humidifier_on::T",
+      "edge_group": "assoc",
+      "kind": "env-trigger",
+      "polarity": -1,
+      "metadata": {
+        "rule_to": "automation.r5_humidifier_on",
+        "entity_id": "input_number.ke_ting_shi_du_chuan_gan_qi",
+        "zone": "home",
+        "channel": "humidity",
+        "relation": "↓",
+        "threshold": 40,
+        "confidence": 0.95,
+        "entity_id_display": "Living Room Humidity Sensor (input_number.ke_ting_shi_du_chuan_gan_qi)"
+      }
+    },
+    {
+      "edge_id": "e00066",
+      "source": "env::home::humidity",
+      "target": "automation.r6_humidifier_off::A",
+      "edge_group": "assoc",
+      "kind": "indirect-action",
+      "polarity": -1,
+      "metadata": {
+        "rule_from": "automation.r6_humidifier_off",
+        "effect_entity_id": "input_boolean.ke_ting_jia_shi_qi",
+        "effect_operation": "turn_off",
+        "zone": "home",
+        "channel": "humidity",
+        "direction": "-1",
+        "mu": 1,
+        "lambda": 0,
+        "duration": "inf",
+        "confidence": 0.7,
+        "reason": "Turning off humidifier stops increasing humidity (natural decrease).",
+        "effect_entity_id_display": "Living Room Humidifier (input_boolean.ke_ting_jia_shi_qi)"
+      }
+    },
+    {
+      "edge_id": "e00067",
+      "source": "env::home::humidity",
+      "target": "automation.r6_humidifier_off::T",
+      "edge_group": "assoc",
+      "kind": "env-trigger",
+      "polarity": 1,
+      "metadata": {
+        "rule_to": "automation.r6_humidifier_off",
+        "entity_id": "input_number.ke_ting_shi_du_chuan_gan_qi",
+        "zone": "home",
+        "channel": "humidity",
+        "relation": "↑",
+        "threshold": 60,
+        "confidence": 0.95,
+        "entity_id_display": "Living Room Humidity Sensor (input_number.ke_ting_shi_du_chuan_gan_qi)"
+      }
+    },
+    {
+      "edge_id": "e00068",
+      "source": "env::home::light",
+      "target": "automation.r12_bedroom_light::A",
+      "edge_group": "assoc",
+      "kind": "indirect-action",
+      "polarity": 1,
+      "metadata": {
+        "rule_from": "automation.r12_bedroom_light",
+        "effect_entity_id": "input_boolean.wo_shi_deng",
+        "effect_operation": "turn_on",
+        "zone": "home",
+        "channel": "light",
+        "direction": "+1",
+        "mu": 1,
+        "lambda": 0,
+        "duration": "inf",
+        "confidence": 0.95,
+        "reason": "Turning on light increases illumination.",
+        "effect_entity_id_display": "Bedroom Light (input_boolean.wo_shi_deng)"
+      }
+    },
+    {
+      "edge_id": "e00069",
+      "source": "env::home::light",
+      "target": "automation.r12_bedroom_light::C",
+      "edge_group": "assoc",
+      "kind": "indirect-condition-disable",
+      "polarity": -1,
+      "metadata": {
+        "rule_to": "automation.r12_bedroom_light",
+        "entity_id": "input_number.wo_shi_liang_du_chuan_gan_qi",
+        "zone": "home",
+        "channel": "light",
+        "relation": "<",
+        "threshold": 50,
+        "confidence": 0.95,
+        "entity_id_display": "Bedroom Light Sensor (input_number.wo_shi_liang_du_chuan_gan_qi)"
+      }
+    },
+    {
+      "edge_id": "e00070",
+      "source": "env::home::light",
+      "target": "automation.r15_lights_off_when_leaving_home::A",
+      "edge_group": "assoc",
+      "kind": "indirect-action",
+      "polarity": -1,
+      "metadata": {
+        "rule_from": "automation.r15_lights_off_when_leaving_home",
+        "effect_entity_id": "input_boolean.men_lang_deng",
+        "effect_operation": "turn_off",
+        "zone": "home",
+        "channel": "light",
+        "direction": "-1",
+        "mu": 1,
+        "lambda": 0,
+        "duration": "inf",
+        "confidence": 0.95,
+        "reason": "Turning off light decreases illumination.",
+        "effect_entity_id_display": "Porch Light (input_boolean.men_lang_deng)"
+      }
+    },
+    {
+      "edge_id": "e00071",
+      "source": "env::home::light",
+      "target": "automation.r15_lights_off_when_leaving_home::A",
+      "edge_group": "assoc",
+      "kind": "indirect-action",
+      "polarity": -1,
+      "metadata": {
+        "rule_from": "automation.r15_lights_off_when_leaving_home",
+        "effect_entity_id": "input_boolean.wen_shi_deng",
+        "effect_operation": "turn_off",
+        "zone": "home",
+        "channel": "light",
+        "direction": "-1",
+        "mu": 1,
+        "lambda": 0,
+        "duration": "inf",
+        "confidence": 0.95,
+        "reason": "Turning off light decreases illumination.",
+        "effect_entity_id_display": "Greenhouse Light (input_boolean.wen_shi_deng)"
+      }
+    },
+    {
+      "edge_id": "e00072",
+      "source": "env::home::light",
+      "target": "automation.r1_door_open_lights::A",
+      "edge_group": "assoc",
+      "kind": "indirect-action",
+      "polarity": 1,
+      "metadata": {
+        "rule_from": "automation.r1_door_open_lights",
+        "effect_entity_id": "input_boolean.men_lang_deng",
+        "effect_operation": "turn_on",
+        "zone": "home",
+        "channel": "light",
+        "direction": "+1",
+        "mu": 1,
+        "lambda": 0,
+        "duration": "inf",
+        "confidence": 0.95,
+        "reason": "Turning on light increases illumination.",
+        "effect_entity_id_display": "Porch Light (input_boolean.men_lang_deng)"
+      }
+    },
+    {
+      "edge_id": "e00073",
+      "source": "env::home::light",
+      "target": "automation.r1_door_open_lights::A",
+      "edge_group": "assoc",
+      "kind": "indirect-action",
+      "polarity": 1,
+      "metadata": {
+        "rule_from": "automation.r1_door_open_lights",
+        "effect_entity_id": "input_boolean.men_wai_deng",
+        "effect_operation": "turn_on",
+        "zone": "home",
+        "channel": "light",
+        "direction": "+1",
+        "mu": 1,
+        "lambda": 0,
+        "duration": "inf",
+        "confidence": 0.95,
+        "reason": "Turning on light increases illumination.",
+        "effect_entity_id_display": "Outside Door Light (input_boolean.men_wai_deng)"
+      }
+    },
+    {
+      "edge_id": "e00074",
+      "source": "env::home::light",
+      "target": "automation.r1_door_open_lights::C",
+      "edge_group": "assoc",
+      "kind": "indirect-condition-disable",
+      "polarity": -1,
+      "metadata": {
+        "rule_to": "automation.r1_door_open_lights",
+        "entity_id": "input_number.ke_ting_liang_du_chuan_gan_qi",
+        "zone": "home",
+        "channel": "light",
+        "relation": "<",
+        "threshold": 50,
+        "confidence": 0.95,
+        "entity_id_display": "Living Room Light Sensor (input_number.ke_ting_liang_du_chuan_gan_qi)"
+      }
+    },
+    {
+      "edge_id": "e00075",
+      "source": "env::home::light",
+      "target": "automation.r3_porch_light::A",
+      "edge_group": "assoc",
+      "kind": "indirect-action",
+      "polarity": 1,
+      "metadata": {
+        "rule_from": "automation.r3_porch_light",
+        "effect_entity_id": "input_boolean.men_lang_deng",
+        "effect_operation": "turn_on",
+        "zone": "home",
+        "channel": "light",
+        "direction": "+1",
+        "mu": 1,
+        "lambda": 0,
+        "duration": "inf",
+        "confidence": 0.95,
+        "reason": "Turning on light increases illumination.",
+        "effect_entity_id_display": "Porch Light (input_boolean.men_lang_deng)"
+      }
+    },
+    {
+      "edge_id": "e00076",
+      "source": "env::home::light",
+      "target": "automation.r3_porch_light::C",
+      "edge_group": "assoc",
+      "kind": "indirect-condition-disable",
+      "polarity": -1,
+      "metadata": {
+        "rule_to": "automation.r3_porch_light",
+        "entity_id": "input_number.liang_du_chuan_gan_qi_2",
+        "zone": "home",
+        "channel": "light",
+        "relation": "<",
+        "threshold": 50,
+        "confidence": 0.95,
+        "entity_id_display": "Porch Light Sensor (input_number.liang_du_chuan_gan_qi_2)"
+      }
+    },
+    {
+      "edge_id": "e00077",
+      "source": "env::home::light",
+      "target": "automation.r4_living_room_light::A",
+      "edge_group": "assoc",
+      "kind": "indirect-action",
+      "polarity": 1,
+      "metadata": {
+        "rule_from": "automation.r4_living_room_light",
+        "effect_entity_id": "input_boolean.deng",
+        "effect_operation": "turn_on",
+        "zone": "home",
+        "channel": "light",
+        "direction": "+1",
+        "mu": 1,
+        "lambda": 0,
+        "duration": "inf",
+        "confidence": 0.95,
+        "reason": "Turning on a light increases environmental illumination.",
+        "effect_entity_id_display": "Living Room Light (input_boolean.deng)"
+      }
+    },
+    {
+      "edge_id": "e00078",
+      "source": "env::home::light",
+      "target": "automation.r4_living_room_light::C",
+      "edge_group": "assoc",
+      "kind": "indirect-condition-disable",
+      "polarity": -1,
+      "metadata": {
+        "rule_to": "automation.r4_living_room_light",
+        "entity_id": "input_number.ke_ting_liang_du_chuan_gan_qi",
+        "zone": "home",
+        "channel": "light",
+        "relation": "<",
+        "threshold": 50,
+        "confidence": 0.95,
+        "entity_id_display": "Living Room Light Sensor (input_number.ke_ting_liang_du_chuan_gan_qi)"
+      }
+    },
+    {
+      "edge_id": "e00079",
+      "source": "env::home::light",
+      "target": "automation.r9_kitchen_light::A",
+      "edge_group": "assoc",
+      "kind": "indirect-action",
+      "polarity": 1,
+      "metadata": {
+        "rule_from": "automation.r9_kitchen_light",
+        "effect_entity_id": "input_boolean.deng_2",
+        "effect_operation": "turn_on",
+        "zone": "home",
+        "channel": "light",
+        "direction": "+1",
+        "mu": 1,
+        "lambda": 0,
+        "duration": "inf",
+        "confidence": 0.95,
+        "reason": "Turning on a light increases environmental illumination.",
+        "effect_entity_id_display": "Kitchen Light (input_boolean.deng_2)"
+      }
+    },
+    {
+      "edge_id": "e00080",
+      "source": "env::home::light",
+      "target": "automation.r9_kitchen_light::C",
+      "edge_group": "assoc",
+      "kind": "indirect-condition-disable",
+      "polarity": -1,
+      "metadata": {
+        "rule_to": "automation.r9_kitchen_light",
+        "entity_id": "input_number.chu_fang_liang_du_chuan_gan_qi",
+        "zone": "home",
+        "channel": "light",
+        "relation": "<",
+        "threshold": 50,
+        "confidence": 0.95,
+        "entity_id_display": "Kitchen Light Sensor (input_number.chu_fang_liang_du_chuan_gan_qi)"
+      }
+    },
+    {
+      "edge_id": "e00081",
+      "source": "env::home::smoke",
+      "target": "automation.r11_fire_suppression::A",
+      "edge_group": "assoc",
+      "kind": "indirect-action",
+      "polarity": -1,
+      "metadata": {
+        "rule_from": "automation.r11_fire_suppression",
+        "effect_entity_id": "input_boolean.xiao_fang_pen_lin_tou",
+        "effect_operation": "turn_on",
+        "zone": "home",
+        "channel": "smoke",
+        "direction": "-1",
+        "mu": 1,
+        "lambda": 0,
+        "duration": "inf",
+        "confidence": 0.6,
+        "reason": "Water suppresses fire and smoke generation.",
+        "effect_entity_id_display": "Fire Sprinkler (input_boolean.xiao_fang_pen_lin_tou)"
+      }
+    },
+    {
+      "edge_id": "e00082",
+      "source": "env::home::temperature",
+      "target": "automation.r13_bedroom_heating::A",
+      "edge_group": "assoc",
+      "kind": "indirect-action",
+      "polarity": 1,
+      "metadata": {
+        "rule_from": "automation.r13_bedroom_heating",
+        "effect_entity_id": "input_boolean.wo_shi_nuan_qi",
+        "effect_operation": "turn_on",
+        "zone": "home",
+        "channel": "temperature",
+        "direction": "+1",
+        "mu": 1,
+        "lambda": 0,
+        "duration": "inf",
+        "confidence": 0.9,
+        "reason": "Activating heater increases temperature.",
+        "effect_entity_id_display": "Bedroom Heater (input_boolean.wo_shi_nuan_qi)"
+      }
+    },
+    {
+      "edge_id": "e00083",
+      "source": "env::home::temperature",
+      "target": "automation.r14_bedroom_window::A",
+      "edge_group": "assoc",
+      "kind": "indirect-action",
+      "polarity": -1,
+      "metadata": {
+        "rule_from": "automation.r14_bedroom_window",
+        "effect_entity_id": "input_boolean.wo_shi_chuang_hu",
+        "effect_operation": "turn_on",
+        "zone": "home",
+        "channel": "temperature",
+        "direction": "-1",
+        "mu": 1,
+        "lambda": 0,
+        "duration": "inf",
+        "confidence": 0.7,
+        "reason": "Opening window during high heat usually facilitates cooling.",
+        "effect_entity_id_display": "Bedroom Window (input_boolean.wo_shi_chuang_hu)"
+      }
+    },
+    {
+      "edge_id": "e00084",
+      "source": "env::home::temperature",
+      "target": "automation.r14_bedroom_window::A",
+      "edge_group": "assoc",
+      "kind": "indirect-action",
+      "polarity": -1,
+      "metadata": {
+        "rule_from": "automation.r14_bedroom_window",
+        "effect_entity_id": "input_boolean.wo_shi_nuan_qi",
+        "effect_operation": "turn_off",
+        "zone": "home",
+        "channel": "temperature",
+        "direction": "-1",
+        "mu": 1,
+        "lambda": 0,
+        "duration": "inf",
+        "confidence": 0.8,
+        "reason": "Turning off heater stops heating.",
+        "effect_entity_id_display": "Bedroom Heater (input_boolean.wo_shi_nuan_qi)"
+      }
+    },
+    {
+      "edge_id": "e00085",
+      "source": "env::home::temperature",
+      "target": "automation.r14_bedroom_window::T",
+      "edge_group": "assoc",
+      "kind": "env-trigger",
+      "polarity": 1,
+      "metadata": {
+        "rule_to": "automation.r14_bedroom_window",
+        "entity_id": "input_number.wo_shi_wen_du_chuan_gan_qi",
+        "zone": "home",
+        "channel": "temperature",
+        "relation": "↑",
+        "threshold": 30,
+        "confidence": 0.95,
+        "entity_id_display": "Bedroom Temperature Sensor (input_number.wo_shi_wen_du_chuan_gan_qi)"
+      }
+    },
+    {
+      "edge_id": "e00086",
+      "source": "env::home::temperature",
+      "target": "automation.r16_greenhouse_heating::A",
+      "edge_group": "assoc",
+      "kind": "indirect-action",
+      "polarity": 1,
+      "metadata": {
+        "rule_from": "automation.r16_greenhouse_heating",
+        "effect_entity_id": "input_boolean.wen_shi_nuan_qi",
+        "effect_operation": "turn_on",
+        "zone": "home",
+        "channel": "temperature",
+        "direction": "+1",
+        "mu": 1,
+        "lambda": 0,
+        "duration": "inf",
+        "confidence": 0.9,
+        "reason": "Activating heater increases temperature.",
+        "effect_entity_id_display": "Greenhouse Heater (input_boolean.wen_shi_nuan_qi)"
+      }
+    },
+    {
+      "edge_id": "e00087",
+      "source": "env::home::temperature",
+      "target": "automation.r17_greenhouse_window::A",
+      "edge_group": "assoc",
+      "kind": "indirect-action",
+      "polarity": -1,
+      "metadata": {
+        "rule_from": "automation.r17_greenhouse_window",
+        "effect_entity_id": "input_boolean.wen_shi_chuang_hu",
+        "effect_operation": "turn_on",
+        "zone": "home",
+        "channel": "temperature",
+        "direction": "-1",
+        "mu": 1,
+        "lambda": 0,
+        "duration": "inf",
+        "confidence": 0.7,
+        "reason": "Opening window during high heat usually facilitates cooling.",
+        "effect_entity_id_display": "Greenhouse Window (input_boolean.wen_shi_chuang_hu)"
+      }
+    },
+    {
+      "edge_id": "e00088",
+      "source": "env::home::temperature",
+      "target": "automation.r17_greenhouse_window::A",
+      "edge_group": "assoc",
+      "kind": "indirect-action",
+      "polarity": -1,
+      "metadata": {
+        "rule_from": "automation.r17_greenhouse_window",
+        "effect_entity_id": "input_boolean.wen_shi_nuan_qi",
+        "effect_operation": "turn_off",
+        "zone": "home",
+        "channel": "temperature",
+        "direction": "-1",
+        "mu": 1,
+        "lambda": 0,
+        "duration": "inf",
+        "confidence": 0.8,
+        "reason": "Turning off heater stops heating.",
+        "effect_entity_id_display": "Greenhouse Heater (input_boolean.wen_shi_nuan_qi)"
+      }
+    },
+    {
+      "edge_id": "e00089",
+      "source": "env::home::temperature",
+      "target": "automation.r17_greenhouse_window::T",
+      "edge_group": "assoc",
+      "kind": "env-trigger",
+      "polarity": 1,
+      "metadata": {
+        "rule_to": "automation.r17_greenhouse_window",
+        "entity_id": "input_number.greenhouse_temperature_sensor",
+        "zone": "home",
+        "channel": "temperature",
+        "relation": "↑",
+        "threshold": 30,
+        "confidence": 0.95,
+        "entity_id_display": "Greenhouse Temperature Sensor (input_number.greenhouse_temperature_sensor)"
+      }
+    },
+    {
+      "edge_id": "e00090",
+      "source": "env::home::temperature",
+      "target": "automation.r7_living_room_heating::A",
+      "edge_group": "assoc",
+      "kind": "indirect-action",
+      "polarity": 1,
+      "metadata": {
+        "rule_from": "automation.r7_living_room_heating",
+        "effect_entity_id": "input_boolean.ke_ting_di_nuan",
+        "effect_operation": "turn_on",
+        "zone": "home",
+        "channel": "temperature",
+        "direction": "+1",
+        "mu": 1,
+        "lambda": 0,
+        "duration": "inf",
+        "confidence": 0.9,
+        "reason": "Activating heating increases room temperature.",
+        "effect_entity_id_display": "Living Room Floor Heating (input_boolean.ke_ting_di_nuan)"
+      }
+    },
+    {
+      "edge_id": "e00091",
+      "source": "env::home::temperature",
+      "target": "automation.r7_living_room_heating::T",
+      "edge_group": "assoc",
+      "kind": "env-trigger",
+      "polarity": -1,
+      "metadata": {
+        "rule_to": "automation.r7_living_room_heating",
+        "entity_id": "input_number.ke_ting_wen_du_chuan_gan_qi",
+        "zone": "home",
+        "channel": "temperature",
+        "relation": "↓",
+        "threshold": 24,
+        "confidence": 0.95,
+        "entity_id_display": "Living Room Temperature Sensor (input_number.ke_ting_wen_du_chuan_gan_qi)"
+      }
+    },
+    {
+      "edge_id": "e00092",
+      "source": "env::home::temperature",
+      "target": "automation.r8_living_room_cooling::A",
+      "edge_group": "assoc",
+      "kind": "indirect-action",
+      "polarity": -1,
+      "metadata": {
+        "rule_from": "automation.r8_living_room_cooling",
+        "effect_entity_id": "input_boolean.ke_ting_kong_diao_kai_guan",
+        "effect_operation": "turn_on",
+        "zone": "home",
+        "channel": "temperature",
+        "direction": "-1",
+        "mu": 1,
+        "lambda": 0,
+        "duration": "inf",
+        "confidence": 0.85,
+        "reason": "AC turns on in high heat to cool the environment.",
+        "effect_entity_id_display": "Living Room Air Conditioner Switch (input_boolean.ke_ting_kong_diao_kai_guan)"
+      }
+    },
+    {
+      "edge_id": "e00093",
+      "source": "env::home::temperature",
+      "target": "automation.r8_living_room_cooling::T",
+      "edge_group": "assoc",
+      "kind": "env-trigger",
+      "polarity": 1,
+      "metadata": {
+        "rule_to": "automation.r8_living_room_cooling",
+        "entity_id": "input_number.ke_ting_wen_du_chuan_gan_qi",
+        "zone": "home",
+        "channel": "temperature",
+        "relation": "↑",
+        "threshold": 30,
+        "confidence": 0.95,
+        "entity_id_display": "Living Room Temperature Sensor (input_number.ke_ting_wen_du_chuan_gan_qi)"
+      }
+    },
+    {
+      "edge_id": "e00094",
+      "source": "env::home::water_flow",
+      "target": "automation.r10_water_shutoff::A",
+      "edge_group": "assoc",
+      "kind": "indirect-action",
+      "polarity": -1,
+      "metadata": {
+        "rule_from": "automation.r10_water_shutoff",
+        "effect_entity_id": "input_boolean.zhong_yang_shui_fa",
+        "effect_operation": "turn_off",
+        "zone": "home",
+        "channel": "water_flow",
+        "direction": "-1",
+        "mu": 1,
+        "lambda": 0,
+        "duration": "inf",
+        "confidence": 0.95,
+        "reason": "Closing valve stops water supply.",
+        "effect_entity_id_display": "input_boolean.zhong_yang_shui_fa"
+      }
+    },
+    {
+      "edge_id": "e00095",
+      "source": "env::home::water_flow",
+      "target": "automation.r11_fire_suppression::A",
+      "edge_group": "assoc",
+      "kind": "indirect-action",
+      "polarity": 1,
+      "metadata": {
+        "rule_from": "automation.r11_fire_suppression",
+        "effect_entity_id": "input_boolean.xiao_fang_pen_lin_tou",
+        "effect_operation": "turn_on",
+        "zone": "home",
+        "channel": "water_flow",
+        "direction": "+1",
+        "mu": 1,
+        "lambda": 0,
+        "duration": "inf",
+        "confidence": 0.9,
+        "reason": "Fire sprinkler releases water.",
+        "effect_entity_id_display": "Fire Sprinkler (input_boolean.xiao_fang_pen_lin_tou)"
+      }
+    }
+  ],
+  "summary": {
+    "node_count": 48,
+    "edge_count": 95,
+    "nodes_by_type": {
+      "action": 17,
+      "condition": 9,
+      "environment": 5,
+      "trigger": 17
+    },
+    "edges_by_kind": {
+      "direct-action": 12,
+      "direct-condition-allow": 2,
+      "direct-trigger": 2,
+      "env-association": 21,
+      "env-trigger": 6,
+      "flow": 26,
+      "indirect-action": 21,
+      "indirect-condition-disable": 5
+    },
+    "edges_by_group": {
+      "assoc": 69,
+      "intra": 26
+    },
+    "rule_count": 17
+  },
+  "pseudocode": "Algorithm BuildRuleAssociationGraph(TCAE)\nInput : TCAE rule set R = {r1, ..., rn}\nOutput: Rule Association Graph G_RA = (V, E, ell)\n\n1  V <- empty set; E <- empty list\n2  for each rule r in R do\n3      add trigger node v_r^T to V\n4      if C_r is not empty then\n5          add condition node v_r^C to V\n6      add action node v_r^A to V\n7      if C_r is not empty then\n8          add flow edge v_r^T -> v_r^C and v_r^C -> v_r^A\n9      else\n10         add flow edge v_r^T -> v_r^A\n11     for each environment reference rho in E_r^T union E_r^C do\n12         add environment node v_(rho.zone,rho.channel)^E to V\n13     for each environment effect eta in E_r^A do\n14         for each z in eta.reachable_zones do\n15             add environment node v_(z,eta.channel)^E to V\n16             add env-association edge v_r^A -> v_(z,eta.channel)^E\n17             add indirect-action edge v_(z,eta.channel)^E -> v_r^A\n18 end for\n\n19 for each ordered rule pair (ri, rj), ri != rj do\n20     for each action a in A_ri and trigger t in T_rj do\n21         if a may make t true then\n22             add direct-trigger edge v_ri^A -> v_rj^T\n23     for each action a in A_ri and condition c in C_rj do\n24         if a may make c true then\n25             add direct-condition-allow edge v_ri^A -> v_rj^C\n26         else if a may make c false then\n27             add direct-condition-disable edge v_ri^A -> v_rj^C\n28     for each action a in A_ri and action b in A_rj do\n29         if target(a) = target(b) then\n30             add direct-action edge v_ri^A -> v_rj^A\n31 end for\n\n32 for each rule r in R do\n33     for each environment trigger reference rho in E_r^T do\n34         add env-trigger edge v_(rho.zone,rho.channel)^E -> v_r^T\n35     for each environment condition reference rho in E_r^C do\n36         if increasing (rho.zone,rho.channel) helps satisfy rho then\n37             add indirect-condition-allow edge v_(rho.zone,rho.channel)^E -> v_r^C\n38         else\n39             add indirect-condition-disable edge v_(rho.zone,rho.channel)^E -> v_r^C\n40 end for\n\n41 remove duplicate edges with identical source, target, kind, polarity and core metadata\n42 assign stable edge identifiers\n43 return G_RA",
+  "source": {
+    "model": "TCAE",
+    "schema_version": "1.0",
+    "generated_at": "2026-05-31T18:00:58.105011+00:00",
+    "rule_count": 17
+  },
+  "entity_display": {
+    "input_boolean.men_lang_deng": "Porch Light (input_boolean.men_lang_deng)",
+    "input_boolean.men_wai_deng": "Outside Door Light (input_boolean.men_wai_deng)",
+    "input_boolean.zhi_neng_men_suo": "Smart Door Lock (input_boolean.zhi_neng_men_suo)",
+    "input_number.ke_ting_liang_du_chuan_gan_qi": "Living Room Light Sensor (input_number.ke_ting_liang_du_chuan_gan_qi)",
+    "input_boolean.wen_shi_deng": "Greenhouse Light (input_boolean.wen_shi_deng)",
+    "input_button.yun_dong_chuan_gan_qi": "Porch Motion Sensor (input_button.yun_dong_chuan_gan_qi)",
+    "input_number.liang_du_chuan_gan_qi_2": "Porch Light Sensor (input_number.liang_du_chuan_gan_qi_2)",
+    "input_boolean.deng": "Living Room Light (input_boolean.deng)",
+    "input_button.yun_dong_chuan_gan_qi_2": "Living Room Motion Sensor (input_button.yun_dong_chuan_gan_qi_2)",
+    "input_boolean.deng_2": "Kitchen Light (input_boolean.deng_2)",
+    "input_button.yun_dong_chuan_gan_qi_3": "Kitchen Motion Sensor (input_button.yun_dong_chuan_gan_qi_3)",
+    "input_number.chu_fang_liang_du_chuan_gan_qi": "Kitchen Light Sensor (input_number.chu_fang_liang_du_chuan_gan_qi)",
+    "input_boolean.wo_shi_deng": "Bedroom Light (input_boolean.wo_shi_deng)",
+    "input_button.wo_shi_yun_dong_chuan_gan_qi": "Bedroom Motion Sensor (input_button.wo_shi_yun_dong_chuan_gan_qi)",
+    "input_number.wo_shi_liang_du_chuan_gan_qi": "Bedroom Light Sensor (input_number.wo_shi_liang_du_chuan_gan_qi)",
+    "input_boolean.ke_ting_jia_shi_qi": "Living Room Humidifier (input_boolean.ke_ting_jia_shi_qi)",
+    "input_number.ke_ting_shi_du_chuan_gan_qi": "Living Room Humidity Sensor (input_number.ke_ting_shi_du_chuan_gan_qi)",
+    "input_boolean.ke_ting_di_nuan": "Living Room Floor Heating (input_boolean.ke_ting_di_nuan)",
+    "input_number.ke_ting_wen_du_chuan_gan_qi": "Living Room Temperature Sensor (input_number.ke_ting_wen_du_chuan_gan_qi)",
+    "input_boolean.ke_ting_kong_diao_kai_guan": "Living Room Air Conditioner Switch (input_boolean.ke_ting_kong_diao_kai_guan)",
+    "input_number.ke_ting_kong_diao_shu_zhi": "Living Room Air Conditioner Value (input_number.ke_ting_kong_diao_shu_zhi)",
+    "input_boolean.chu_fang_lou_shui_chuan_gan_qi": "Kitchen Water Leak Sensor (input_boolean.chu_fang_lou_shui_chuan_gan_qi)",
+    "input_boolean.zhong_yang_shui_fa": "input_boolean.zhong_yang_shui_fa",
+    "input_boolean.chu_fang_yan_wu_bao_jing_qi": "Kitchen Smoke Alarm (input_boolean.chu_fang_yan_wu_bao_jing_qi)",
+    "input_boolean.xiao_fang_pen_lin_tou": "Fire Sprinkler (input_boolean.xiao_fang_pen_lin_tou)",
+    "input_boolean.wo_shi_nuan_qi": "Bedroom Heater (input_boolean.wo_shi_nuan_qi)",
+    "input_datetime.xi_tong_shi_jian": "System time (input_datetime.xi_tong_shi_jian)",
+    "input_boolean.wo_shi_chuang_hu": "Bedroom Window (input_boolean.wo_shi_chuang_hu)",
+    "input_number.wo_shi_wen_du_chuan_gan_qi": "Bedroom Temperature Sensor (input_number.wo_shi_wen_du_chuan_gan_qi)",
+    "input_boolean.wen_shi_nuan_qi": "Greenhouse Heater (input_boolean.wen_shi_nuan_qi)",
+    "input_boolean.wen_shi_chuang_hu": "Greenhouse Window (input_boolean.wen_shi_chuang_hu)",
+    "input_number.greenhouse_temperature_sensor": "Greenhouse Temperature Sensor (input_number.greenhouse_temperature_sensor)"
+  }
+}

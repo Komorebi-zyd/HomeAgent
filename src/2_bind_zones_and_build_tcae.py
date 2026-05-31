@@ -18,10 +18,13 @@ import json
 from typing import Any, Dict, List, Optional, Tuple
 
 from common import (
+    entity_display_name,
     get_input_path,
+    get_optional_input_path,
     get_output_path,
     listify,
     load_config,
+    load_entity_registry,
     load_json,
     load_yaml,
     make_rule_uid,
@@ -221,10 +224,16 @@ def unique_effect_items(binding: Dict[str, Any]) -> List[Tuple[str, Dict[str, An
 
 
 
-def print_entity_zone_context(entity_id: str, device: Dict[str, Any], binding: Dict[str, Any]) -> None:
+def get_display_name(entity_id: str, device: Optional[Dict[str, Any]] = None, registry_map: Optional[Dict[str, Dict[str, Any]]] = None) -> str:
+    if device and device.get("display_name"):
+        return str(device["display_name"])
+    return entity_display_name(entity_id, registry_map or {})
+
+
+def print_entity_zone_context(entity_id: str, device: Dict[str, Any], binding: Dict[str, Any], registry_map: Optional[Dict[str, Dict[str, Any]]] = None) -> None:
     """Print zone-binding context in natural Chinese for human review."""
     print("\n" + "=" * 88)
-    print(f"实体 ID：{entity_id}")
+    print(f"实体：{get_display_name(entity_id, device, registry_map)}")
     domain = device.get("domain")
     role = binding.get("role")
     positions = device.get("positions") or []
@@ -268,7 +277,13 @@ def print_entity_zone_context(entity_id: str, device: Dict[str, Any], binding: D
         print(f"  ... 还有 {len(contexts) - 6} 条上下文未显示。")
 
 
-def interactive_zone_binding(devices_data: Dict[str, Any], channels_data: Dict[str, Any], existing: Optional[Dict[str, Any]] = None) -> Dict[str, Any]:
+def interactive_zone_binding(
+    devices_data: Dict[str, Any],
+    channels_data: Dict[str, Any],
+    existing: Optional[Dict[str, Any]] = None,
+    registry_map: Optional[Dict[str, Dict[str, Any]]] = None,
+) -> Dict[str, Any]:
+    registry_map = registry_map or {}
     device_map = load_device_map(devices_data)
     binding_map = load_binding_map(channels_data)
     existing = existing or {}
@@ -299,10 +314,10 @@ def interactive_zone_binding(devices_data: Dict[str, Any], channels_data: Dict[s
 
     print(f"\n需要绑定 zone 的实体数量: {len(target_entities)}")
     for eid in target_entities:
-        device = device_map.get(eid, {"entity_id": eid})
+        device = device_map.get(eid, {"entity_id": eid, "display_name": entity_display_name(eid, registry_map)})
         binding = binding_map[eid]
         prev = existing_bindings.get(eid)
-        print_entity_zone_context(eid, device, binding)
+        print_entity_zone_context(eid, device, binding, registry_map)
 
         if prev:
             print("已有绑定:")
@@ -324,6 +339,7 @@ def interactive_zone_binding(devices_data: Dict[str, Any], channels_data: Dict[s
 
         result_bindings[eid] = {
             "entity_id": eid,
+            "display_name": get_display_name(eid, device, registry_map),
             "source_zones": source_zones,
             "reachable_zones": reachable_zones,
             "source_zone_ids": zone_ids,
@@ -506,6 +522,7 @@ def build_env_effects_from_action(
 
 def build_tcae(automations: List[Dict[str, Any]], devices_data: Dict[str, Any], channels_data: Dict[str, Any], zones_data: Dict[str, Any]) -> Dict[str, Any]:
     binding_map = load_binding_map(channels_data)
+    device_map = load_device_map(devices_data)
     rules: List[Dict[str, Any]] = []
 
     for idx, rule in enumerate(automations, start=1):
@@ -543,6 +560,15 @@ def build_tcae(automations: List[Dict[str, Any]], devices_data: Dict[str, Any], 
             {
                 "rule_uid": rule_uid,
                 "rule_id": rule.get("id"),
+                "display_alias": rule.get("alias"),
+                "entity_display": {
+                    eid: device_map.get(eid, {}).get("display_name", eid)
+                    for eid in sorted({
+                        *(a.get("target_entity") for a in actions if a.get("target_entity")),
+                        *(t.get("entity_id") for t in triggers if t.get("entity_id")),
+                        *(c.get("entity_id") for c in conditions if c.get("entity_id")),
+                    })
+                },
                 "alias": rule.get("alias"),
                 "description": rule.get("description"),
                 "mode": rule.get("mode"),
@@ -580,6 +606,10 @@ def main() -> None:
 
     config = load_config()
     automations_path = get_input_path(config, "automations")
+    registry_path = get_optional_input_path(config, "entity_registry", "./configurations/core.entity_registry")
+    registry_map = load_entity_registry(registry_path)
+    if registry_map:
+        print(f"已加载实体名称映射: {registry_path}（{len(registry_map)} 条）")
     devices_path = get_output_path(config, "devices")
     channels_path = get_output_path(config, "channels")
     zones_path = get_output_path(config, "zones")
@@ -594,7 +624,7 @@ def main() -> None:
         zones_data = existing_zones
         print(f"复用已有 zones.json: {zones_path}")
     else:
-        zones_data = interactive_zone_binding(devices_data, channels_data, existing=existing_zones)
+        zones_data = interactive_zone_binding(devices_data, channels_data, existing=existing_zones, registry_map=registry_map)
         write_json(zones_path, zones_data)
         print(f"\n已写入 zone 绑定: {zones_path}")
 

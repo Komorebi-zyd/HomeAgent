@@ -27,11 +27,15 @@ from common import (
     call_ai_json,
     domain_of,
     ensure_dir,
+    enrich_entity_with_registry,
+    entity_display_name,
     get_input_path,
+    get_optional_input_path,
     get_output_path,
     infer_value_type_from_domain,
     listify,
     load_config,
+    load_entity_registry,
     load_env,
     load_yaml,
     make_rule_uid,
@@ -257,7 +261,8 @@ def finalize_roles(entity: Dict[str, Any]) -> None:
     entity["roles"] = roles
 
 
-def extract_devices(automations: List[Dict[str, Any]]) -> Dict[str, Any]:
+def extract_devices(automations: List[Dict[str, Any]], registry_map: Optional[Dict[str, Dict[str, Any]]] = None) -> Dict[str, Any]:
+    registry_map = registry_map or {}
     entities: Dict[str, Dict[str, Any]] = {}
     rules_summary: List[Dict[str, Any]] = []
 
@@ -304,6 +309,7 @@ def extract_devices(automations: List[Dict[str, Any]]) -> Dict[str, Any]:
         entity["rules"] = sorted(unique_list(entity["rules"]))
         entity["operations"] = sorted(unique_list(entity["operations"]))
         finalize_roles(entity)
+        enrich_entity_with_registry(entity, registry_map)
 
     entity_list = sorted(entities.values(), key=lambda x: x["entity_id"])
     return {
@@ -340,6 +346,8 @@ def compact_devices_for_ai(devices: Dict[str, Any]) -> List[Dict[str, Any]]:
         compact.append(
             {
                 "entity_id": e["entity_id"],
+                "display_name": e.get("display_name", e["entity_id"]),
+                "registry": e.get("registry", {}),
                 "domain": e["domain"],
                 "value_type_hint": e.get("value_type_hint"),
                 "positions": e.get("positions", []),
@@ -414,6 +422,18 @@ def normalize_proposed_channels(raw: Any, existing_channels: List[str], device_i
         )
         seen.add(channel)
     return proposals
+
+
+def build_entity_display_list(devices: Dict[str, Any]) -> List[Dict[str, Any]]:
+    return [
+        {
+            "entity_id": e.get("entity_id"),
+            "display_name": e.get("display_name", e.get("entity_id")),
+            "original_name": (e.get("registry") or {}).get("original_name"),
+            "name": (e.get("registry") or {}).get("name"),
+        }
+        for e in sorted(devices.get("entities", []), key=lambda x: x.get("entity_id", ""))
+    ]
 
 
 def validate_and_normalize_bindings(ai_data: Any, devices: Dict[str, Any], channels: List[str]) -> Dict[str, Any]:
@@ -528,6 +548,7 @@ def validate_and_normalize_bindings(ai_data: Any, devices: Dict[str, Any], chann
         "generated_at": utc_now_iso(),
         "method": "ai_with_validation",
         "candidate_channels": channels,
+        "entity_display": build_entity_display_list(devices),
         "bindings": [out_map[eid] for eid in sorted(out_map)],
         "proposed_channels": proposed,
         "invalid_channel_mentions": sorted(invalid_mentions.values(), key=lambda x: x["channel"]),
@@ -553,6 +574,7 @@ def build_empty_channels(devices: Dict[str, Any], config: Dict[str, Any], method
         "generated_at": utc_now_iso(),
         "method": method,
         "candidate_channels": config.get("channels", []),
+        "entity_display": build_entity_display_list(devices),
         "bindings": [default_empty_binding(e) for e in sorted(devices.get("entities", []), key=lambda x: x["entity_id"])],
         "proposed_channels": [],
         "invalid_channel_mentions": [],
@@ -561,6 +583,7 @@ def build_empty_channels(devices: Dict[str, Any], config: Dict[str, Any], method
 
 def print_binding_review_hint(channels_data: Dict[str, Any], channels_path: str) -> None:
     print("\n[Channel Binding Summary]")
+    display_map = {e.get("entity_id"): e.get("display_name", e.get("entity_id")) for e in channels_data.get("entity_display", []) if isinstance(e, dict)}
     for b in channels_data.get("bindings", []):
         observes = ", ".join(o["channel"] for o in b.get("observes", [])) or "-"
         ebo_parts = []
@@ -568,7 +591,8 @@ def print_binding_review_hint(channels_data: Dict[str, Any], channels_path: str)
             ebo_parts.append(op + ":" + ",".join(f"{e['channel']}({e['direction']})" for e in effects))
         effects = "; ".join(ebo_parts) or ", ".join(f"{e['channel']}({e['direction']})" for e in b.get("effects", [])) or "-"
         review = " REVIEW" if b.get("needs_human_review") else ""
-        print(f"- {b['entity_id']} | role={b.get('role')} | observes={observes} | effects={effects}{review}")
+        name = display_map.get(b["entity_id"], b["entity_id"])
+        print(f"- {name} | role={b.get('role')} | observes={observes} | effects={effects}{review}")
 
     proposals = channels_data.get("proposed_channels", []) or []
     if proposals:
@@ -611,11 +635,17 @@ def main() -> None:
 
     load_env()
     automations_path = get_input_path(config, "automations")
+    registry_path = get_optional_input_path(config, "entity_registry", "./configurations/core.entity_registry")
+    registry_map = load_entity_registry(registry_path)
+    if registry_map:
+        print(f"已加载实体名称映射: {registry_path}（{len(registry_map)} 条）")
+    else:
+        print("未发现可用的 core.entity_registry，用户可见名称将回退为 entity_id。")
     devices_path = get_output_path(config, "devices")
     channels_path = get_output_path(config, "channels")
 
     automations = normalize_automation_list(load_yaml(automations_path, default=[]))
-    devices = extract_devices(automations)
+    devices = extract_devices(automations, registry_map=registry_map)
     write_json(devices_path, devices)
     print(f"已提取 {devices['summary']['entity_count']} 个实体，写入: {devices_path}")
 

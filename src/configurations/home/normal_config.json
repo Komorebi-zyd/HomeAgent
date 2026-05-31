@@ -1,0 +1,91 @@
+{
+  "schema_version": "1.0",
+  "generated_at": "2026-05-31T18:16:32.698693+00:00",
+  "method": "ai_with_human_review",
+  "normal_entities": {
+    "input_boolean.wen_shi_chuang_hu": {
+      "entity_id": "input_boolean.wen_shi_chuang_hu",
+      "normal_values": [
+        "off"
+      ],
+      "abnormal_values": [
+        "on"
+      ],
+      "category": "security",
+      "safety_level": "high",
+      "confidence": 0.8,
+      "reason": "The greenhouse window opens to cool the room (R17), but physically opening a window reduces security. It should remain closed unless actively cooling.",
+      "needs_human_review": false,
+      "source": "ai"
+    },
+    "input_boolean.wo_shi_chuang_hu": {
+      "entity_id": "input_boolean.wo_shi_chuang_hu",
+      "normal_values": [
+        "off"
+      ],
+      "abnormal_values": [
+        "on"
+      ],
+      "category": "security",
+      "safety_level": "high",
+      "confidence": 0.8,
+      "reason": "The bedroom window opens to cool the room (R14), but physically opening a window reduces security. It should remain closed unless actively cooling.",
+      "needs_human_review": false,
+      "source": "ai"
+    },
+    "input_boolean.xiao_fang_pen_lin_tou": {
+      "entity_id": "input_boolean.xiao_fang_pen_lin_tou",
+      "normal_values": [
+        "off"
+      ],
+      "abnormal_values": [
+        "on"
+      ],
+      "category": "safety",
+      "safety_level": "critical",
+      "confidence": 0.95,
+      "reason": "The fire sprinkler is only activated in response to a smoke alarm (R11). Its normal state is 'off' to prevent water damage. Activation indicates an emergency.",
+      "needs_human_review": false,
+      "source": "ai"
+    },
+    "input_boolean.zhi_neng_men_suo": {
+      "entity_id": "input_boolean.zhi_neng_men_suo",
+      "normal_values": [
+        "off"
+      ],
+      "abnormal_values": [
+        "on"
+      ],
+      "category": "security",
+      "safety_level": "high",
+      "confidence": 0.7,
+      "reason": "Context implies 'on' corresponds to opening the lock (R1) and 'off' to closing/locking (R15). The locked state (off) is the normal security state.",
+      "needs_human_review": false,
+      "source": "ai"
+    },
+    "input_boolean.zhong_yang_shui_fa": {
+      "entity_id": "input_boolean.zhong_yang_shui_fa",
+      "normal_values": [
+        "on"
+      ],
+      "abnormal_values": [
+        "off"
+      ],
+      "category": "safety",
+      "safety_level": "critical",
+      "confidence": 0.95,
+      "reason": "The central water valve is only turned off to prevent damage when a leak is detected (R10). The normal state is 'on' to ensure water availability.",
+      "needs_human_review": false,
+      "source": "ai"
+    }
+  },
+  "summary": {
+    "normal_entity_count": 5,
+    "levels": {
+      "critical": 2,
+      "high": 3,
+      "low": 0,
+      "medium": 0
+    }
+  }
+}

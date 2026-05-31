@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0",
-  "generated_at": "2026-05-31T16:23:48.784260+00:00",
+  "generated_at": "2026-05-31T17:36:55.526710+00:00",
   "method": "ai_with_validation",
   "candidate_channels": [
     "temperature",
@@ -12,6 +12,200 @@
     "smoke",
     "water_flow"
   ],
+  "entity_display": [
+    {
+      "entity_id": "input_boolean.chu_fang_lou_shui_chuan_gan_qi",
+      "display_name": "Kitchen Water Leak Sensor (input_boolean.chu_fang_lou_shui_chuan_gan_qi)",
+      "original_name": "Kitchen Water Leak Sensor",
+      "name": null
+    },
+    {
+      "entity_id": "input_boolean.chu_fang_yan_wu_bao_jing_qi",
+      "display_name": "Kitchen Smoke Alarm (input_boolean.chu_fang_yan_wu_bao_jing_qi)",
+      "original_name": "Kitchen Smoke Alarm",
+      "name": null
+    },
+    {
+      "entity_id": "input_boolean.deng",
+      "display_name": "Living Room Light (input_boolean.deng)",
+      "original_name": "Living Room Light",
+      "name": null
+    },
+    {
+      "entity_id": "input_boolean.deng_2",
+      "display_name": "Kitchen Light (input_boolean.deng_2)",
+      "original_name": "Kitchen Light",
+      "name": null
+    },
+    {
+      "entity_id": "input_boolean.ke_ting_di_nuan",
+      "display_name": "Living Room Floor Heating (input_boolean.ke_ting_di_nuan)",
+      "original_name": "Living Room Floor Heating",
+      "name": null
+    },
+    {
+      "entity_id": "input_boolean.ke_ting_jia_shi_qi",
+      "display_name": "Living Room Humidifier (input_boolean.ke_ting_jia_shi_qi)",
+      "original_name": "Living Room Humidifier",
+      "name": null
+    },
+    {
+      "entity_id": "input_boolean.ke_ting_kong_diao_kai_guan",
+      "display_name": "Living Room Air Conditioner Switch (input_boolean.ke_ting_kong_diao_kai_guan)",
+      "original_name": "Living Room Air Conditioner Switch",
+      "name": null
+    },
+    {
+      "entity_id": "input_boolean.men_lang_deng",
+      "display_name": "Porch Light (input_boolean.men_lang_deng)",
+      "original_name": "Porch Light",
+      "name": null
+    },
+    {
+      "entity_id": "input_boolean.men_wai_deng",
+      "display_name": "Outside Door Light (input_boolean.men_wai_deng)",
+      "original_name": "Outside Door Light",
+      "name": null
+    },
+    {
+      "entity_id": "input_boolean.wen_shi_chuang_hu",
+      "display_name": "Greenhouse Window (input_boolean.wen_shi_chuang_hu)",
+      "original_name": "Greenhouse Window",
+      "name": null
+    },
+    {
+      "entity_id": "input_boolean.wen_shi_deng",
+      "display_name": "Greenhouse Light (input_boolean.wen_shi_deng)",
+      "original_name": "Greenhouse Light",
+      "name": null
+    },
+    {
+      "entity_id": "input_boolean.wen_shi_nuan_qi",
+      "display_name": "Greenhouse Heater (input_boolean.wen_shi_nuan_qi)",
+      "original_name": "Greenhouse Heater",
+      "name": null
+    },
+    {
+      "entity_id": "input_boolean.wo_shi_chuang_hu",
+      "display_name": "Bedroom Window (input_boolean.wo_shi_chuang_hu)",
+      "original_name": "Bedroom Window",
+      "name": null
+    },
+    {
+      "entity_id": "input_boolean.wo_shi_deng",
+      "display_name": "Bedroom Light (input_boolean.wo_shi_deng)",
+      "original_name": "Bedroom Light",
+      "name": null
+    },
+    {
+      "entity_id": "input_boolean.wo_shi_nuan_qi",
+      "display_name": "Bedroom Heater (input_boolean.wo_shi_nuan_qi)",
+      "original_name": "Bedroom Heater",
+      "name": null
+    },
+    {
+      "entity_id": "input_boolean.xiao_fang_pen_lin_tou",
+      "display_name": "Fire Sprinkler (input_boolean.xiao_fang_pen_lin_tou)",
+      "original_name": "Fire Sprinkler",
+      "name": null
+    },
+    {
+      "entity_id": "input_boolean.zhi_neng_men_suo",
+      "display_name": "Smart Door Lock (input_boolean.zhi_neng_men_suo)",
+      "original_name": "Smart Door Lock",
+      "name": null
+    },
+    {
+      "entity_id": "input_boolean.zhong_yang_shui_fa",
+      "display_name": "input_boolean.zhong_yang_shui_fa",
+      "original_name": null,
+      "name": null
+    },
+    {
+      "entity_id": "input_button.wo_shi_yun_dong_chuan_gan_qi",
+      "display_name": "Bedroom Motion Sensor (input_button.wo_shi_yun_dong_chuan_gan_qi)",
+      "original_name": "Bedroom Motion Sensor",
+      "name": null
+    },
+    {
+      "entity_id": "input_button.yun_dong_chuan_gan_qi",
+      "display_name": "Porch Motion Sensor (input_button.yun_dong_chuan_gan_qi)",
+      "original_name": "Porch Motion Sensor",
+      "name": null
+    },
+    {
+      "entity_id": "input_button.yun_dong_chuan_gan_qi_2",
+      "display_name": "Living Room Motion Sensor (input_button.yun_dong_chuan_gan_qi_2)",
+      "original_name": "Living Room Motion Sensor",
+      "name": null
+    },
+    {
+      "entity_id": "input_button.yun_dong_chuan_gan_qi_3",
+      "display_name": "Kitchen Motion Sensor (input_button.yun_dong_chuan_gan_qi_3)",
+      "original_name": "Kitchen Motion Sensor",
+      "name": null
+    },
+    {
+      "entity_id": "input_datetime.xi_tong_shi_jian",
+      "display_name": "System time (input_datetime.xi_tong_shi_jian)",
+      "original_name": "System time",
+      "name": null
+    },
+    {
+      "entity_id": "input_number.chu_fang_liang_du_chuan_gan_qi",
+      "display_name": "Kitchen Light Sensor (input_number.chu_fang_liang_du_chuan_gan_qi)",
+      "original_name": "Kitchen Light Sensor",
+      "name": null
+    },
+    {
+      "entity_id": "input_number.greenhouse_temperature_sensor",
+      "display_name": "Greenhouse Temperature Sensor (input_number.greenhouse_temperature_sensor)",
+      "original_name": "Greenhouse Temperature Sensor",
+      "name": null
+    },
+    {
+      "entity_id": "input_number.ke_ting_kong_diao_shu_zhi",
+      "display_name": "Living Room Air Conditioner Value (input_number.ke_ting_kong_diao_shu_zhi)",
+      "original_name": "Living Room Air Conditioner Value",
+      "name": null
+    },
+    {
+      "entity_id": "input_number.ke_ting_liang_du_chuan_gan_qi",
+      "display_name": "Living Room Light Sensor (input_number.ke_ting_liang_du_chuan_gan_qi)",
+      "original_name": "Living Room Light Sensor",
+      "name": null
+    },
+    {
+      "entity_id": "input_number.ke_ting_shi_du_chuan_gan_qi",
+      "display_name": "Living Room Humidity Sensor (input_number.ke_ting_shi_du_chuan_gan_qi)",
+      "original_name": "Living Room Humidity Sensor",
+      "name": null
+    },
+    {
+      "entity_id": "input_number.ke_ting_wen_du_chuan_gan_qi",
+      "display_name": "Living Room Temperature Sensor (input_number.ke_ting_wen_du_chuan_gan_qi)",
+      "original_name": "Living Room Temperature Sensor",
+      "name": null
+    },
+    {
+      "entity_id": "input_number.liang_du_chuan_gan_qi_2",
+      "display_name": "Porch Light Sensor (input_number.liang_du_chuan_gan_qi_2)",
+      "original_name": "Porch Light Sensor",
+      "name": null
+    },
+    {
+      "entity_id": "input_number.wo_shi_liang_du_chuan_gan_qi",
+      "display_name": "Bedroom Light Sensor (input_number.wo_shi_liang_du_chuan_gan_qi)",
+      "original_name": "Bedroom Light Sensor",
+      "name": null
+    },
+    {
+      "entity_id": "input_number.wo_shi_wen_du_chuan_gan_qi",
+      "display_name": "Bedroom Temperature Sensor (input_number.wo_shi_wen_du_chuan_gan_qi)",
+      "original_name": "Bedroom Temperature Sensor",
+      "name": null
+    }
+  ],
   "bindings": [
     {
       "entity_id": "input_boolean.chu_fang_lou_shui_chuan_gan_qi",
@@ -21,13 +215,13 @@
           "channel": "water_flow",
           "value_type": "state",
           "confidence": 0.9,
-          "reason": "Entity acts as a trigger for water shutoff upon leak detection (R10), indicating water flow presence."
+          "reason": "Entity functions as a water leak sensor in R10, detecting abnormal water presence/flow."
         }
       ],
       "effects": [],
       "effects_by_operation": {},
       "needs_human_review": false,
-      "notes": "Inferred from R10 context linking leak sensor to water valve."
+      "notes": "Leak sensor typically detects presence of water."
     },
     {
       "entity_id": "input_boolean.chu_fang_yan_wu_bao_jing_qi",
@@ -36,14 +230,14 @@
         {
           "channel": "smoke",
           "value_type": "state",
-          "confidence": 0.95,
-          "reason": "Trigger context in R11 'smoke alarm' directly implies smoke detection."
+          "confidence": 0.9,
+          "reason": "Entity acts as a smoke alarm trigger in R11, indicating smoke/fire presence."
         }
       ],
       "effects": [],
       "effects_by_operation": {},
       "needs_human_review": false,
-      "notes": "Explicitly named smoke alarm in description."
+      "notes": "Smoke alarm detects smoke particles."
     },
     {
       "entity_id": "input_boolean.deng",
@@ -53,9 +247,9 @@
         {
           "channel": "light",
           "direction": "+1",
-          "operation": "default",
-          "confidence": 0.9,
-          "reason": "Action target in R4 to turn on living room light based on brightness."
+          "operation": "turn_on",
+          "confidence": 0.95,
+          "reason": "Entity is a light switch; 'turn_on' increases light level in the room."
         }
       ],
       "effects_by_operation": {
@@ -63,13 +257,21 @@
           {
             "channel": "light",
             "direction": "+1",
-            "confidence": 0.9,
-            "reason": "Increasing illumination level."
+            "confidence": 0.95,
+            "reason": "Turning on a light increases environmental illumination."
+          }
+        ],
+        "turn_off": [
+          {
+            "channel": "light",
+            "direction": "-1",
+            "confidence": 0.95,
+            "reason": "Turning off a light decreases environmental illumination."
           }
         ]
       },
       "needs_human_review": false,
-      "notes": "Generic 'deng' implies light in context of brightness/motion rules."
+      "notes": "Standard light actuator."
     },
     {
       "entity_id": "input_boolean.deng_2",
@@ -79,9 +281,9 @@
         {
           "channel": "light",
           "direction": "+1",
-          "operation": "default",
-          "confidence": 0.9,
-          "reason": "Action target in R9 to turn on kitchen light based on brightness."
+          "operation": "turn_on",
+          "confidence": 0.95,
+          "reason": "Entity is a light switch; 'turn_on' increases light level."
         }
       ],
       "effects_by_operation": {
@@ -89,13 +291,13 @@
           {
             "channel": "light",
             "direction": "+1",
-            "confidence": 0.9,
-            "reason": "Increasing illumination level."
+            "confidence": 0.95,
+            "reason": "Turning on a light increases environmental illumination."
           }
         ]
       },
       "needs_human_review": false,
-      "notes": "Generic 'deng_2' implies light in context of brightness/motion rules."
+      "notes": "Standard light actuator."
     },
     {
       "entity_id": "input_boolean.ke_ting_di_nuan",
@@ -105,9 +307,9 @@
         {
           "channel": "temperature",
           "direction": "+1",
-          "operation": "default",
-          "confidence": 0.95,
-          "reason": "R7 context 'floor heating' implies temperature increase."
+          "operation": "turn_on",
+          "confidence": 0.9,
+          "reason": "Floor heating is turned on when temperature is low (R7), implying it heats the room."
         }
       ],
       "effects_by_operation": {
@@ -115,13 +317,21 @@
           {
             "channel": "temperature",
             "direction": "+1",
-            "confidence": 0.95,
-            "reason": "Floor heating increases room temperature."
+            "confidence": 0.9,
+            "reason": "Activating heating increases room temperature."
+          }
+        ],
+        "turn_off": [
+          {
+            "channel": "temperature",
+            "direction": "-1",
+            "confidence": 0.8,
+            "reason": "Deactivating heating allows room temperature to drop (natural cooling)."
           }
         ]
       },
       "needs_human_review": false,
-      "notes": "Di Nuan = Floor Heating."
+      "notes": "Heating actuator, conditioned by state in R7."
     },
     {
       "entity_id": "input_boolean.ke_ting_jia_shi_qi",
@@ -131,9 +341,9 @@
         {
           "channel": "humidity",
           "direction": "+1",
-          "operation": "default",
-          "confidence": 0.95,
-          "reason": "R5/R6 context identifies entity as 'humidifier' modifying humidity."
+          "operation": "turn_on",
+          "confidence": 0.9,
+          "reason": "Humidifier is turned on when humidity is low (R5), implying it adds moisture."
         }
       ],
       "effects_by_operation": {
@@ -141,21 +351,21 @@
           {
             "channel": "humidity",
             "direction": "+1",
-            "confidence": 0.95,
-            "reason": "Humidifier active state increases humidity."
+            "confidence": 0.9,
+            "reason": "Activating humidifier increases humidity."
           }
         ],
         "turn_off": [
           {
             "channel": "humidity",
-            "direction": "0",
-            "confidence": 0.5,
-            "reason": "Turning off stops active humidification; humidity may drift."
+            "direction": "-1",
+            "confidence": 0.7,
+            "reason": "Turning off humidifier stops increasing humidity (natural decrease)."
           }
         ]
       },
       "needs_human_review": false,
-      "notes": "Jia Shi Qi = Humidifier."
+      "notes": "Humidity control actuator."
     },
     {
       "entity_id": "input_boolean.ke_ting_kong_diao_kai_guan",
@@ -165,9 +375,9 @@
         {
           "channel": "temperature",
           "direction": "-1",
-          "operation": "default",
-          "confidence": 0.9,
-          "reason": "R8 context 'air conditioner' implies cooling/temperature decrease."
+          "operation": "turn_on",
+          "confidence": 0.85,
+          "reason": "Air conditioner is turned on when temperature is high (R8), implying it cools the room."
         }
       ],
       "effects_by_operation": {
@@ -175,13 +385,13 @@
           {
             "channel": "temperature",
             "direction": "-1",
-            "confidence": 0.9,
-            "reason": "AC operation in R8 is cooling (30C -> 27C target)."
+            "confidence": 0.85,
+            "reason": "AC turns on in high heat to cool the environment."
           }
         ]
       },
       "needs_human_review": false,
-      "notes": "Kong Diao = Air Conditioner."
+      "notes": "AC switch affects temperature. Direction inferred from context (cooling)."
     },
     {
       "entity_id": "input_boolean.men_lang_deng",
@@ -191,9 +401,9 @@
         {
           "channel": "light",
           "direction": "+1",
-          "operation": "default",
-          "confidence": 0.9,
-          "reason": "Context 'porch light' (R1, R3) implies controlling light."
+          "operation": "turn_on",
+          "confidence": 0.95,
+          "reason": "Porch light switch increases illumination."
         }
       ],
       "effects_by_operation": {
@@ -201,21 +411,21 @@
           {
             "channel": "light",
             "direction": "+1",
-            "confidence": 0.9,
-            "reason": "Switching light on."
+            "confidence": 0.95,
+            "reason": "Turning on light increases illumination."
           }
         ],
         "turn_off": [
           {
             "channel": "light",
             "direction": "-1",
-            "confidence": 0.9,
-            "reason": "Switching light off."
+            "confidence": 0.95,
+            "reason": "Turning off light decreases illumination."
           }
         ]
       },
       "needs_human_review": false,
-      "notes": "Men Lang Deng = Porch Light."
+      "notes": "Standard light actuator."
     },
     {
       "entity_id": "input_boolean.men_wai_deng",
@@ -225,9 +435,9 @@
         {
           "channel": "light",
           "direction": "+1",
-          "operation": "default",
-          "confidence": 0.9,
-          "reason": "Context 'outside door light' (R1) implies controlling light."
+          "operation": "turn_on",
+          "confidence": 0.95,
+          "reason": "Outside light switch increases illumination."
         }
       ],
       "effects_by_operation": {
@@ -235,13 +445,13 @@
           {
             "channel": "light",
             "direction": "+1",
-            "confidence": 0.9,
-            "reason": "Switching light on."
+            "confidence": 0.95,
+            "reason": "Turning on light increases illumination."
           }
         ]
       },
       "needs_human_review": false,
-      "notes": "Men Wai Deng = Outside Door Light."
+      "notes": "Standard light actuator."
     },
     {
       "entity_id": "input_boolean.wen_shi_chuang_hu",
@@ -251,9 +461,9 @@
         {
           "channel": "temperature",
           "direction": "-1",
-          "operation": "default",
-          "confidence": 0.8,
-          "reason": "R17: Open window in response to high temp (32C) implies cooling/ventilation."
+          "operation": "turn_on",
+          "confidence": 0.7,
+          "reason": "Window opens at high temperature (R17), likely to vent and cool the room."
         }
       ],
       "effects_by_operation": {
@@ -261,13 +471,13 @@
           {
             "channel": "temperature",
             "direction": "-1",
-            "confidence": 0.8,
-            "reason": "Opening window typically lowers temperature relative to sealed state."
+            "confidence": 0.7,
+            "reason": "Opening window during high heat usually facilitates cooling."
           }
         ]
       },
       "needs_human_review": false,
-      "notes": "Wen Shi Chuang Hu = Greenhouse Window."
+      "notes": "Window actuator. Affects temperature via ventilation."
     },
     {
       "entity_id": "input_boolean.wen_shi_deng",
@@ -277,9 +487,9 @@
         {
           "channel": "light",
           "direction": "-1",
-          "operation": "default",
-          "confidence": 0.85,
-          "reason": "Context R2/R15 'greenhouse light' implies control over light."
+          "operation": "turn_off",
+          "confidence": 0.95,
+          "reason": "Greenhouse light is turned off in R15."
         }
       ],
       "effects_by_operation": {
@@ -287,13 +497,13 @@
           {
             "channel": "light",
             "direction": "-1",
-            "confidence": 0.85,
-            "reason": "Turn off action affects light."
+            "confidence": 0.95,
+            "reason": "Turning off light decreases illumination."
           }
         ]
       },
       "needs_human_review": false,
-      "notes": "Wen Shi Deng = Greenhouse Light."
+      "notes": "Light actuator used as trigger in R2."
     },
     {
       "entity_id": "input_boolean.wen_shi_nuan_qi",
@@ -303,9 +513,9 @@
         {
           "channel": "temperature",
           "direction": "+1",
-          "operation": "default",
-          "confidence": 0.95,
-          "reason": "Context R16/R17 'greenhouse heating' implies temperature increase."
+          "operation": "turn_on",
+          "confidence": 0.9,
+          "reason": "Greenhouse heater is turned on at 7PM (R16), implying it heats the room."
         }
       ],
       "effects_by_operation": {
@@ -313,21 +523,21 @@
           {
             "channel": "temperature",
             "direction": "+1",
-            "confidence": 0.95,
-            "reason": "Heating increases temperature."
+            "confidence": 0.9,
+            "reason": "Activating heater increases temperature."
           }
         ],
         "turn_off": [
           {
             "channel": "temperature",
-            "direction": "0",
-            "confidence": 0.5,
-            "reason": "Turning off heating stops temperature increase."
+            "direction": "-1",
+            "confidence": 0.8,
+            "reason": "Turning off heater stops heating."
           }
         ]
       },
       "needs_human_review": false,
-      "notes": "Nuan Qi = Heater."
+      "notes": "Heater actuator."
     },
     {
       "entity_id": "input_boolean.wo_shi_chuang_hu",
@@ -337,9 +547,9 @@
         {
           "channel": "temperature",
           "direction": "-1",
-          "operation": "default",
-          "confidence": 0.8,
-          "reason": "R14: Open window in response to high temp (30C) implies cooling/ventilation."
+          "operation": "turn_on",
+          "confidence": 0.7,
+          "reason": "Window opens at high temperature (R14), likely to cool the room."
         }
       ],
       "effects_by_operation": {
@@ -347,13 +557,13 @@
           {
             "channel": "temperature",
             "direction": "-1",
-            "confidence": 0.8,
-            "reason": "Opening window releases heat."
+            "confidence": 0.7,
+            "reason": "Opening window during high heat usually facilitates cooling."
           }
         ]
       },
       "needs_human_review": false,
-      "notes": "Wo Shi Chuang Hu = Bedroom Window."
+      "notes": "Window actuator affects temperature."
     },
     {
       "entity_id": "input_boolean.wo_shi_deng",
@@ -363,9 +573,9 @@
         {
           "channel": "light",
           "direction": "+1",
-          "operation": "default",
-          "confidence": 0.9,
-          "reason": "Context R12 'bedroom light' implies controlling light."
+          "operation": "turn_on",
+          "confidence": 0.95,
+          "reason": "Bedroom light switch increases illumination."
         }
       ],
       "effects_by_operation": {
@@ -373,13 +583,13 @@
           {
             "channel": "light",
             "direction": "+1",
-            "confidence": 0.9,
-            "reason": "Turning on light."
+            "confidence": 0.95,
+            "reason": "Turning on light increases illumination."
           }
         ]
       },
       "needs_human_review": false,
-      "notes": "Wo Shi Deng = Bedroom Light."
+      "notes": "Standard light actuator."
     },
     {
       "entity_id": "input_boolean.wo_shi_nuan_qi",
@@ -389,9 +599,9 @@
         {
           "channel": "temperature",
           "direction": "+1",
-          "operation": "default",
-          "confidence": 0.95,
-          "reason": "Context R13/R14 'bedroom heating' implies temperature increase."
+          "operation": "turn_on",
+          "confidence": 0.9,
+          "reason": "Bedroom heater is turned on at 7PM (R13), implying it heats the room."
         }
       ],
       "effects_by_operation": {
@@ -399,21 +609,21 @@
           {
             "channel": "temperature",
             "direction": "+1",
-            "confidence": 0.95,
-            "reason": "Heating increases temperature."
+            "confidence": 0.9,
+            "reason": "Activating heater increases temperature."
           }
         ],
         "turn_off": [
           {
             "channel": "temperature",
-            "direction": "0",
-            "confidence": 0.5,
-            "reason": "Stopping heating."
+            "direction": "-1",
+            "confidence": 0.8,
+            "reason": "Turning off heater stops heating."
           }
         ]
       },
       "needs_human_review": false,
-      "notes": "Wo Shi Nuan Qi = Bedroom Heater."
+      "notes": "Heater actuator."
     },
     {
       "entity_id": "input_boolean.xiao_fang_pen_lin_tou",
@@ -423,9 +633,16 @@
         {
           "channel": "water_flow",
           "direction": "+1",
-          "operation": "default",
-          "confidence": 0.95,
-          "reason": "Context R11 'fire sprinkler' implies releasing water."
+          "operation": "turn_on",
+          "confidence": 0.9,
+          "reason": "Sprinkler activation releases water (R11)."
+        },
+        {
+          "channel": "smoke",
+          "direction": "-1",
+          "operation": "turn_on",
+          "confidence": 0.6,
+          "reason": "Sprinkler suppresses fire/smoke indirectly."
         }
       ],
       "effects_by_operation": {
@@ -433,13 +650,19 @@
           {
             "channel": "water_flow",
             "direction": "+1",
-            "confidence": 0.95,
-            "reason": "Sprinkler activation causes water flow."
+            "confidence": 0.9,
+            "reason": "Fire sprinkler releases water."
+          },
+          {
+            "channel": "smoke",
+            "direction": "-1",
+            "confidence": 0.6,
+            "reason": "Water suppresses fire and smoke generation."
           }
         ]
       },
       "needs_human_review": false,
-      "notes": "Xiao Fang Pen Lin Tou = Fire Sprinkler."
+      "notes": "Sprinkler primarily affects water flow."
     },
     {
       "entity_id": "input_boolean.zhi_neng_men_suo",
@@ -447,8 +670,8 @@
       "observes": [],
       "effects": [],
       "effects_by_operation": {},
-      "needs_human_review": true,
-      "notes": "Smart lock logical state. Does not directly affect environmental channels in candidate list (temperature, humidity, light, etc.)."
+      "needs_human_review": false,
+      "notes": "Smart door lock is a security/logical device, not directly an environmental channel sensor or actuator based on provided channels."
     },
     {
       "entity_id": "input_boolean.zhong_yang_shui_fa",
@@ -458,9 +681,9 @@
         {
           "channel": "water_flow",
           "direction": "-1",
-          "operation": "default",
+          "operation": "turn_off",
           "confidence": 0.95,
-          "reason": "Context R10 'central water valve' shutoff stops water flow."
+          "reason": "Central water valve is turned off to stop water flow (R10)."
         }
       ],
       "effects_by_operation": {
@@ -469,12 +692,12 @@
             "channel": "water_flow",
             "direction": "-1",
             "confidence": 0.95,
-            "reason": "Closing valve stops water flow."
+            "reason": "Closing valve stops water supply."
           }
         ]
       },
       "needs_human_review": false,
-      "notes": "Zhong Yang Shui Fa = Central Water Valve."
+      "notes": "Water valve controls flow."
     },
     {
       "entity_id": "input_button.wo_shi_yun_dong_chuan_gan_qi",
@@ -484,13 +707,13 @@
           "channel": "motion",
           "value_type": "event",
           "confidence": 0.9,
-          "reason": "Context 'bedroom motion sensor' (R12) detects motion."
+          "reason": "Entity acts as motion trigger in R12."
         }
       ],
       "effects": [],
       "effects_by_operation": {},
       "needs_human_review": false,
-      "notes": "Yun Dong Chuan Gan Qi = Motion Sensor."
+      "notes": "Motion sensor."
     },
     {
       "entity_id": "input_button.yun_dong_chuan_gan_qi",
@@ -500,13 +723,13 @@
           "channel": "motion",
           "value_type": "event",
           "confidence": 0.9,
-          "reason": "Context 'porch motion sensor' (R3) detects motion."
+          "reason": "Entity acts as motion trigger in R3."
         }
       ],
       "effects": [],
       "effects_by_operation": {},
       "needs_human_review": false,
-      "notes": "Motion sensor for porch."
+      "notes": "Motion sensor."
     },
     {
       "entity_id": "input_button.yun_dong_chuan_gan_qi_2",
@@ -516,13 +739,13 @@
           "channel": "motion",
           "value_type": "event",
           "confidence": 0.9,
-          "reason": "Context 'living room motion sensor' (R4) detects motion."
+          "reason": "Entity acts as motion trigger in R4."
         }
       ],
       "effects": [],
       "effects_by_operation": {},
       "needs_human_review": false,
-      "notes": "Motion sensor for living room."
+      "notes": "Motion sensor."
     },
     {
       "entity_id": "input_button.yun_dong_chuan_gan_qi_3",
@@ -532,22 +755,22 @@
           "channel": "motion",
           "value_type": "event",
           "confidence": 0.9,
-          "reason": "Context 'kitchen motion sensor' (R9) detects motion."
+          "reason": "Entity acts as motion trigger in R9."
         }
       ],
       "effects": [],
       "effects_by_operation": {},
       "needs_human_review": false,
-      "notes": "Motion sensor for kitchen."
+      "notes": "Motion sensor."
     },
     {
       "entity_id": "input_datetime.xi_tong_shi_jian",
-      "role": "sensor",
+      "role": "logical",
       "observes": [],
       "effects": [],
       "effects_by_operation": {},
-      "needs_human_review": true,
-      "notes": "System time/date. No environmental physical channel."
+      "needs_human_review": false,
+      "notes": "System time is a temporal reference, not a physical environmental channel."
     },
     {
       "entity_id": "input_number.chu_fang_liang_du_chuan_gan_qi",
@@ -557,13 +780,13 @@
           "channel": "light",
           "value_type": "numeric",
           "confidence": 0.95,
-          "reason": "Context 'brightness sensor' (R9) measures light intensity."
+          "reason": "Used in condition checking brightness level (lux) in R9."
         }
       ],
       "effects": [],
       "effects_by_operation": {},
       "needs_human_review": false,
-      "notes": "Liang Du = Brightness."
+      "notes": "Light sensor."
     },
     {
       "entity_id": "input_number.greenhouse_temperature_sensor",
@@ -573,13 +796,13 @@
           "channel": "temperature",
           "value_type": "numeric",
           "confidence": 0.95,
-          "reason": "Explicit name 'greenhouse temperature_sensor' (R17)."
+          "reason": "Trigger based on temperature value in R17."
         }
       ],
       "effects": [],
       "effects_by_operation": {},
       "needs_human_review": false,
-      "notes": "Named temperature sensor."
+      "notes": "Temperature sensor."
     },
     {
       "entity_id": "input_number.ke_ting_kong_diao_shu_zhi",
@@ -589,9 +812,9 @@
         {
           "channel": "temperature",
           "direction": "unknown",
-          "operation": "default",
-          "confidence": 0.8,
-          "reason": "Sets AC target value. Indirectly affects temperature."
+          "operation": "set_value",
+          "confidence": 0.7,
+          "reason": "Sets target temperature for AC. Direct effect is setting a setpoint, indirectly affects temperature."
         }
       ],
       "effects_by_operation": {
@@ -599,13 +822,13 @@
           {
             "channel": "temperature",
             "direction": "unknown",
-            "confidence": 0.8,
-            "reason": "Setting target value changes cooling/heating behavior."
+            "confidence": 0.7,
+            "reason": "Sets AC target temperature."
           }
         ]
       },
       "needs_human_review": false,
-      "notes": "AC control setting."
+      "notes": "AC setpoint control."
     },
     {
       "entity_id": "input_number.ke_ting_liang_du_chuan_gan_qi",
@@ -615,13 +838,13 @@
           "channel": "light",
           "value_type": "numeric",
           "confidence": 0.95,
-          "reason": "Context 'brightness sensor' (R1, R4) measures light intensity."
+          "reason": "Used in condition checking brightness level (lux) in R1 and R4."
         }
       ],
       "effects": [],
       "effects_by_operation": {},
       "needs_human_review": false,
-      "notes": "Liang Du = Brightness."
+      "notes": "Light sensor."
     },
     {
       "entity_id": "input_number.ke_ting_shi_du_chuan_gan_qi",
@@ -631,13 +854,13 @@
           "channel": "humidity",
           "value_type": "numeric",
           "confidence": 0.95,
-          "reason": "Context 'humidity' (R5, R6) measured in %."
+          "reason": "Trigger based on humidity percentage in R5 and R6."
         }
       ],
       "effects": [],
       "effects_by_operation": {},
       "needs_human_review": false,
-      "notes": "Shi Du = Humidity."
+      "notes": "Humidity sensor."
     },
     {
       "entity_id": "input_number.ke_ting_wen_du_chuan_gan_qi",
@@ -647,13 +870,13 @@
           "channel": "temperature",
           "value_type": "numeric",
           "confidence": 0.95,
-          "reason": "Context 'temperature' (R7, R8) triggers heating/cooling."
+          "reason": "Trigger based on temperature value in R7 and R8."
         }
       ],
       "effects": [],
       "effects_by_operation": {},
       "needs_human_review": false,
-      "notes": "Wen Du = Temperature."
+      "notes": "Temperature sensor."
     },
     {
       "entity_id": "input_number.liang_du_chuan_gan_qi_2",
@@ -663,13 +886,13 @@
           "channel": "light",
           "value_type": "numeric",
           "confidence": 0.95,
-          "reason": "Context 'brightness sensor' (R3) measures light intensity."
+          "reason": "Used in condition checking brightness level (lux) in R3."
         }
       ],
       "effects": [],
       "effects_by_operation": {},
       "needs_human_review": false,
-      "notes": "Liang Du = Brightness."
+      "notes": "Light sensor."
     },
     {
       "entity_id": "input_number.wo_shi_liang_du_chuan_gan_qi",
@@ -679,13 +902,13 @@
           "channel": "light",
           "value_type": "numeric",
           "confidence": 0.95,
-          "reason": "Context 'brightness sensor' (R12) measures light intensity."
+          "reason": "Used in condition checking brightness level (lux) in R12."
         }
       ],
       "effects": [],
       "effects_by_operation": {},
       "needs_human_review": false,
-      "notes": "Liang Du = Brightness."
+      "notes": "Light sensor."
     },
     {
       "entity_id": "input_number.wo_shi_wen_du_chuan_gan_qi",
@@ -695,13 +918,13 @@
           "channel": "temperature",
           "value_type": "numeric",
           "confidence": 0.95,
-          "reason": "Context 'temperature' (R14) triggers window opening."
+          "reason": "Trigger based on temperature value in R14."
         }
       ],
       "effects": [],
       "effects_by_operation": {},
       "needs_human_review": false,
-      "notes": "Wen Du = Temperature."
+      "notes": "Temperature sensor."
     }
   ],
   "proposed_channels": [],

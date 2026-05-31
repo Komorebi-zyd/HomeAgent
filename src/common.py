@@ -109,6 +109,24 @@ def get_input_path(config: Dict[str, Any], key: str) -> Path:
     return resolve_src_path(config["input_files"][key])
 
 
+def get_optional_input_path(config: Dict[str, Any], key: str, default_relative: Optional[str] = None) -> Optional[Path]:
+    """Resolve an optional input path from config.
+
+    The project may be used with different Home Assistant exports. Therefore
+    optional files, such as ``core.entity_registry``, should not be hard-coded
+    as mandatory. If the key is absent and ``default_relative`` is provided, the
+    default path is resolved relative to ``src/`` and returned only when it
+    exists.
+    """
+    value = (config.get("input_files") or {}).get(key)
+    if value:
+        return resolve_src_path(value)
+    if default_relative:
+        p = resolve_src_path(default_relative)
+        return p if p.exists() else None
+    return None
+
+
 def get_output_path(config: Dict[str, Any], key: str) -> Path:
     return get_home_dir(config) / config["output_files"][key]
 
@@ -223,6 +241,64 @@ def normalize_entity_ids(value: Any) -> List[str]:
             ids.append(str(item).strip())
     return unique_list(ids)
 
+
+
+
+def load_entity_registry(path: Optional[Union[str, Path]] = None) -> Dict[str, Dict[str, Any]]:
+    """Load Home Assistant core.entity_registry as an entity_id-indexed map.
+
+    The registry is used only for user-facing display names and additional
+    metadata. It is not required for semantic classification, and missing files
+    simply produce an empty mapping.
+    """
+    if path is None:
+        return {}
+    p = Path(path)
+    if not p.exists():
+        return {}
+    try:
+        data = load_json(p)
+    except Exception:
+        return {}
+    entities = ((data or {}).get("data") or {}).get("entities") or []
+    out: Dict[str, Dict[str, Any]] = {}
+    for item in entities:
+        if isinstance(item, dict) and item.get("entity_id"):
+            out[str(item["entity_id"])] = item
+    return out
+
+
+def entity_display_name(entity_id: str, registry_map: Optional[Dict[str, Dict[str, Any]]] = None) -> str:
+    """Return a human-friendly entity name for display.
+
+    Priority: user-customized name -> original_name -> entity_id. The returned
+    text includes entity_id as a stable reference when a natural name exists.
+    """
+    registry_map = registry_map or {}
+    rec = registry_map.get(entity_id) or {}
+    name = rec.get("name") or rec.get("original_name")
+    if name and str(name).strip():
+        return f"{name} ({entity_id})"
+    return entity_id
+
+
+def enrich_entity_with_registry(entity: Dict[str, Any], registry_map: Optional[Dict[str, Dict[str, Any]]] = None) -> Dict[str, Any]:
+    """Attach display metadata from core.entity_registry to an entity record."""
+    registry_map = registry_map or {}
+    eid = entity.get("entity_id")
+    rec = registry_map.get(eid) or {}
+    entity["display_name"] = entity_display_name(str(eid), registry_map) if eid else ""
+    entity["registry"] = {
+        "name": rec.get("name"),
+        "original_name": rec.get("original_name"),
+        "aliases": rec.get("aliases") or [],
+        "area_id": rec.get("area_id"),
+        "device_class": rec.get("device_class"),
+        "original_device_class": rec.get("original_device_class"),
+        "platform": rec.get("platform"),
+        "unit_of_measurement": rec.get("unit_of_measurement"),
+    }
+    return entity
 
 def infer_value_type_from_domain(domain: str) -> str:
     """Infer only from HA domain, never from user-defined object name."""

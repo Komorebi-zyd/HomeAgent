@@ -17,10 +17,10 @@
   - [X] 非预期状态转换图（规则关联图根据实体常态配置得到的结果）
 - [ ] 方案设计【Agent+】
   - [X] zone+channel感知
-  - [ ] TCAE建模
-  - [ ] 规则关联图生成算法（静态代码分析）
-  - [ ] 非预期状态转换图生成算法（规则关联图根据实体常态配置得到的结果）
-  - [ ] 非预期状态处理策略生成算法（家庭环境上下文+产生关联的规则事件上下文+模板+AI判断）
+  - [X] TCAE建模
+  - [X] 规则关联图生成算法（静态代码分析）
+  - [X] 非预期状态转换图生成算法（规则关联图根据实体常态配置得到的结果）
+  - [X] 非预期状态处理策略生成算法（家庭环境上下文+产生关联的规则事件上下文+模板+AI判断）
   - [ ] 图游走算法
 - [ ] 规则关联边定义与规则冲突实例设计（8+8）
   - [ ] 触发（直接/间接） $\rightarrow 2$
@@ -71,6 +71,7 @@ HomeAgent/
     ├── configurations/
     │   ├── config.json                           //系统配置文件
     │   ├── automations.yaml                      //Home Assistant自动化规则
+    │   ├── core.entity_registry                  //Home Assistant实体映射
     │   │
     │   └── home/
     │       ├── devices.json                      //脚本1输出：从规则中提取的实体信息
@@ -438,7 +439,7 @@ $$
   - 方向函数：
     - $\operatorname{dir}(\rho)=\begin{cases} +1, & \bowtie=\uparrow \\ -1, & \bowtie=\downarrow \end{cases}$
   - 标签：
-    - $\operatorname{kind}(v_{z,c}^E,v_{r_j}^T)=\textsf{env-trigger}$
+    - $\operatorname{kind}(v_{z,c}^E,v_{r_j}^T)=\textsf{indirect-trigger}$
     - $\operatorname{pol}(v_{z,c}^E,v_{r_j}^T)=\operatorname{dir}(\rho)$
   - 含义：
     - 若 $\operatorname{pol}=+1$，表示环境参数上升有助于触发该规则；
@@ -545,7 +546,7 @@ $$
     - $\mathcal{K}$：边类型集合
     - $\{+1,-1\}$：边极性集合
     - $\mathcal{M}$：边元数据集合
-  - **边类型集合定义**：$\mathcal{K}=\{\textsf{flow},\textsf{direct-trigger},\textsf{env-trigger},\textsf{direct-condition-allow},\textsf{direct-condition-disable},\textsf{indirect-condition-allow},\textsf{indirect-condition-disable},\textsf{direct-action},\textsf{indirect-action},\textsf{env-association}\}$
+  - **边类型集合定义**：$\mathcal{K}=\{\textsf{flow},\textsf{direct-trigger},\textsf{indirect-trigger},\textsf{direct-condition-allow},\textsf{direct-condition-disable},\textsf{indirect-condition-allow},\textsf{indirect-condition-disable},\textsf{direct-action},\textsf{indirect-action},\textsf{env-association}\}$
     - `flow` 为规则内部边类型
     - 其余九类为规则关联边类型
 - **路径**：在规则关联图 $\mathcal{G}_{RA}$ 中，一条路径定义为$p=\langle v_0,v_1,\dots,v_k\rangle$
@@ -823,8 +824,54 @@ d = +∞ 或预设持续时间
 1. 基于TCAE 实现规则关联图生成算法，伪代码如下
 
 ```
+Algorithm BuildRuleAssociationGraph(TCAE)
+Input : TCAE rule set R = {r1, ..., rn}
+Output: Rule Association Graph G_RA = (V, E, ell)
 
+1  V <- empty set; E <- empty list
+2  for each rule r in R do
+3      add trigger node v_r^T to V
+4      if C_r is not empty then
+5          add condition node v_r^C to V
+6      add action node v_r^A to V
+7      if C_r is not empty then
+8          add flow edge v_r^T -> v_r^C and v_r^C -> v_r^A
+9      else
+10         add flow edge v_r^T -> v_r^A
+11     for each environment reference rho in E_r^T union E_r^C do
+12         add environment node v_(rho.zone,rho.channel)^E to V
+13     for each environment effect eta in E_r^A do
+14         for each z in eta.reachable_zones do
+15             add environment node v_(z,eta.channel)^E to V
+16             add env-association edge v_r^A -> v_(z,eta.channel)^E
+17             add indirect-action edge v_(z,eta.channel)^E -> v_r^A
+18 end for
+19 for each ordered rule pair (ri, rj), ri != rj do
+20     for each action a in A_ri and trigger t in T_rj do
+21         if a may make t true then
+22             add direct-trigger edge v_ri^A -> v_rj^T
+23     for each action a in A_ri and condition c in C_rj do
+24         if a may make c true then
+25             add direct-condition-allow edge v_ri^A -> v_rj^C
+26         else if a may make c false then
+27             add direct-condition-disable edge v_ri^A -> v_rj^C
+28     for each action a in A_ri and action b in A_rj do
+29         if target(a) = target(b) then
+30             add direct-action edge v_ri^A -> v_rj^A
+31 end for
+32 for each rule r in R do
+33     for each environment trigger reference rho in E_r^T do
+34         add indirect-trigger edge v_(rho.zone,rho.channel)^E -> v_r^T
+35     for each environment condition reference rho in E_r^C do
+36         if increasing (rho.zone,rho.channel) helps satisfy rho then
+37             add indirect-condition-allow edge v_(rho.zone,rho.channel)^E -> v_r^C
+38         else
+39             add indirect-condition-disable edge v_(rho.zone,rho.channel)^E -> v_r^C
+40 end for
 
+41 remove duplicate edges with identical source, target, kind, polarity and core metadata
+42 assign stable edge identifiers
+43 return G_RA
 ```
 
 #### 非预期状态转换图生成算法（规则关联图根据实体常态配置得到的结果）
@@ -834,24 +881,195 @@ d = +∞ 或预设持续时间
 3. 基于实体常态配置与规则关联图，剪枝实现非预期状态转换图生成算法，伪代码如下
 
 ```
+Algorithm BuildUnexpectedStateTransitionGraph(G_RA, TCAE, NormalConfig)
+Input :
+  G_RA = (V, E, ell), the Rule Association Graph
+  TCAE rule set R = {r1, ..., rn}
+  NormalConfig N, entity normal-state predicates
+Output:
+  G_UST = (V_U, E_U, ell_U), Unexpected State Transition Graph
+  P_U, unexpected association paths
+  Out_U, path-to-unexpected-post-state annotations
 
+1  ActionPost <- empty map from action node id to post-state set
+2  AbnormalActions <- empty map from action node id to unexpected post-states
+3  for each rule r in TCAE.rules do
+4      a_node <- node id of v_r^A
+5      for each action a in A_r do
+6          e <- target entity of action a
+7          Posts <- abstract post-state set of a
+8          for each v' in Posts do
+9              add (e, v') to ActionPost[a_node]
+10             if e is configured in NormalConfig and N_e(v') = 0 then
+11                 add (e, v') to AbnormalActions[a_node]
+12 end for
+13 P_U <- empty list
+14 for each terminal action node vA in AbnormalActions.keys do
+15     perform bounded reverse DFS in G_RA from vA
+16     during DFS, keep node sequence p and edge sequence ep
+17     if p contains at least one association edge and last(p)=vA then
+18         if PositiveOnly is false or path_polarity(p) = +1 then
+19             add p to P_U
+20             Out_U[p] <- AbnormalActions[vA]
+21 end for
+22 V_U <- all nodes appearing in paths P_U
+23 E_U <- all edges appearing in paths P_U
+24 ell_U <- restriction of ell to E_U
+25 return G_UST = (V_U, E_U, ell_U), P_U, Out_U
 ```
 
 #### 非预期状态处理策略生成算法（家庭环境上下文+产生关联的规则事件上下文+模板+AI判断）
 
-1. 基于TCAE与规则非预期状态转换图和非预期状态处理策略模板模板提供的上下文信息，利用AI实现启发式非预期状态处理策略自动配置
+- 将图中的非预期路径规约为若干“源动作规则 $r_i$ 与目标规则 $r_j$”之间的局部关联模式，然后结合家庭环境上下文、两条规则的 TCAE 上下文、关联方式、非预期后态以及处理策略模板，由 AI 选择一个可执行的处理策略。
+- 核心思想如下：
+  - 对于直接关联，若存在 $v_{r_i}^A \rightarrow v_{r_j}^{T/C/A}$，则构造规则对 $(r_i,r_j)$；
+  - 对于间接关联，若存在 $v_{r_i}^A \rightarrow v_{z,c}^E \rightarrow v_{r_j}^{T/C/A}$，则构造规则对 $(r_i,r_j)$；
+  - 只对两两规则之间的局部连接生成策略，不把完整长路径整体发送给 AI；
+  - 若多个非预期路径包含同一个局部规则关联，则合并其证据、路径 ID 和非预期后态；
+  - AI 的输入由四部分组成：
+    1. 家庭环境上下文：实体列表、实体所属区域、实体关联物理通道、实体常态配置；
+    2. 源规则 $r_i$ 的 TCAE 信息；
+    3. 目标规则 $r_j$ 的 TCAE 信息；
+    4. 两条规则之间的关联方式、相关边、环境中继节点、可能导致的非预期后态、处理策略模板。
 
-- 模板：
-  1. 默认执行即可，不做处理
-  2. 只执行先触发的规则，并禁止后触发规则的动作
-  3. 只执行后触发的规则，并撤销先触发规则的动作
-  4. 强制执行关联对中的第一条规则（按规则id字典序排），并撤销/禁止第二条规则的动作
-  5. 强制执行关联对中的第二条规则（按规则id字典序排），并撤销/禁止第一条规则的动作
-  6. 两条规则都执行，但是以第二条规则（按规则id字典序排）为结尾（执行先后要求）
-  7. 两条规则都执行，但是以第一条规则（按规则id字典序排）为结尾（执行先后要求）
-  8. 取消两条规则的执行
+| 策略编号 | 策略名称                               | 含义                                                     |
+| -------: | -------------------------------------- | -------------------------------------------------------- |
+|        0 | `default`                            | 默认执行，不进行干预                                     |
+|        1 | `only_first_triggered`               | 只执行先触发规则，并禁止后触发规则动作                   |
+|        2 | `only_later_triggered`               | 只执行后触发规则，并撤销先触发规则动作                   |
+|        3 | `force_lexicographic_first`          | 强制保留规则 ID 字典序较小的规则，并撤销或禁止另一条规则 |
+|        4 | `force_lexicographic_second`         | 强制保留规则 ID 字典序较大的规则，并撤销或禁止另一条规则 |
+|        5 | `both_end_with_lexicographic_second` | 两条规则都执行，但以规则 ID 字典序较大的规则作为最终状态 |
+|        6 | `both_end_with_lexicographic_first`  | 两条规则都执行，但以规则 ID 字典序较小的规则作为最终状态 |
+|        7 | `cancel_both`                        | 取消两条规则执行                                         |
 
-2. 人工审核是否需要调整非预期状态处理策略
+- 算法伪代码：
+
+```
+Algorithm GenerateResolutionRules(G_UST, TCAE, Devices, Channels, Zones, NormalConfig, Templates)
+Input :
+  G_UST        = (V_U, E_U, ell_U), unexpected state transition graph
+  TCAE         = TCAE rule set R = {r1, ..., rn}
+  Devices      = extracted Home Assistant entity information
+  Channels     = entity-channel bindings
+  Zones        = human-reviewed entity-zone bindings
+  NormalConfig = entity normal-state predicates
+  Templates    = predefined resolution strategy templates
+
+Parameters:
+  TerminalOnly = true
+      // If true, only generate policies for local associations whose target rule
+      // is the terminal unexpected-action rule.
+  RPM = 10
+      // AI request rate limit.
+
+Output:
+  ResolutionRules, AI-selected handling policies for terminal pairwise rule associations
+
+1   EdgeMap <- map edge_id to edge in G_UST
+2   NodeMap <- map node_id to node in G_UST
+3   PairCandidates <- empty map
+4   for each unexpected path p in G_UST.unexpected_paths do
+5       EdgeSeq <- edges of p according to p.edges
+6       NodeSeq <- nodes of p according to p.nodes
+7       TerminalAction <- p.terminal_action_node
+8       TerminalRule <- RuleOf(TerminalAction)        // TerminalRule is the rule whose action node produces the weak unexpected post-state.
+9       for each edge e in EdgeSeq do
+10          if e.kind in {direct-trigger, direct-condition-allow, direct-condition-disable, direct-action} then
+11              SourceNode <- source(e)
+12              TargetNode <- target(e)
+13              if SourceNode is action node v_ri^A and TargetNode is component node v_rj^{T/C/A} then
+14                  SourceRule <- RuleOf(SourceNode)
+15                  TargetRule <- RuleOf(TargetNode)
+16                  TargetComponent <- ComponentOf(TargetNode)
+17                  if SourceRule = TargetRule then
+18                      continue
+19                  end if
+20                  if TerminalOnly = true and TargetRule != TerminalRule then
+21                      continue
+                      // Do not generate policy for remote intermediate links.
+                      // Example: in R12 -> R3 -> R15 -> R2, only R15 -> R2 is kept.
+22                  end if
+23                  key <- MakeCandidateKey( SourceRule, TargetRule, TargetComponent, e.kind, via_environment = null)
+24                  merge edge e, path p, and p.out_U into PairCandidates[key]
+25              end if
+26          end if
+27      end for
+28      for each adjacent edge pair (e1, e2) in EdgeSeq do
+29          if e1.kind = env-association and e2.kind in {env-trigger,   indirect-condition-allow,   indirect-condition-disable,   indirect-action} and target(e1) = source(e2) then
+30              SourceNode <- source(e1)
+31              EnvNode <- target(e1)
+32              TargetNode <- target(e2)
+33              if SourceNode is action node v_ri^A     and EnvNode is environment node v_{z,c}^E     and TargetNode is component node v_rj^{T/C/A} then
+34                  SourceRule <- RuleOf(SourceNode)
+35                  TargetRule <- RuleOf(TargetNode)
+36                  TargetComponent <- ComponentOf(TargetNode)
+37                  EnvInfo <- (zone(EnvNode), channel(EnvNode))
+
+38                  if SourceRule = TargetRule then
+39                      continue
+40                  end if
+
+41                  if TerminalOnly = true and TargetRule != TerminalRule then
+42                      continue
+                      // Only keep indirect local associations entering the
+                      // terminal unexpected rule.
+43                  end if
+44                  key <- MakeCandidateKey(SourceRule, TargetRule, TargetComponent, e2.kind, via_environment = EnvInfo )
+45                  merge edge pair (e1, e2), path p, and p.out_U into PairCandidates[key]
+46              end if
+47          end if
+48      end for
+49  end for
+50  HomeContext <- BuildHomeContext(Devices, Channels, Zones, NormalConfig)
+51  ResolutionRules <- empty list
+52  for each candidate q in PairCandidates do
+53      ri <- q.source_rule_uid
+54      rj <- q.target_rule_uid
+55      SourceRuleContext <- TCAE[ri]
+56      TargetRuleContext <- TCAE[rj]
+57      AIPayload <- {
+58          home_context: HomeContext,
+59          source_rule: SourceRuleContext,
+60          target_rule: TargetRuleContext,
+61          association_candidate: q,
+62          unexpected_outcomes: q.unexpected_outcomes,
+63          strategy_templates: Templates,
+64          constraints: {
+65              select_exactly_one_strategy: true,
+66              strategy_id_must_be_one_of: TemplateIDs(Templates),
+67              return_strict_json_only: true
+68          }
+69      }
+70      wait according to RPM limit
+71      AIResponse <- QueryAI(AIPayload)
+72      Policy <- ValidateAndNormalize(AIResponse, Templates)
+73      if Policy.confidence < ReviewThreshold then
+74          Policy.needs_human_review <- true
+75      end if
+76      add {
+77          resolution_rule_id,
+78          candidate_id: q.candidate_id,
+79          source_rule_uid: ri,
+80          target_rule_uid: rj,
+81          target_component: q.target_component,
+82          association_kind: q.association_kind,
+83          association_mode: q.association_mode,
+84          via_environment: q.via_environment,
+85          unexpected_outcomes: q.unexpected_outcomes,
+86          path_ids: q.path_ids,
+87          edge_ids: q.edge_ids,
+88          policy: Policy
+89      } to ResolutionRules
+90  end for
+91  return ResolutionRules
+```
+
+- 保守回退策略：
+  - 当 AI 不可用或输出无效时，系统使用保守回退策略：
+    - 若非预期后态安全等级为 `high` 或 `critical`，且源规则与终止规则不同，则默认选择 `S2_ONLY_FIRST_BLOCK_LATER`，并标记 `needs_human_review=true`；
+    - 若非预期后态为 `critical` 但关联关系不清晰，则默认选择 `S8_CANCEL_BOTH`，并要求人工审核；
+    - 其他情况选择 `S1_DEFAULT`，仅报告并等待运行时严格验证。
 
 #### 图游走算法
 
@@ -860,3 +1078,86 @@ d = +∞ 或预设持续时间
 ```
 
 ```
+
+#### Agent交互上下文信息
+
+由于智能家居系统中的设备命名与场景描述高度依赖用户个人习惯，系统放弃采用任何针对特定语言或拼音的硬编码规则，转而利用大语言模型（LLM）充当通用语义推导桥梁。为确保生成的绑定关系、常态配置和处理策略在逻辑上具备极高的置信度与严格的自洽性，本系统在各阶段与 Agent 交互时均采用经过精心编排的**结构化上下文（Structured Context）**，并明确定义其系统提示词设计原则及反馈结果规范。
+
+##### 环境绑定
+
+在物理通道（Channel）绑定阶段，系统需要为从 `automations.yaml` 中提取的每一台实体设备绑定其在物理空间中观测或产生效应的环境维度。
+
+1. **输入上下文组织编排 (Input Context Alignment)**：
+   - **候选通道集合（Candidate Channels, $\mathcal{C}$）**：来自于 `config.json`，用以约束 AI 绑定的边界。
+   - **实体语义画像（Entity Semantic Profile）**：包含实体 ID（`entity_id`）、设备注册元数据 `registry`（包含原厂名称、设备描述等稳定标识，不依赖特定拼音字串），以及当前实体的多条**规则引用上下文（raw_contexts）**。
+   - **规则引用上下文（Rule Contexts）**：提供实体在不同自动化规则中出现的实际位置（`section`，如 `trigger`/`condition`/`action`）、相关的触发平台/条件机制、调用的服务（`service`）、具体的动作行为、以及动作后的目标状态值（`post_value`），辅以其原始 YAML 片段（`node_excerpt`）作为底层语义支撑。
+2. **系统提示词设计原则 (System Prompt Guidelines)**：
+   - 存放在 `config.json` 的 `system_prompts.channels_binding` 中。
+   - 核心任务：根据实体在自动化规则中的上下文，推断出其物理通道绑定（`observes`/`effects`）与实体角色（`role`）。
+   - 约束：
+     - **中性语义假设**：不预设特定的命名语言，将所有非英语的拼音、简称视为中性语义特征，仅提取其中的空间与物理联系。
+     - **角色敏感区分**：精确区分传感器（Sensor）与执行器（Actuator）。传感器仅有观测关系 `observes`，执行器则根据不同的服务操作（Operations，如 `turn_on`/`turn_off`）绑定方向极性明确的物理通道效应（Effects，极性为 $+1, -1, 0, \text{unknown}$），即 `effects_by_operation`。
+     - **跨通道效应支持**：支持单一实体影响多个物理通道（如空调在 `turn_on` 时对温度通道方向为 $-1$, 对湿度通道方向也为 $-1$）。
+     - **新通道发现（Channel Discovery）**：当现有候选通道无法完全表达实体的物理效应时，拒绝生硬绑定，应在 `proposed_channels` 中提出新增通道建议。
+3. **反馈结果规范 (Response Schema Specifications)**：
+   - 必须反馈符合以下结构的严格 JSON 对象：
+     ```json
+     {
+       "bindings": [
+         {
+           "entity_id": "input_number.ke_ting_liang_du_chuan_gan_qi",
+           "role": "sensor",
+           "observes": [
+             {
+               "channel": "light",
+               "value_type": "numeric",
+               "confidence": 0.98,
+               "reason": "Used in trigger of rule LivingRoom_Light_Auto observing light changes."
+             }
+           ],
+           "effects": [],
+           "effects_by_operation": {},
+           "needs_human_review": false,
+           "notes": ""
+         }
+       ],
+       "proposed_channels": []
+     }
+     ```
+
+##### 实体常态配置
+
+在静态图分析中，弱非预期状态转换的剪枝高度依赖“实体常态配置”。该交互旨在为安全敏感型实体在没有明确合理自动化语义上下文时，锚定一个应当保持的安全或偏好状态。
+
+1. **输入上下文组织编排 (Input Context Alignment)**：
+   - **候选实体集合（Action Targets）**：主要选择在 TCAE 规则中被动作所控制的所有候选实体。
+   - **空间区域绑定（Zone Bindings）**：合并前述由用户在 CLI 交互中确认的设备源区域（`source_zones`）与可达区域（`reachable_zones`），确保 AI 能够理解设备的物理覆盖范围（例如开放式厨房可跨区域波及客厅）。
+   - **物理通道绑定（Channel Bindings）**：传递该实体已绑定的物理角色、通道以及效应方向。
+   - **规则动作后态集（TCAE Post-States）**：搜集并列举出该实体在所有 TCAE 规则中执行动作后会被赋予的全部抽象目标后态（`possible_post_values_from_tcae`），确保 AI 生成的常态值能与 TCAE 静态推导状态完全对齐。
+2. **系统提示词设计原则 (System Prompt Guidelines)**：
+   - 存放在 `config.json` 的 `system_prompts.normal_config` 中。
+   - 核心任务：根据设备特性、空间位置与关联规则，判断该实体是否为安全/安防/资源/隐私敏感型设备，推导其安全的常态谓词（Normal-state predicate）。
+   - 约束：
+     - **紧凑配置原则**：避免给普通的舒适度设备（如氛围灯、加湿器）强行配置常态。重点聚焦于出入控制（门锁、窗户）、安全防御（消防水阀、烟雾报警）、隐私防范与临界资源保护（阀门、大功率用电器）。
+     - **状态严格对齐**：其常态值 `normal_values` 必须使用可直接与动作后态（post-state）相比较的原子值（如 `"on"`, `"off"`, 数值）。
+     - **动态调整许可**：允许一个实体在不同物理和空间特征下有多个可接受的常态值，用列表呈现。
+3. **反馈结果规范 (Response Schema Specifications)**：
+   - 必须反馈符合以下结构的严格 JSON 对象：
+     ```json
+     {
+       "normal_entities": [
+         {
+           "entity_id": "input_boolean.wo_shi_nuan_qi",
+           "normal_values": ["off"],
+           "abnormal_values": ["on"],
+           "category": "safety",
+           "safety_level": "medium",
+           "confidence": 0.95,
+           "reason": "Heaters should remain off by default to save energy and prevent overheating when unsupervised, unless turned on by rules in a cold context.",
+           "needs_human_review": true
+         }
+       ]
+     }
+     ```
+
+##### 非预期状态处理策略生成

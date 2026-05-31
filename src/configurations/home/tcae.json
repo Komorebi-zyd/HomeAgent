@@ -1,11 +1,18 @@
 {
   "schema_version": "1.0",
-  "generated_at": "2026-05-31T16:36:42.429278+00:00",
+  "generated_at": "2026-05-31T18:00:58.105011+00:00",
   "model": "TCAE",
   "rules": [
     {
       "rule_uid": "automation.r1_door_open_lights",
       "rule_id": "1741536976427",
+      "display_alias": "R1-Door Open Lights",
+      "entity_display": {
+        "input_boolean.men_lang_deng": "Porch Light (input_boolean.men_lang_deng)",
+        "input_boolean.men_wai_deng": "Outside Door Light (input_boolean.men_wai_deng)",
+        "input_boolean.zhi_neng_men_suo": "Smart Door Lock (input_boolean.zhi_neng_men_suo)",
+        "input_number.ke_ting_liang_du_chuan_gan_qi": "Living Room Light Sensor (input_number.ke_ting_liang_du_chuan_gan_qi)"
+      },
       "alias": "R1-Door Open Lights",
       "description": "When the door lock is opened, if the brightness sensor is below 50lux, turn on the outside door light and porch light.",
       "mode": "single",
@@ -49,7 +56,7 @@
         "E_C": [
           {
             "entity_id": "input_number.ke_ting_liang_du_chuan_gan_qi",
-            "zone": "ketchen",
+            "zone": "home",
             "channel": "light",
             "relation": "<",
             "threshold": 50,
@@ -62,69 +69,69 @@
             "entity_id": "input_boolean.men_wai_deng",
             "operation": "turn_on",
             "source_zones": [
-              "ketchen"
+              "home"
             ],
             "reachable_zones": [
-              "porch"
+              "home"
             ],
             "channel": "light",
             "direction": "+1",
             "mu": 1,
             "lambda": 0,
             "duration": "inf",
-            "confidence": 0.9,
-            "reason": "Switching light on."
+            "confidence": 0.95,
+            "reason": "Turning on light increases illumination."
           },
           {
             "entity_id": "input_boolean.men_wai_deng",
             "operation": "turn_on",
             "source_zones": [
-              "ketchen"
+              "home"
             ],
             "reachable_zones": [
-              "porch"
+              "home"
             ],
             "channel": "light",
             "direction": "+1",
             "mu": 1,
             "lambda": 0,
             "duration": "inf",
-            "confidence": 0.9,
-            "reason": "Context 'outside door light' (R1) implies controlling light."
+            "confidence": 0.95,
+            "reason": "Outside light switch increases illumination."
           },
           {
             "entity_id": "input_boolean.men_lang_deng",
             "operation": "turn_on",
             "source_zones": [
-              "greenhouse"
+              "home"
             ],
             "reachable_zones": [
-              "porch"
+              "home"
             ],
             "channel": "light",
             "direction": "+1",
             "mu": 1,
             "lambda": 0,
             "duration": "inf",
-            "confidence": 0.9,
-            "reason": "Switching light on."
+            "confidence": 0.95,
+            "reason": "Turning on light increases illumination."
           },
           {
             "entity_id": "input_boolean.men_lang_deng",
             "operation": "turn_on",
             "source_zones": [
-              "greenhouse"
+              "home"
             ],
             "reachable_zones": [
-              "porch"
+              "home"
             ],
             "channel": "light",
             "direction": "+1",
             "mu": 1,
             "lambda": 0,
             "duration": "inf",
-            "confidence": 0.9,
-            "reason": "Context 'porch light' (R1, R3) implies controlling light."
+            "confidence": 0.95,
+            "reason": "Porch light switch increases illumination."
           }
         ]
       },
@@ -168,6 +175,12 @@
     {
       "rule_uid": "automation.r15_lights_off_when_leaving_home",
       "rule_id": "1741537129329",
+      "display_alias": "R15-Lights Off When Leaving Home",
+      "entity_display": {
+        "input_boolean.men_lang_deng": "Porch Light (input_boolean.men_lang_deng)",
+        "input_boolean.wen_shi_deng": "Greenhouse Light (input_boolean.wen_shi_deng)",
+        "input_boolean.zhi_neng_men_suo": "Smart Door Lock (input_boolean.zhi_neng_men_suo)"
+      },
       "alias": "R15-Lights Off When Leaving Home",
       "description": "When the door lock is closed, turn off the porch light and greenhouse light.",
       "mode": "single",
@@ -206,69 +219,52 @@
             "entity_id": "input_boolean.men_lang_deng",
             "operation": "turn_off",
             "source_zones": [
-              "greenhouse"
+              "home"
             ],
             "reachable_zones": [
-              "porch"
+              "home"
             ],
             "channel": "light",
             "direction": "-1",
             "mu": 1,
             "lambda": 0,
             "duration": "inf",
-            "confidence": 0.9,
-            "reason": "Switching light off."
-          },
-          {
-            "entity_id": "input_boolean.men_lang_deng",
-            "operation": "turn_off",
-            "source_zones": [
-              "greenhouse"
-            ],
-            "reachable_zones": [
-              "porch"
-            ],
-            "channel": "light",
-            "direction": "+1",
-            "mu": 1,
-            "lambda": 0,
-            "duration": "inf",
-            "confidence": 0.9,
-            "reason": "Context 'porch light' (R1, R3) implies controlling light."
+            "confidence": 0.95,
+            "reason": "Turning off light decreases illumination."
           },
           {
             "entity_id": "input_boolean.wen_shi_deng",
             "operation": "turn_off",
             "source_zones": [
-              "outdoor"
+              "home"
             ],
             "reachable_zones": [
-              "porch"
+              "home"
             ],
             "channel": "light",
             "direction": "-1",
             "mu": 1,
             "lambda": 0,
             "duration": "inf",
-            "confidence": 0.85,
-            "reason": "Turn off action affects light."
+            "confidence": 0.95,
+            "reason": "Turning off light decreases illumination."
           },
           {
             "entity_id": "input_boolean.wen_shi_deng",
             "operation": "turn_off",
             "source_zones": [
-              "outdoor"
+              "home"
             ],
             "reachable_zones": [
-              "porch"
+              "home"
             ],
             "channel": "light",
             "direction": "-1",
             "mu": 1,
             "lambda": 0,
             "duration": "inf",
-            "confidence": 0.85,
-            "reason": "Context R2/R15 'greenhouse light' implies control over light."
+            "confidence": 0.95,
+            "reason": "Greenhouse light is turned off in R15."
           }
         ]
       },
@@ -311,6 +307,12 @@
     {
       "rule_uid": "automation.r3_porch_light",
       "rule_id": "1741537258059",
+      "display_alias": "R3-Porch Light",
+      "entity_display": {
+        "input_boolean.men_lang_deng": "Porch Light (input_boolean.men_lang_deng)",
+        "input_button.yun_dong_chuan_gan_qi": "Porch Motion Sensor (input_button.yun_dong_chuan_gan_qi)",
+        "input_number.liang_du_chuan_gan_qi_2": "Porch Light Sensor (input_number.liang_du_chuan_gan_qi_2)"
+      },
       "alias": "R3-Porch Light",
       "description": "When the porch motion sensor is triggered, if the brightness sensor is below 50lux, turn on the porch light.",
       "mode": "single",
@@ -346,7 +348,7 @@
         "E_C": [
           {
             "entity_id": "input_number.liang_du_chuan_gan_qi_2",
-            "zone": "outdoor",
+            "zone": "home",
             "channel": "light",
             "relation": "<",
             "threshold": 50,
@@ -359,35 +361,35 @@
             "entity_id": "input_boolean.men_lang_deng",
             "operation": "turn_on",
             "source_zones": [
-              "greenhouse"
+              "home"
             ],
             "reachable_zones": [
-              "porch"
+              "home"
             ],
             "channel": "light",
             "direction": "+1",
             "mu": 1,
             "lambda": 0,
             "duration": "inf",
-            "confidence": 0.9,
-            "reason": "Switching light on."
+            "confidence": 0.95,
+            "reason": "Turning on light increases illumination."
           },
           {
             "entity_id": "input_boolean.men_lang_deng",
             "operation": "turn_on",
             "source_zones": [
-              "greenhouse"
+              "home"
             ],
             "reachable_zones": [
-              "porch"
+              "home"
             ],
             "channel": "light",
             "direction": "+1",
             "mu": 1,
             "lambda": 0,
             "duration": "inf",
-            "confidence": 0.9,
-            "reason": "Context 'porch light' (R1, R3) implies controlling light."
+            "confidence": 0.95,
+            "reason": "Porch light switch increases illumination."
           }
         ]
       },
@@ -428,6 +430,12 @@
     {
       "rule_uid": "automation.r4_living_room_light",
       "rule_id": "1741537430474",
+      "display_alias": "R4-Living Room Light",
+      "entity_display": {
+        "input_boolean.deng": "Living Room Light (input_boolean.deng)",
+        "input_button.yun_dong_chuan_gan_qi_2": "Living Room Motion Sensor (input_button.yun_dong_chuan_gan_qi_2)",
+        "input_number.ke_ting_liang_du_chuan_gan_qi": "Living Room Light Sensor (input_number.ke_ting_liang_du_chuan_gan_qi)"
+      },
       "alias": "R4-Living Room Light",
       "description": "When the living room motion sensor is triggered, if the brightness sensor is below 50lux, turn on the living room light.",
       "mode": "single",
@@ -463,7 +471,7 @@
         "E_C": [
           {
             "entity_id": "input_number.ke_ting_liang_du_chuan_gan_qi",
-            "zone": "ketchen",
+            "zone": "home",
             "channel": "light",
             "relation": "<",
             "threshold": 50,
@@ -476,35 +484,35 @@
             "entity_id": "input_boolean.deng",
             "operation": "turn_on",
             "source_zones": [
-              "livingroom"
+              "home"
             ],
             "reachable_zones": [
-              "bedroom"
+              "home"
             ],
             "channel": "light",
             "direction": "+1",
             "mu": 1,
             "lambda": 0,
             "duration": "inf",
-            "confidence": 0.9,
-            "reason": "Increasing illumination level."
+            "confidence": 0.95,
+            "reason": "Turning on a light increases environmental illumination."
           },
           {
             "entity_id": "input_boolean.deng",
             "operation": "turn_on",
             "source_zones": [
-              "livingroom"
+              "home"
             ],
             "reachable_zones": [
-              "bedroom"
+              "home"
             ],
             "channel": "light",
             "direction": "+1",
             "mu": 1,
             "lambda": 0,
             "duration": "inf",
-            "confidence": 0.9,
-            "reason": "Action target in R4 to turn on living room light based on brightness."
+            "confidence": 0.95,
+            "reason": "Entity is a light switch; 'turn_on' increases light level in the room."
           }
         ]
       },
@@ -545,6 +553,12 @@
     {
       "rule_uid": "automation.r9_kitchen_light",
       "rule_id": "1741537509709",
+      "display_alias": "R9-Kitchen Light",
+      "entity_display": {
+        "input_boolean.deng_2": "Kitchen Light (input_boolean.deng_2)",
+        "input_button.yun_dong_chuan_gan_qi_3": "Kitchen Motion Sensor (input_button.yun_dong_chuan_gan_qi_3)",
+        "input_number.chu_fang_liang_du_chuan_gan_qi": "Kitchen Light Sensor (input_number.chu_fang_liang_du_chuan_gan_qi)"
+      },
       "alias": "R9-Kitchen Light",
       "description": "When the kitchen motion sensor is triggered, if the brightness sensor is below 50lux, turn on the kitchen light.",
       "mode": "single",
@@ -580,7 +594,7 @@
         "E_C": [
           {
             "entity_id": "input_number.chu_fang_liang_du_chuan_gan_qi",
-            "zone": "ketchen",
+            "zone": "home",
             "channel": "light",
             "relation": "<",
             "threshold": 50,
@@ -593,35 +607,35 @@
             "entity_id": "input_boolean.deng_2",
             "operation": "turn_on",
             "source_zones": [
-              "livingroom"
+              "home"
             ],
             "reachable_zones": [
-              "greenhouse"
+              "home"
             ],
             "channel": "light",
             "direction": "+1",
             "mu": 1,
             "lambda": 0,
             "duration": "inf",
-            "confidence": 0.9,
-            "reason": "Increasing illumination level."
+            "confidence": 0.95,
+            "reason": "Turning on a light increases environmental illumination."
           },
           {
             "entity_id": "input_boolean.deng_2",
             "operation": "turn_on",
             "source_zones": [
-              "livingroom"
+              "home"
             ],
             "reachable_zones": [
-              "greenhouse"
+              "home"
             ],
             "channel": "light",
             "direction": "+1",
             "mu": 1,
             "lambda": 0,
             "duration": "inf",
-            "confidence": 0.9,
-            "reason": "Action target in R9 to turn on kitchen light based on brightness."
+            "confidence": 0.95,
+            "reason": "Entity is a light switch; 'turn_on' increases light level."
           }
         ]
       },
@@ -662,6 +676,12 @@
     {
       "rule_uid": "automation.r12_bedroom_light",
       "rule_id": "1741537625039",
+      "display_alias": "R12-Bedroom Light",
+      "entity_display": {
+        "input_boolean.wo_shi_deng": "Bedroom Light (input_boolean.wo_shi_deng)",
+        "input_button.wo_shi_yun_dong_chuan_gan_qi": "Bedroom Motion Sensor (input_button.wo_shi_yun_dong_chuan_gan_qi)",
+        "input_number.wo_shi_liang_du_chuan_gan_qi": "Bedroom Light Sensor (input_number.wo_shi_liang_du_chuan_gan_qi)"
+      },
       "alias": "R12-Bedroom Light",
       "description": "When the bedroom motion sensor is triggered, if the brightness sensor is below 50lux, turn on the bedroom light.",
       "mode": "single",
@@ -697,7 +717,7 @@
         "E_C": [
           {
             "entity_id": "input_number.wo_shi_liang_du_chuan_gan_qi",
-            "zone": "greenhouse",
+            "zone": "home",
             "channel": "light",
             "relation": "<",
             "threshold": 50,
@@ -710,35 +730,35 @@
             "entity_id": "input_boolean.wo_shi_deng",
             "operation": "turn_on",
             "source_zones": [
-              "ketchen"
+              "home"
             ],
             "reachable_zones": [
-              "livingroom"
+              "home"
             ],
             "channel": "light",
             "direction": "+1",
             "mu": 1,
             "lambda": 0,
             "duration": "inf",
-            "confidence": 0.9,
-            "reason": "Turning on light."
+            "confidence": 0.95,
+            "reason": "Turning on light increases illumination."
           },
           {
             "entity_id": "input_boolean.wo_shi_deng",
             "operation": "turn_on",
             "source_zones": [
-              "ketchen"
+              "home"
             ],
             "reachable_zones": [
-              "livingroom"
+              "home"
             ],
             "channel": "light",
             "direction": "+1",
             "mu": 1,
             "lambda": 0,
             "duration": "inf",
-            "confidence": 0.9,
-            "reason": "Context R12 'bedroom light' implies controlling light."
+            "confidence": 0.95,
+            "reason": "Bedroom light switch increases illumination."
           }
         ]
       },
@@ -779,6 +799,11 @@
     {
       "rule_uid": "automation.r2_greenhouse_light_re_enable_and_door_unlock",
       "rule_id": "1741537673053",
+      "display_alias": "R2-Greenhouse Light Re-enable and Door Unlock",
+      "entity_display": {
+        "input_boolean.wen_shi_deng": "Greenhouse Light (input_boolean.wen_shi_deng)",
+        "input_boolean.zhi_neng_men_suo": "Smart Door Lock (input_boolean.zhi_neng_men_suo)"
+      },
       "alias": "R2-Greenhouse Light Re-enable and Door Unlock",
       "description": "If the greenhouse light is turned off, open the door lock and turn the porch light back on.",
       "mode": "single",
@@ -837,6 +862,11 @@
     {
       "rule_uid": "automation.r5_humidifier_on",
       "rule_id": "1741537793019",
+      "display_alias": "R5-Humidifier On",
+      "entity_display": {
+        "input_boolean.ke_ting_jia_shi_qi": "Living Room Humidifier (input_boolean.ke_ting_jia_shi_qi)",
+        "input_number.ke_ting_shi_du_chuan_gan_qi": "Living Room Humidity Sensor (input_number.ke_ting_shi_du_chuan_gan_qi)"
+      },
       "alias": "R5-Humidifier On",
       "description": "When the living room humidity is below 40%, and the humidifier is off, turn on the living room humidifier.",
       "mode": "single",
@@ -870,7 +900,7 @@
         "E_T": [
           {
             "entity_id": "input_number.ke_ting_shi_du_chuan_gan_qi",
-            "zone": "livingroom",
+            "zone": "home",
             "channel": "humidity",
             "relation": "↓",
             "threshold": 40,
@@ -884,35 +914,35 @@
             "entity_id": "input_boolean.ke_ting_jia_shi_qi",
             "operation": "turn_on",
             "source_zones": [
-              "ketchen"
+              "home"
             ],
             "reachable_zones": [
-              "bedroom"
+              "home"
             ],
             "channel": "humidity",
             "direction": "+1",
             "mu": 1,
             "lambda": 0,
             "duration": "inf",
-            "confidence": 0.95,
-            "reason": "Humidifier active state increases humidity."
+            "confidence": 0.9,
+            "reason": "Activating humidifier increases humidity."
           },
           {
             "entity_id": "input_boolean.ke_ting_jia_shi_qi",
             "operation": "turn_on",
             "source_zones": [
-              "ketchen"
+              "home"
             ],
             "reachable_zones": [
-              "bedroom"
+              "home"
             ],
             "channel": "humidity",
             "direction": "+1",
             "mu": 1,
             "lambda": 0,
             "duration": "inf",
-            "confidence": 0.95,
-            "reason": "R5/R6 context identifies entity as 'humidifier' modifying humidity."
+            "confidence": 0.9,
+            "reason": "Humidifier is turned on when humidity is low (R5), implying it adds moisture."
           }
         ]
       },
@@ -952,6 +982,11 @@
     {
       "rule_uid": "automation.r6_humidifier_off",
       "rule_id": "1741537872533",
+      "display_alias": "R6-Humidifier Off",
+      "entity_display": {
+        "input_boolean.ke_ting_jia_shi_qi": "Living Room Humidifier (input_boolean.ke_ting_jia_shi_qi)",
+        "input_number.ke_ting_shi_du_chuan_gan_qi": "Living Room Humidity Sensor (input_number.ke_ting_shi_du_chuan_gan_qi)"
+      },
       "alias": "R6-Humidifier Off",
       "description": "When the living room humidity is above 60%, and the humidifier is on, turn off the living room humidifier.",
       "mode": "single",
@@ -985,7 +1020,7 @@
         "E_T": [
           {
             "entity_id": "input_number.ke_ting_shi_du_chuan_gan_qi",
-            "zone": "livingroom",
+            "zone": "home",
             "channel": "humidity",
             "relation": "↑",
             "threshold": 60,
@@ -999,18 +1034,18 @@
             "entity_id": "input_boolean.ke_ting_jia_shi_qi",
             "operation": "turn_off",
             "source_zones": [
-              "ketchen"
+              "home"
             ],
             "reachable_zones": [
-              "bedroom"
+              "home"
             ],
             "channel": "humidity",
-            "direction": "+1",
+            "direction": "-1",
             "mu": 1,
             "lambda": 0,
             "duration": "inf",
-            "confidence": 0.95,
-            "reason": "R5/R6 context identifies entity as 'humidifier' modifying humidity."
+            "confidence": 0.7,
+            "reason": "Turning off humidifier stops increasing humidity (natural decrease)."
           }
         ]
       },
@@ -1049,6 +1084,11 @@
     {
       "rule_uid": "automation.r7_living_room_heating",
       "rule_id": "1741538058532",
+      "display_alias": "R7-Living Room Heating",
+      "entity_display": {
+        "input_boolean.ke_ting_di_nuan": "Living Room Floor Heating (input_boolean.ke_ting_di_nuan)",
+        "input_number.ke_ting_wen_du_chuan_gan_qi": "Living Room Temperature Sensor (input_number.ke_ting_wen_du_chuan_gan_qi)"
+      },
       "alias": "R7-Living Room Heating",
       "description": "When the living room temperature is below 24℃, and the living room floor heating is off, turn on the living room floor heating.",
       "mode": "single",
@@ -1082,7 +1122,7 @@
         "E_T": [
           {
             "entity_id": "input_number.ke_ting_wen_du_chuan_gan_qi",
-            "zone": "bedroom",
+            "zone": "home",
             "channel": "temperature",
             "relation": "↓",
             "threshold": 24,
@@ -1096,35 +1136,35 @@
             "entity_id": "input_boolean.ke_ting_di_nuan",
             "operation": "turn_on",
             "source_zones": [
-              "livingroom"
+              "home"
             ],
             "reachable_zones": [
-              "livingroom"
+              "home"
             ],
             "channel": "temperature",
             "direction": "+1",
             "mu": 1,
             "lambda": 0,
             "duration": "inf",
-            "confidence": 0.95,
-            "reason": "Floor heating increases room temperature."
+            "confidence": 0.9,
+            "reason": "Activating heating increases room temperature."
           },
           {
             "entity_id": "input_boolean.ke_ting_di_nuan",
             "operation": "turn_on",
             "source_zones": [
-              "livingroom"
+              "home"
             ],
             "reachable_zones": [
-              "livingroom"
+              "home"
             ],
             "channel": "temperature",
             "direction": "+1",
             "mu": 1,
             "lambda": 0,
             "duration": "inf",
-            "confidence": 0.95,
-            "reason": "R7 context 'floor heating' implies temperature increase."
+            "confidence": 0.9,
+            "reason": "Floor heating is turned on when temperature is low (R7), implying it heats the room."
           }
         ]
       },
@@ -1164,6 +1204,12 @@
     {
       "rule_uid": "automation.r8_living_room_cooling",
       "rule_id": "1741538133764",
+      "display_alias": "R8-Living Room Cooling",
+      "entity_display": {
+        "input_boolean.ke_ting_kong_diao_kai_guan": "Living Room Air Conditioner Switch (input_boolean.ke_ting_kong_diao_kai_guan)",
+        "input_number.ke_ting_kong_diao_shu_zhi": "Living Room Air Conditioner Value (input_number.ke_ting_kong_diao_shu_zhi)",
+        "input_number.ke_ting_wen_du_chuan_gan_qi": "Living Room Temperature Sensor (input_number.ke_ting_wen_du_chuan_gan_qi)"
+      },
       "alias": "R8-Living Room Cooling",
       "description": "When the living room temperature is above 30℃, and the living room air conditioner is off, turn on the living room air conditioner and set it to 27℃.",
       "mode": "single",
@@ -1207,7 +1253,7 @@
         "E_T": [
           {
             "entity_id": "input_number.ke_ting_wen_du_chuan_gan_qi",
-            "zone": "bedroom",
+            "zone": "home",
             "channel": "temperature",
             "relation": "↑",
             "threshold": 30,
@@ -1221,35 +1267,35 @@
             "entity_id": "input_boolean.ke_ting_kong_diao_kai_guan",
             "operation": "turn_on",
             "source_zones": [
-              "livingroom"
+              "home"
             ],
             "reachable_zones": [
-              "ketchen"
+              "home"
             ],
             "channel": "temperature",
             "direction": "-1",
             "mu": 1,
             "lambda": 0,
             "duration": "inf",
-            "confidence": 0.9,
-            "reason": "AC operation in R8 is cooling (30C -> 27C target)."
+            "confidence": 0.85,
+            "reason": "AC turns on in high heat to cool the environment."
           },
           {
             "entity_id": "input_boolean.ke_ting_kong_diao_kai_guan",
             "operation": "turn_on",
             "source_zones": [
-              "livingroom"
+              "home"
             ],
             "reachable_zones": [
-              "ketchen"
+              "home"
             ],
             "channel": "temperature",
             "direction": "-1",
             "mu": 1,
             "lambda": 0,
             "duration": "inf",
-            "confidence": 0.9,
-            "reason": "R8 context 'air conditioner' implies cooling/temperature decrease."
+            "confidence": 0.85,
+            "reason": "Air conditioner is turned on when temperature is high (R8), implying it cools the room."
           }
         ]
       },
@@ -1299,6 +1345,11 @@
     {
       "rule_uid": "automation.r10_water_shutoff",
       "rule_id": "1741538310528",
+      "display_alias": "R10-Water Shutoff",
+      "entity_display": {
+        "input_boolean.chu_fang_lou_shui_chuan_gan_qi": "Kitchen Water Leak Sensor (input_boolean.chu_fang_lou_shui_chuan_gan_qi)",
+        "input_boolean.zhong_yang_shui_fa": "input_boolean.zhong_yang_shui_fa"
+      },
       "alias": "R10-Water Shutoff",
       "description": "When the water leak sensor is triggered, turn off the central water valve.",
       "mode": "single",
@@ -1329,10 +1380,10 @@
             "entity_id": "input_boolean.zhong_yang_shui_fa",
             "operation": "turn_off",
             "source_zones": [
-              "outdoor"
+              "home"
             ],
             "reachable_zones": [
-              "ketchen"
+              "home"
             ],
             "channel": "water_flow",
             "direction": "-1",
@@ -1340,16 +1391,16 @@
             "lambda": 0,
             "duration": "inf",
             "confidence": 0.95,
-            "reason": "Closing valve stops water flow."
+            "reason": "Closing valve stops water supply."
           },
           {
             "entity_id": "input_boolean.zhong_yang_shui_fa",
             "operation": "turn_off",
             "source_zones": [
-              "outdoor"
+              "home"
             ],
             "reachable_zones": [
-              "ketchen"
+              "home"
             ],
             "channel": "water_flow",
             "direction": "-1",
@@ -1357,7 +1408,7 @@
             "lambda": 0,
             "duration": "inf",
             "confidence": 0.95,
-            "reason": "Context R10 'central water valve' shutoff stops water flow."
+            "reason": "Central water valve is turned off to stop water flow (R10)."
           }
         ]
       },
@@ -1392,6 +1443,11 @@
     {
       "rule_uid": "automation.r11_fire_suppression",
       "rule_id": "1741538409237",
+      "display_alias": "R11-Fire Suppression",
+      "entity_display": {
+        "input_boolean.chu_fang_yan_wu_bao_jing_qi": "Kitchen Smoke Alarm (input_boolean.chu_fang_yan_wu_bao_jing_qi)",
+        "input_boolean.xiao_fang_pen_lin_tou": "Fire Sprinkler (input_boolean.xiao_fang_pen_lin_tou)"
+      },
       "alias": "R11-Fire Suppression",
       "description": "When the smoke alarm is turned on, turn on the fire sprinkler.",
       "mode": "single",
@@ -1422,35 +1478,69 @@
             "entity_id": "input_boolean.xiao_fang_pen_lin_tou",
             "operation": "turn_on",
             "source_zones": [
-              "livingroom"
+              "home"
             ],
             "reachable_zones": [
-              "bedroom"
+              "home"
             ],
             "channel": "water_flow",
             "direction": "+1",
             "mu": 1,
             "lambda": 0,
             "duration": "inf",
-            "confidence": 0.95,
-            "reason": "Sprinkler activation causes water flow."
+            "confidence": 0.9,
+            "reason": "Fire sprinkler releases water."
           },
           {
             "entity_id": "input_boolean.xiao_fang_pen_lin_tou",
             "operation": "turn_on",
             "source_zones": [
-              "livingroom"
+              "home"
             ],
             "reachable_zones": [
-              "bedroom"
+              "home"
+            ],
+            "channel": "smoke",
+            "direction": "-1",
+            "mu": 1,
+            "lambda": 0,
+            "duration": "inf",
+            "confidence": 0.6,
+            "reason": "Water suppresses fire and smoke generation."
+          },
+          {
+            "entity_id": "input_boolean.xiao_fang_pen_lin_tou",
+            "operation": "turn_on",
+            "source_zones": [
+              "home"
+            ],
+            "reachable_zones": [
+              "home"
             ],
             "channel": "water_flow",
             "direction": "+1",
             "mu": 1,
             "lambda": 0,
             "duration": "inf",
-            "confidence": 0.95,
-            "reason": "Context R11 'fire sprinkler' implies releasing water."
+            "confidence": 0.9,
+            "reason": "Sprinkler activation releases water (R11)."
+          },
+          {
+            "entity_id": "input_boolean.xiao_fang_pen_lin_tou",
+            "operation": "turn_on",
+            "source_zones": [
+              "home"
+            ],
+            "reachable_zones": [
+              "home"
+            ],
+            "channel": "smoke",
+            "direction": "-1",
+            "mu": 1,
+            "lambda": 0,
+            "duration": "inf",
+            "confidence": 0.6,
+            "reason": "Sprinkler suppresses fire/smoke indirectly."
           }
         ]
       },
@@ -1485,6 +1575,11 @@
     {
       "rule_uid": "automation.r13_bedroom_heating",
       "rule_id": "1741538698986",
+      "display_alias": "R13-Bedroom Heating",
+      "entity_display": {
+        "input_boolean.wo_shi_nuan_qi": "Bedroom Heater (input_boolean.wo_shi_nuan_qi)",
+        "input_datetime.xi_tong_shi_jian": "System time (input_datetime.xi_tong_shi_jian)"
+      },
       "alias": "R13-Bedroom Heating",
       "description": "At 7 PM, turn on the bedroom heating.",
       "mode": "single",
@@ -1516,35 +1611,35 @@
             "entity_id": "input_boolean.wo_shi_nuan_qi",
             "operation": "turn_on",
             "source_zones": [
-              "ketchen"
+              "home"
             ],
             "reachable_zones": [
-              "greenhouse"
+              "home"
             ],
             "channel": "temperature",
             "direction": "+1",
             "mu": 1,
             "lambda": 0,
             "duration": "inf",
-            "confidence": 0.95,
-            "reason": "Heating increases temperature."
+            "confidence": 0.9,
+            "reason": "Activating heater increases temperature."
           },
           {
             "entity_id": "input_boolean.wo_shi_nuan_qi",
             "operation": "turn_on",
             "source_zones": [
-              "ketchen"
+              "home"
             ],
             "reachable_zones": [
-              "greenhouse"
+              "home"
             ],
             "channel": "temperature",
             "direction": "+1",
             "mu": 1,
             "lambda": 0,
             "duration": "inf",
-            "confidence": 0.95,
-            "reason": "Context R13/R14 'bedroom heating' implies temperature increase."
+            "confidence": 0.9,
+            "reason": "Bedroom heater is turned on at 7PM (R13), implying it heats the room."
           }
         ]
       },
@@ -1579,6 +1674,12 @@
     {
       "rule_uid": "automation.r14_bedroom_window",
       "rule_id": "1741538821346",
+      "display_alias": "R14-Bedroom Window",
+      "entity_display": {
+        "input_boolean.wo_shi_chuang_hu": "Bedroom Window (input_boolean.wo_shi_chuang_hu)",
+        "input_boolean.wo_shi_nuan_qi": "Bedroom Heater (input_boolean.wo_shi_nuan_qi)",
+        "input_number.wo_shi_wen_du_chuan_gan_qi": "Bedroom Temperature Sensor (input_number.wo_shi_wen_du_chuan_gan_qi)"
+      },
       "alias": "R14-Bedroom Window",
       "description": "When the bedroom temperature reaches 30℃, open the window and turn off the heating.",
       "mode": "single",
@@ -1614,7 +1715,7 @@
         "E_T": [
           {
             "entity_id": "input_number.wo_shi_wen_du_chuan_gan_qi",
-            "zone": "ketchen",
+            "zone": "home",
             "channel": "temperature",
             "relation": "↑",
             "threshold": 30,
@@ -1628,27 +1729,44 @@
             "entity_id": "input_boolean.wo_shi_chuang_hu",
             "operation": "turn_on",
             "source_zones": [
-              "bedroom"
+              "home"
             ],
             "reachable_zones": [
-              "greenhouse"
+              "home"
             ],
             "channel": "temperature",
             "direction": "-1",
             "mu": 1,
             "lambda": 0,
             "duration": "inf",
-            "confidence": 0.8,
-            "reason": "Opening window releases heat."
+            "confidence": 0.7,
+            "reason": "Opening window during high heat usually facilitates cooling."
           },
           {
             "entity_id": "input_boolean.wo_shi_chuang_hu",
             "operation": "turn_on",
             "source_zones": [
-              "bedroom"
+              "home"
             ],
             "reachable_zones": [
-              "greenhouse"
+              "home"
+            ],
+            "channel": "temperature",
+            "direction": "-1",
+            "mu": 1,
+            "lambda": 0,
+            "duration": "inf",
+            "confidence": 0.7,
+            "reason": "Window opens at high temperature (R14), likely to cool the room."
+          },
+          {
+            "entity_id": "input_boolean.wo_shi_nuan_qi",
+            "operation": "turn_off",
+            "source_zones": [
+              "home"
+            ],
+            "reachable_zones": [
+              "home"
             ],
             "channel": "temperature",
             "direction": "-1",
@@ -1656,24 +1774,7 @@
             "lambda": 0,
             "duration": "inf",
             "confidence": 0.8,
-            "reason": "R14: Open window in response to high temp (30C) implies cooling/ventilation."
-          },
-          {
-            "entity_id": "input_boolean.wo_shi_nuan_qi",
-            "operation": "turn_off",
-            "source_zones": [
-              "ketchen"
-            ],
-            "reachable_zones": [
-              "greenhouse"
-            ],
-            "channel": "temperature",
-            "direction": "+1",
-            "mu": 1,
-            "lambda": 0,
-            "duration": "inf",
-            "confidence": 0.95,
-            "reason": "Context R13/R14 'bedroom heating' implies temperature increase."
+            "reason": "Turning off heater stops heating."
           }
         ]
       },
@@ -1714,6 +1815,10 @@
     {
       "rule_uid": "automation.r16_greenhouse_heating",
       "rule_id": "1741538884366",
+      "display_alias": "R16-Greenhouse Heating",
+      "entity_display": {
+        "input_boolean.wen_shi_nuan_qi": "Greenhouse Heater (input_boolean.wen_shi_nuan_qi)"
+      },
       "alias": "R16-Greenhouse Heating",
       "description": "At 7 PM, turn on the greenhouse heating.",
       "mode": "single",
@@ -1742,35 +1847,35 @@
             "entity_id": "input_boolean.wen_shi_nuan_qi",
             "operation": "turn_on",
             "source_zones": [
-              "bedroom"
+              "home"
             ],
             "reachable_zones": [
-              "outdoor"
+              "home"
             ],
             "channel": "temperature",
             "direction": "+1",
             "mu": 1,
             "lambda": 0,
             "duration": "inf",
-            "confidence": 0.95,
-            "reason": "Heating increases temperature."
+            "confidence": 0.9,
+            "reason": "Activating heater increases temperature."
           },
           {
             "entity_id": "input_boolean.wen_shi_nuan_qi",
             "operation": "turn_on",
             "source_zones": [
-              "bedroom"
+              "home"
             ],
             "reachable_zones": [
-              "outdoor"
+              "home"
             ],
             "channel": "temperature",
             "direction": "+1",
             "mu": 1,
             "lambda": 0,
             "duration": "inf",
-            "confidence": 0.95,
-            "reason": "Context R16/R17 'greenhouse heating' implies temperature increase."
+            "confidence": 0.9,
+            "reason": "Greenhouse heater is turned on at 7PM (R16), implying it heats the room."
           }
         ]
       },
@@ -1801,6 +1906,12 @@
     {
       "rule_uid": "automation.r17_greenhouse_window",
       "rule_id": "1741538950856",
+      "display_alias": "R17-Greenhouse Window",
+      "entity_display": {
+        "input_boolean.wen_shi_chuang_hu": "Greenhouse Window (input_boolean.wen_shi_chuang_hu)",
+        "input_boolean.wen_shi_nuan_qi": "Greenhouse Heater (input_boolean.wen_shi_nuan_qi)",
+        "input_number.greenhouse_temperature_sensor": "Greenhouse Temperature Sensor (input_number.greenhouse_temperature_sensor)"
+      },
       "alias": "R17-Greenhouse Window",
       "description": "When the greenhouse temperature reaches 32℃, open the window and turn off the heating.",
       "mode": "single",
@@ -1836,7 +1947,7 @@
         "E_T": [
           {
             "entity_id": "input_number.greenhouse_temperature_sensor",
-            "zone": "livingroom",
+            "zone": "home",
             "channel": "temperature",
             "relation": "↑",
             "threshold": 30,
@@ -1850,27 +1961,44 @@
             "entity_id": "input_boolean.wen_shi_chuang_hu",
             "operation": "turn_on",
             "source_zones": [
-              "greenhouse"
+              "home"
             ],
             "reachable_zones": [
-              "porch"
+              "home"
             ],
             "channel": "temperature",
             "direction": "-1",
             "mu": 1,
             "lambda": 0,
             "duration": "inf",
-            "confidence": 0.8,
-            "reason": "Opening window typically lowers temperature relative to sealed state."
+            "confidence": 0.7,
+            "reason": "Opening window during high heat usually facilitates cooling."
           },
           {
             "entity_id": "input_boolean.wen_shi_chuang_hu",
             "operation": "turn_on",
             "source_zones": [
-              "greenhouse"
+              "home"
             ],
             "reachable_zones": [
-              "porch"
+              "home"
+            ],
+            "channel": "temperature",
+            "direction": "-1",
+            "mu": 1,
+            "lambda": 0,
+            "duration": "inf",
+            "confidence": 0.7,
+            "reason": "Window opens at high temperature (R17), likely to vent and cool the room."
+          },
+          {
+            "entity_id": "input_boolean.wen_shi_nuan_qi",
+            "operation": "turn_off",
+            "source_zones": [
+              "home"
+            ],
+            "reachable_zones": [
+              "home"
             ],
             "channel": "temperature",
             "direction": "-1",
@@ -1878,24 +2006,7 @@
             "lambda": 0,
             "duration": "inf",
             "confidence": 0.8,
-            "reason": "R17: Open window in response to high temp (32C) implies cooling/ventilation."
-          },
-          {
-            "entity_id": "input_boolean.wen_shi_nuan_qi",
-            "operation": "turn_off",
-            "source_zones": [
-              "bedroom"
-            ],
-            "reachable_zones": [
-              "outdoor"
-            ],
-            "channel": "temperature",
-            "direction": "+1",
-            "mu": 1,
-            "lambda": 0,
-            "duration": "inf",
-            "confidence": 0.95,
-            "reason": "Context R16/R17 'greenhouse heating' implies temperature increase."
+            "reason": "Turning off heater stops heating."
           }
         ]
       },
@@ -1938,6 +2049,6 @@
     "rule_count": 17,
     "env_trigger_ref_count": 6,
     "env_condition_ref_count": 5,
-    "env_action_effect_count": 37
+    "env_action_effect_count": 38
   }
 }

@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0",
-  "generated_at": "2026-05-31T16:23:42.621647+00:00",
+  "generated_at": "2026-05-31T17:36:49.324541+00:00",
   "source": "automations.yaml",
   "summary": {
     "rule_count": 17,
@@ -166,7 +166,18 @@
           }
         }
       ],
-      "primary_role": "sensor"
+      "primary_role": "sensor",
+      "display_name": "Kitchen Water Leak Sensor (input_boolean.chu_fang_lou_shui_chuan_gan_qi)",
+      "registry": {
+        "name": null,
+        "original_name": "Kitchen Water Leak Sensor",
+        "aliases": [],
+        "area_id": "chu_fang",
+        "device_class": null,
+        "original_device_class": null,
+        "platform": "input_boolean",
+        "unit_of_measurement": null
+      }
     },
     {
       "entity_id": "input_boolean.chu_fang_yan_wu_bao_jing_qi",
@@ -206,7 +217,18 @@
           }
         }
       ],
-      "primary_role": "sensor"
+      "primary_role": "sensor",
+      "display_name": "Kitchen Smoke Alarm (input_boolean.chu_fang_yan_wu_bao_jing_qi)",
+      "registry": {
+        "name": null,
+        "original_name": "Kitchen Smoke Alarm",
+        "aliases": [],
+        "area_id": "chu_fang",
+        "device_class": null,
+        "original_device_class": null,
+        "platform": "input_boolean",
+        "unit_of_measurement": null
+      }
     },
     {
       "entity_id": "input_boolean.deng",
@@ -248,7 +270,18 @@
           }
         }
       ],
-      "primary_role": "actuator"
+      "primary_role": "actuator",
+      "display_name": "Living Room Light (input_boolean.deng)",
+      "registry": {
+        "name": null,
+        "original_name": "Living Room Light",
+        "aliases": [],
+        "area_id": "ke_ting",
+        "device_class": null,
+        "original_device_class": null,
+        "platform": "input_boolean",
+        "unit_of_measurement": null
+      }
     },
     {
       "entity_id": "input_boolean.deng_2",
@@ -290,7 +323,18 @@
           }
         }
       ],
-      "primary_role": "actuator"
+      "primary_role": "actuator",
+      "display_name": "Kitchen Light (input_boolean.deng_2)",
+      "registry": {
+        "name": null,
+        "original_name": "Kitchen Light",
+        "aliases": [],
+        "area_id": "chu_fang",
+        "device_class": null,
+        "original_device_class": null,
+        "platform": "input_boolean",
+        "unit_of_measurement": null
+      }
     },
     {
       "entity_id": "input_boolean.ke_ting_di_nuan",
@@ -352,7 +396,18 @@
           }
         }
       ],
-      "primary_role": "hybrid"
+      "primary_role": "hybrid",
+      "display_name": "Living Room Floor Heating (input_boolean.ke_ting_di_nuan)",
+      "registry": {
+        "name": null,
+        "original_name": "Living Room Floor Heating",
+        "aliases": [],
+        "area_id": "ke_ting",
+        "device_class": null,
+        "original_device_class": null,
+        "platform": "input_boolean",
+        "unit_of_measurement": null
+      }
     },
     {
       "entity_id": "input_boolean.ke_ting_jia_shi_qi",
@@ -454,7 +509,18 @@
           }
         }
       ],
-      "primary_role": "hybrid"
+      "primary_role": "hybrid",
+      "display_name": "Living Room Humidifier (input_boolean.ke_ting_jia_shi_qi)",
+      "registry": {
+        "name": null,
+        "original_name": "Living Room Humidifier",
+        "aliases": [],
+        "area_id": "ke_ting",
+        "device_class": null,
+        "original_device_class": null,
+        "platform": "input_boolean",
+        "unit_of_measurement": null
+      }
     },
     {
       "entity_id": "input_boolean.ke_ting_kong_diao_kai_guan",
@@ -516,7 +582,18 @@
           }
         }
       ],
-      "primary_role": "hybrid"
+      "primary_role": "hybrid",
+      "display_name": "Living Room Air Conditioner Switch (input_boolean.ke_ting_kong_diao_kai_guan)",
+      "registry": {
+        "name": null,
+        "original_name": "Living Room Air Conditioner Switch",
+        "aliases": [],
+        "area_id": "ke_ting",
+        "device_class": null,
+        "original_device_class": null,
+        "platform": "input_boolean",
+        "unit_of_measurement": null
+      }
     },
     {
       "entity_id": "input_boolean.men_lang_deng",
@@ -606,7 +683,18 @@
           }
         }
       ],
-      "primary_role": "actuator"
+      "primary_role": "actuator",
+      "display_name": "Porch Light (input_boolean.men_lang_deng)",
+      "registry": {
+        "name": null,
+        "original_name": "Porch Light",
+        "aliases": [],
+        "area_id": "men_lang",
+        "device_class": null,
+        "original_device_class": null,
+        "platform": "input_boolean",
+        "unit_of_measurement": null
+      }
     },
     {
       "entity_id": "input_boolean.men_wai_deng",
@@ -651,7 +739,18 @@
           }
         }
       ],
-      "primary_role": "actuator"
+      "primary_role": "actuator",
+      "display_name": "Outside Door Light (input_boolean.men_wai_deng)",
+      "registry": {
+        "name": null,
+        "original_name": "Outside Door Light",
+        "aliases": [],
+        "area_id": "men_wai",
+        "device_class": null,
+        "original_device_class": null,
+        "platform": "input_boolean",
+        "unit_of_measurement": null
+      }
     },
     {
       "entity_id": "input_boolean.wen_shi_chuang_hu",
@@ -693,7 +792,18 @@
           }
         }
       ],
-      "primary_role": "actuator"
+      "primary_role": "actuator",
+      "display_name": "Greenhouse Window (input_boolean.wen_shi_chuang_hu)",
+      "registry": {
+        "name": null,
+        "original_name": "Greenhouse Window",
+        "aliases": [],
+        "area_id": "wen_shi",
+        "device_class": null,
+        "original_device_class": null,
+        "platform": "input_boolean",
+        "unit_of_measurement": null
+      }
     },
     {
       "entity_id": "input_boolean.wen_shi_deng",
@@ -759,7 +869,18 @@
           }
         }
       ],
-      "primary_role": "hybrid"
+      "primary_role": "hybrid",
+      "display_name": "Greenhouse Light (input_boolean.wen_shi_deng)",
+      "registry": {
+        "name": null,
+        "original_name": "Greenhouse Light",
+        "aliases": [],
+        "area_id": "wen_shi",
+        "device_class": null,
+        "original_device_class": null,
+        "platform": "input_boolean",
+        "unit_of_measurement": null
+      }
     },
     {
       "entity_id": "input_boolean.wen_shi_nuan_qi",
@@ -823,7 +944,18 @@
           }
         }
       ],
-      "primary_role": "actuator"
+      "primary_role": "actuator",
+      "display_name": "Greenhouse Heater (input_boolean.wen_shi_nuan_qi)",
+      "registry": {
+        "name": null,
+        "original_name": "Greenhouse Heater",
+        "aliases": [],
+        "area_id": "wen_shi",
+        "device_class": null,
+        "original_device_class": null,
+        "platform": "input_boolean",
+        "unit_of_measurement": null
+      }
     },
     {
       "entity_id": "input_boolean.wo_shi_chuang_hu",
@@ -865,7 +997,18 @@
           }
         }
       ],
-      "primary_role": "actuator"
+      "primary_role": "actuator",
+      "display_name": "Bedroom Window (input_boolean.wo_shi_chuang_hu)",
+      "registry": {
+        "name": null,
+        "original_name": "Bedroom Window",
+        "aliases": [],
+        "area_id": "wo_shi",
+        "device_class": null,
+        "original_device_class": null,
+        "platform": "input_boolean",
+        "unit_of_measurement": null
+      }
     },
     {
       "entity_id": "input_boolean.wo_shi_deng",
@@ -907,7 +1050,18 @@
           }
         }
       ],
-      "primary_role": "actuator"
+      "primary_role": "actuator",
+      "display_name": "Bedroom Light (input_boolean.wo_shi_deng)",
+      "registry": {
+        "name": null,
+        "original_name": "Bedroom Light",
+        "aliases": [],
+        "area_id": "wo_shi",
+        "device_class": null,
+        "original_device_class": null,
+        "platform": "input_boolean",
+        "unit_of_measurement": null
+      }
     },
     {
       "entity_id": "input_boolean.wo_shi_nuan_qi",
@@ -971,7 +1125,18 @@
           }
         }
       ],
-      "primary_role": "actuator"
+      "primary_role": "actuator",
+      "display_name": "Bedroom Heater (input_boolean.wo_shi_nuan_qi)",
+      "registry": {
+        "name": null,
+        "original_name": "Bedroom Heater",
+        "aliases": [],
+        "area_id": "wo_shi",
+        "device_class": null,
+        "original_device_class": null,
+        "platform": "input_boolean",
+        "unit_of_measurement": null
+      }
     },
     {
       "entity_id": "input_boolean.xiao_fang_pen_lin_tou",
@@ -1013,7 +1178,18 @@
           }
         }
       ],
-      "primary_role": "actuator"
+      "primary_role": "actuator",
+      "display_name": "Fire Sprinkler (input_boolean.xiao_fang_pen_lin_tou)",
+      "registry": {
+        "name": null,
+        "original_name": "Fire Sprinkler",
+        "aliases": [],
+        "area_id": "chu_fang",
+        "device_class": null,
+        "original_device_class": null,
+        "platform": "input_boolean",
+        "unit_of_measurement": null
+      }
     },
     {
       "entity_id": "input_boolean.zhi_neng_men_suo",
@@ -1101,7 +1277,18 @@
           }
         }
       ],
-      "primary_role": "hybrid"
+      "primary_role": "hybrid",
+      "display_name": "Smart Door Lock (input_boolean.zhi_neng_men_suo)",
+      "registry": {
+        "name": null,
+        "original_name": "Smart Door Lock",
+        "aliases": [],
+        "area_id": "men_wai",
+        "device_class": null,
+        "original_device_class": null,
+        "platform": "input_boolean",
+        "unit_of_measurement": null
+      }
     },
     {
       "entity_id": "input_boolean.zhong_yang_shui_fa",
@@ -1143,7 +1330,18 @@
           }
         }
       ],
-      "primary_role": "actuator"
+      "primary_role": "actuator",
+      "display_name": "input_boolean.zhong_yang_shui_fa",
+      "registry": {
+        "name": null,
+        "original_name": null,
+        "aliases": [],
+        "area_id": null,
+        "device_class": null,
+        "original_device_class": null,
+        "platform": null,
+        "unit_of_measurement": null
+      }
     },
     {
       "entity_id": "input_button.wo_shi_yun_dong_chuan_gan_qi",
@@ -1183,7 +1381,18 @@
           }
         }
       ],
-      "primary_role": "sensor"
+      "primary_role": "sensor",
+      "display_name": "Bedroom Motion Sensor (input_button.wo_shi_yun_dong_chuan_gan_qi)",
+      "registry": {
+        "name": null,
+        "original_name": "Bedroom Motion Sensor",
+        "aliases": [],
+        "area_id": "wo_shi",
+        "device_class": null,
+        "original_device_class": null,
+        "platform": "input_button",
+        "unit_of_measurement": null
+      }
     },
     {
       "entity_id": "input_button.yun_dong_chuan_gan_qi",
@@ -1223,7 +1432,18 @@
           }
         }
       ],
-      "primary_role": "sensor"
+      "primary_role": "sensor",
+      "display_name": "Porch Motion Sensor (input_button.yun_dong_chuan_gan_qi)",
+      "registry": {
+        "name": null,
+        "original_name": "Porch Motion Sensor",
+        "aliases": [],
+        "area_id": "men_lang",
+        "device_class": null,
+        "original_device_class": null,
+        "platform": "input_button",
+        "unit_of_measurement": null
+      }
     },
     {
       "entity_id": "input_button.yun_dong_chuan_gan_qi_2",
@@ -1263,7 +1483,18 @@
           }
         }
       ],
-      "primary_role": "sensor"
+      "primary_role": "sensor",
+      "display_name": "Living Room Motion Sensor (input_button.yun_dong_chuan_gan_qi_2)",
+      "registry": {
+        "name": null,
+        "original_name": "Living Room Motion Sensor",
+        "aliases": [],
+        "area_id": "ke_ting",
+        "device_class": null,
+        "original_device_class": null,
+        "platform": "input_button",
+        "unit_of_measurement": null
+      }
     },
     {
       "entity_id": "input_button.yun_dong_chuan_gan_qi_3",
@@ -1303,7 +1534,18 @@
           }
         }
       ],
-      "primary_role": "sensor"
+      "primary_role": "sensor",
+      "display_name": "Kitchen Motion Sensor (input_button.yun_dong_chuan_gan_qi_3)",
+      "registry": {
+        "name": null,
+        "original_name": "Kitchen Motion Sensor",
+        "aliases": [],
+        "area_id": "chu_fang",
+        "device_class": null,
+        "original_device_class": null,
+        "platform": "input_button",
+        "unit_of_measurement": null
+      }
     },
     {
       "entity_id": "input_datetime.xi_tong_shi_jian",
@@ -1343,7 +1585,18 @@
           }
         }
       ],
-      "primary_role": "sensor"
+      "primary_role": "sensor",
+      "display_name": "System time (input_datetime.xi_tong_shi_jian)",
+      "registry": {
+        "name": null,
+        "original_name": "System time",
+        "aliases": [],
+        "area_id": "xi_tong",
+        "device_class": null,
+        "original_device_class": null,
+        "platform": "input_datetime",
+        "unit_of_measurement": null
+      }
     },
     {
       "entity_id": "input_number.chu_fang_liang_du_chuan_gan_qi",
@@ -1380,7 +1633,18 @@
           }
         }
       ],
-      "primary_role": "sensor"
+      "primary_role": "sensor",
+      "display_name": "Kitchen Light Sensor (input_number.chu_fang_liang_du_chuan_gan_qi)",
+      "registry": {
+        "name": null,
+        "original_name": "Kitchen Light Sensor",
+        "aliases": [],
+        "area_id": "chu_fang",
+        "device_class": null,
+        "original_device_class": null,
+        "platform": "input_number",
+        "unit_of_measurement": null
+      }
     },
     {
       "entity_id": "input_number.greenhouse_temperature_sensor",
@@ -1419,7 +1683,18 @@
           }
         }
       ],
-      "primary_role": "sensor"
+      "primary_role": "sensor",
+      "display_name": "Greenhouse Temperature Sensor (input_number.greenhouse_temperature_sensor)",
+      "registry": {
+        "name": null,
+        "original_name": "Greenhouse Temperature Sensor",
+        "aliases": [],
+        "area_id": "wen_shi",
+        "device_class": null,
+        "original_device_class": null,
+        "platform": "input_number",
+        "unit_of_measurement": null
+      }
     },
     {
       "entity_id": "input_number.ke_ting_kong_diao_shu_zhi",
@@ -1463,7 +1738,18 @@
           }
         }
       ],
-      "primary_role": "actuator"
+      "primary_role": "actuator",
+      "display_name": "Living Room Air Conditioner Value (input_number.ke_ting_kong_diao_shu_zhi)",
+      "registry": {
+        "name": null,
+        "original_name": "Living Room Air Conditioner Value",
+        "aliases": [],
+        "area_id": "ke_ting",
+        "device_class": null,
+        "original_device_class": null,
+        "platform": "input_number",
+        "unit_of_measurement": null
+      }
     },
     {
       "entity_id": "input_number.ke_ting_liang_du_chuan_gan_qi",
@@ -1519,7 +1805,18 @@
           }
         }
       ],
-      "primary_role": "sensor"
+      "primary_role": "sensor",
+      "display_name": "Living Room Light Sensor (input_number.ke_ting_liang_du_chuan_gan_qi)",
+      "registry": {
+        "name": null,
+        "original_name": "Living Room Light Sensor",
+        "aliases": [],
+        "area_id": "ke_ting",
+        "device_class": null,
+        "original_device_class": null,
+        "platform": "input_number",
+        "unit_of_measurement": null
+      }
     },
     {
       "entity_id": "input_number.ke_ting_shi_du_chuan_gan_qi",
@@ -1579,7 +1876,18 @@
           }
         }
       ],
-      "primary_role": "sensor"
+      "primary_role": "sensor",
+      "display_name": "Living Room Humidity Sensor (input_number.ke_ting_shi_du_chuan_gan_qi)",
+      "registry": {
+        "name": null,
+        "original_name": "Living Room Humidity Sensor",
+        "aliases": [],
+        "area_id": "ke_ting",
+        "device_class": null,
+        "original_device_class": null,
+        "platform": "input_number",
+        "unit_of_measurement": null
+      }
     },
     {
       "entity_id": "input_number.ke_ting_wen_du_chuan_gan_qi",
@@ -1639,7 +1947,18 @@
           }
         }
       ],
-      "primary_role": "sensor"
+      "primary_role": "sensor",
+      "display_name": "Living Room Temperature Sensor (input_number.ke_ting_wen_du_chuan_gan_qi)",
+      "registry": {
+        "name": null,
+        "original_name": "Living Room Temperature Sensor",
+        "aliases": [],
+        "area_id": "ke_ting",
+        "device_class": null,
+        "original_device_class": null,
+        "platform": "input_number",
+        "unit_of_measurement": null
+      }
     },
     {
       "entity_id": "input_number.liang_du_chuan_gan_qi_2",
@@ -1676,7 +1995,18 @@
           }
         }
       ],
-      "primary_role": "sensor"
+      "primary_role": "sensor",
+      "display_name": "Porch Light Sensor (input_number.liang_du_chuan_gan_qi_2)",
+      "registry": {
+        "name": null,
+        "original_name": "Porch Light Sensor",
+        "aliases": [],
+        "area_id": "men_lang",
+        "device_class": null,
+        "original_device_class": null,
+        "platform": "input_number",
+        "unit_of_measurement": null
+      }
     },
     {
       "entity_id": "input_number.wo_shi_liang_du_chuan_gan_qi",
@@ -1713,7 +2043,18 @@
           }
         }
       ],
-      "primary_role": "sensor"
+      "primary_role": "sensor",
+      "display_name": "Bedroom Light Sensor (input_number.wo_shi_liang_du_chuan_gan_qi)",
+      "registry": {
+        "name": null,
+        "original_name": "Bedroom Light Sensor",
+        "aliases": [],
+        "area_id": "wo_shi",
+        "device_class": null,
+        "original_device_class": null,
+        "platform": "input_number",
+        "unit_of_measurement": null
+      }
     },
     {
       "entity_id": "input_number.wo_shi_wen_du_chuan_gan_qi",
@@ -1752,7 +2093,18 @@
           }
         }
       ],
-      "primary_role": "sensor"
+      "primary_role": "sensor",
+      "display_name": "Bedroom Temperature Sensor (input_number.wo_shi_wen_du_chuan_gan_qi)",
+      "registry": {
+        "name": null,
+        "original_name": "Bedroom Temperature Sensor",
+        "aliases": [],
+        "area_id": "wo_shi",
+        "device_class": null,
+        "original_device_class": null,
+        "platform": "input_number",
+        "unit_of_measurement": null
+      }
     }
   ]
 }
