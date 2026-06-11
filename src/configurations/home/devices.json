@@ -1,137 +1,46 @@
 {
   "schema_version": "1.0",
-  "generated_at": "2026-05-31T17:36:49.324541+00:00",
+  "generated_at": "2026-06-07T20:13:38.597381+00:00",
   "source": "automations.yaml",
   "summary": {
-    "rule_count": 17,
-    "entity_count": 32
+    "rule_count": 4,
+    "entity_count": 8
   },
   "rules": [
     {
-      "rule_uid": "automation.r1_door_open_lights",
-      "rule_id": "1741536976427",
-      "alias": "R1-Door Open Lights",
-      "description": "When the door lock is opened, if the brightness sensor is below 50lux, turn on the outside door light and porch light.",
+      "rule_uid": "automation.r21_cleanmode_disablelatch",
+      "rule_id": "1780849082145",
+      "alias": "R21_CleanMode_DisableLatch",
+      "description": "清洁模式，关闭窗户童锁",
       "mode": "single"
     },
     {
-      "rule_uid": "automation.r15_lights_off_when_leaving_home",
-      "rule_id": "1741537129329",
-      "alias": "R15-Lights Off When Leaving Home",
-      "description": "When the door lock is closed, turn off the porch light and greenhouse light.",
+      "rule_uid": "automation.r22_temphigh_windowopen",
+      "rule_id": "1780849846827",
+      "alias": "R22_TempHigh_WindowOpen",
+      "description": "温度高，童锁disabled，开窗",
       "mode": "single"
     },
     {
-      "rule_uid": "automation.r3_porch_light",
-      "rule_id": "1741537258059",
-      "alias": "R3-Porch Light",
-      "description": "When the porch motion sensor is triggered, if the brightness sensor is below 50lux, turn on the porch light.",
+      "rule_uid": "automation.r23_charger_stopautoclose",
+      "rule_id": "1780849977378",
+      "alias": "R23_Charger_StopAutoClose",
+      "description": "刚开始充电，禁用自动关门",
       "mode": "single"
     },
     {
-      "rule_uid": "automation.r4_living_room_light",
-      "rule_id": "1741537430474",
-      "alias": "R4-Living Room Light",
-      "description": "When the living room motion sensor is triggered, if the brightness sensor is below 50lux, turn on the living room light.",
-      "mode": "single"
-    },
-    {
-      "rule_uid": "automation.r9_kitchen_light",
-      "rule_id": "1741537509709",
-      "alias": "R9-Kitchen Light",
-      "description": "When the kitchen motion sensor is triggered, if the brightness sensor is below 50lux, turn on the kitchen light.",
-      "mode": "single"
-    },
-    {
-      "rule_uid": "automation.r12_bedroom_light",
-      "rule_id": "1741537625039",
-      "alias": "R12-Bedroom Light",
-      "description": "When the bedroom motion sensor is triggered, if the brightness sensor is below 50lux, turn on the bedroom light.",
-      "mode": "single"
-    },
-    {
-      "rule_uid": "automation.r2_greenhouse_light_re_enable_and_door_unlock",
-      "rule_id": "1741537673053",
-      "alias": "R2-Greenhouse Light Re-enable and Door Unlock",
-      "description": "If the greenhouse light is turned off, open the door lock and turn the porch light back on.",
-      "mode": "single"
-    },
-    {
-      "rule_uid": "automation.r5_humidifier_on",
-      "rule_id": "1741537793019",
-      "alias": "R5-Humidifier On",
-      "description": "When the living room humidity is below 40%, and the humidifier is off, turn on the living room humidifier.",
-      "mode": "single"
-    },
-    {
-      "rule_uid": "automation.r6_humidifier_off",
-      "rule_id": "1741537872533",
-      "alias": "R6-Humidifier Off",
-      "description": "When the living room humidity is above 60%, and the humidifier is on, turn off the living room humidifier.",
-      "mode": "single"
-    },
-    {
-      "rule_uid": "automation.r7_living_room_heating",
-      "rule_id": "1741538058532",
-      "alias": "R7-Living Room Heating",
-      "description": "When the living room temperature is below 24℃, and the living room floor heating is off, turn on the living room floor heating.",
-      "mode": "single"
-    },
-    {
-      "rule_uid": "automation.r8_living_room_cooling",
-      "rule_id": "1741538133764",
-      "alias": "R8-Living Room Cooling",
-      "description": "When the living room temperature is above 30℃, and the living room air conditioner is off, turn on the living room air conditioner and set it to 27℃.",
-      "mode": "single"
-    },
-    {
-      "rule_uid": "automation.r10_water_shutoff",
-      "rule_id": "1741538310528",
-      "alias": "R10-Water Shutoff",
-      "description": "When the water leak sensor is triggered, turn off the central water valve.",
-      "mode": "single"
-    },
-    {
-      "rule_uid": "automation.r11_fire_suppression",
-      "rule_id": "1741538409237",
-      "alias": "R11-Fire Suppression",
-      "description": "When the smoke alarm is turned on, turn on the fire sprinkler.",
-      "mode": "single"
-    },
-    {
-      "rule_uid": "automation.r13_bedroom_heating",
-      "rule_id": "1741538698986",
-      "alias": "R13-Bedroom Heating",
-      "description": "At 7 PM, turn on the bedroom heating.",
-      "mode": "single"
-    },
-    {
-      "rule_uid": "automation.r14_bedroom_window",
-      "rule_id": "1741538821346",
-      "alias": "R14-Bedroom Window",
-      "description": "When the bedroom temperature reaches 30℃, open the window and turn off the heating.",
-      "mode": "single"
-    },
-    {
-      "rule_uid": "automation.r16_greenhouse_heating",
-      "rule_id": "1741538884366",
-      "alias": "R16-Greenhouse Heating",
-      "description": "At 7 PM, turn on the greenhouse heating.",
-      "mode": "single"
-    },
-    {
-      "rule_uid": "automation.r17_greenhouse_window",
-      "rule_id": "1741538950856",
-      "alias": "R17-Greenhouse Window",
-      "description": "When the greenhouse temperature reaches 32℃, open the window and turn off the heating.",
+      "rule_uid": "automation.r24_night_closegaragedoor",
+      "rule_id": "1780850451101",
+      "alias": "R24_Night_CloseGarageDoor",
+      "description": "晚上十一点关车库门",
       "mode": "single"
     }
   ],
   "entities": [
     {
-      "entity_id": "input_boolean.chu_fang_lou_shui_chuan_gan_qi",
+      "entity_id": "input_boolean.cleaning_mode_switch",
       "domain": "input_boolean",
-      "object_id": "chu_fang_lou_shui_chuan_gan_qi",
+      "object_id": "cleaning_mode_switch",
       "value_type_hint": "state",
       "positions": [
         "trigger"
@@ -140,15 +49,15 @@
         "sensor"
       ],
       "rules": [
-        "automation.r10_water_shutoff"
+        "automation.r21_cleanmode_disablelatch"
       ],
       "operations": [],
       "raw_contexts": [
         {
-          "rule_uid": "automation.r10_water_shutoff",
-          "rule_id": "1741538310528",
-          "rule_alias": "R10-Water Shutoff",
-          "rule_description": "When the water leak sensor is triggered, turn off the central water valve.",
+          "rule_uid": "automation.r21_cleanmode_disablelatch",
+          "rule_id": "1780849082145",
+          "rule_alias": "R21_CleanMode_DisableLatch",
+          "rule_description": "清洁模式，关闭窗户童锁",
           "section": "trigger",
           "yaml_path": "trigger[0].entity_id",
           "platform": "state",
@@ -159,7 +68,7 @@
           "node_excerpt": {
             "platform": "state",
             "entity_id": [
-              "input_boolean.chu_fang_lou_shui_chuan_gan_qi"
+              "input_boolean.cleaning_mode_switch"
             ],
             "from": "off",
             "to": "on"
@@ -167,12 +76,12 @@
         }
       ],
       "primary_role": "sensor",
-      "display_name": "Kitchen Water Leak Sensor (input_boolean.chu_fang_lou_shui_chuan_gan_qi)",
+      "display_name": "cleaning_mode_switch (input_boolean.cleaning_mode_switch)",
       "registry": {
         "name": null,
-        "original_name": "Kitchen Water Leak Sensor",
+        "original_name": "cleaning_mode_switch",
         "aliases": [],
-        "area_id": "chu_fang",
+        "area_id": "nursery",
         "device_class": null,
         "original_device_class": null,
         "platform": "input_boolean",
@@ -180,9 +89,9 @@
       }
     },
     {
-      "entity_id": "input_boolean.chu_fang_yan_wu_bao_jing_qi",
+      "entity_id": "input_boolean.ev_charger_status",
       "domain": "input_boolean",
-      "object_id": "chu_fang_yan_wu_bao_jing_qi",
+      "object_id": "ev_charger_status",
       "value_type_hint": "state",
       "positions": [
         "trigger"
@@ -191,15 +100,15 @@
         "sensor"
       ],
       "rules": [
-        "automation.r11_fire_suppression"
+        "automation.r23_charger_stopautoclose"
       ],
       "operations": [],
       "raw_contexts": [
         {
-          "rule_uid": "automation.r11_fire_suppression",
-          "rule_id": "1741538409237",
-          "rule_alias": "R11-Fire Suppression",
-          "rule_description": "When the smoke alarm is turned on, turn on the fire sprinkler.",
+          "rule_uid": "automation.r23_charger_stopautoclose",
+          "rule_id": "1780849977378",
+          "rule_alias": "R23_Charger_StopAutoClose",
+          "rule_description": "刚开始充电，禁用自动关门",
           "section": "trigger",
           "yaml_path": "trigger[0].entity_id",
           "platform": "state",
@@ -210,7 +119,7 @@
           "node_excerpt": {
             "platform": "state",
             "entity_id": [
-              "input_boolean.chu_fang_yan_wu_bao_jing_qi"
+              "input_boolean.ev_charger_status"
             ],
             "from": "off",
             "to": "on"
@@ -218,12 +127,12 @@
         }
       ],
       "primary_role": "sensor",
-      "display_name": "Kitchen Smoke Alarm (input_boolean.chu_fang_yan_wu_bao_jing_qi)",
+      "display_name": "ev_charger_status (input_boolean.ev_charger_status)",
       "registry": {
         "name": null,
-        "original_name": "Kitchen Smoke Alarm",
+        "original_name": "ev_charger_status",
         "aliases": [],
-        "area_id": "chu_fang",
+        "area_id": "garage",
         "device_class": null,
         "original_device_class": null,
         "platform": "input_boolean",
@@ -231,115 +140,9 @@
       }
     },
     {
-      "entity_id": "input_boolean.deng",
+      "entity_id": "input_boolean.garage_auto_close_enabled",
       "domain": "input_boolean",
-      "object_id": "deng",
-      "value_type_hint": "state",
-      "positions": [
-        "action"
-      ],
-      "roles": [
-        "actuator"
-      ],
-      "rules": [
-        "automation.r4_living_room_light"
-      ],
-      "operations": [
-        "turn_on"
-      ],
-      "raw_contexts": [
-        {
-          "rule_uid": "automation.r4_living_room_light",
-          "rule_id": "1741537430474",
-          "rule_alias": "R4-Living Room Light",
-          "rule_description": "When the living room motion sensor is triggered, if the brightness sensor is below 50lux, turn on the living room light.",
-          "section": "action",
-          "yaml_path": "action[0].target",
-          "platform": null,
-          "condition": null,
-          "service": "input_boolean.turn_on",
-          "operation": "turn_on",
-          "post_value": "on",
-          "node_excerpt": {
-            "service": "input_boolean.turn_on",
-            "metadata": {},
-            "data": {},
-            "target": {
-              "entity_id": "input_boolean.deng"
-            }
-          }
-        }
-      ],
-      "primary_role": "actuator",
-      "display_name": "Living Room Light (input_boolean.deng)",
-      "registry": {
-        "name": null,
-        "original_name": "Living Room Light",
-        "aliases": [],
-        "area_id": "ke_ting",
-        "device_class": null,
-        "original_device_class": null,
-        "platform": "input_boolean",
-        "unit_of_measurement": null
-      }
-    },
-    {
-      "entity_id": "input_boolean.deng_2",
-      "domain": "input_boolean",
-      "object_id": "deng_2",
-      "value_type_hint": "state",
-      "positions": [
-        "action"
-      ],
-      "roles": [
-        "actuator"
-      ],
-      "rules": [
-        "automation.r9_kitchen_light"
-      ],
-      "operations": [
-        "turn_on"
-      ],
-      "raw_contexts": [
-        {
-          "rule_uid": "automation.r9_kitchen_light",
-          "rule_id": "1741537509709",
-          "rule_alias": "R9-Kitchen Light",
-          "rule_description": "When the kitchen motion sensor is triggered, if the brightness sensor is below 50lux, turn on the kitchen light.",
-          "section": "action",
-          "yaml_path": "action[0].target",
-          "platform": null,
-          "condition": null,
-          "service": "input_boolean.turn_on",
-          "operation": "turn_on",
-          "post_value": "on",
-          "node_excerpt": {
-            "service": "input_boolean.turn_on",
-            "metadata": {},
-            "data": {},
-            "target": {
-              "entity_id": "input_boolean.deng_2"
-            }
-          }
-        }
-      ],
-      "primary_role": "actuator",
-      "display_name": "Kitchen Light (input_boolean.deng_2)",
-      "registry": {
-        "name": null,
-        "original_name": "Kitchen Light",
-        "aliases": [],
-        "area_id": "chu_fang",
-        "device_class": null,
-        "original_device_class": null,
-        "platform": "input_boolean",
-        "unit_of_measurement": null
-      }
-    },
-    {
-      "entity_id": "input_boolean.ke_ting_di_nuan",
-      "domain": "input_boolean",
-      "object_id": "ke_ting_di_nuan",
+      "object_id": "garage_auto_close_enabled",
       "value_type_hint": "state",
       "positions": [
         "action",
@@ -350,17 +153,39 @@
         "actuator"
       ],
       "rules": [
-        "automation.r7_living_room_heating"
+        "automation.r23_charger_stopautoclose",
+        "automation.r24_night_closegaragedoor"
       ],
       "operations": [
-        "turn_on"
+        "turn_off"
       ],
       "raw_contexts": [
         {
-          "rule_uid": "automation.r7_living_room_heating",
-          "rule_id": "1741538058532",
-          "rule_alias": "R7-Living Room Heating",
-          "rule_description": "When the living room temperature is below 24℃, and the living room floor heating is off, turn on the living room floor heating.",
+          "rule_uid": "automation.r23_charger_stopautoclose",
+          "rule_id": "1780849977378",
+          "rule_alias": "R23_Charger_StopAutoClose",
+          "rule_description": "刚开始充电，禁用自动关门",
+          "section": "action",
+          "yaml_path": "action[0].target",
+          "platform": null,
+          "condition": null,
+          "service": "input_boolean.turn_off",
+          "operation": "turn_off",
+          "post_value": "off",
+          "node_excerpt": {
+            "service": "input_boolean.turn_off",
+            "metadata": {},
+            "data": {},
+            "target": {
+              "entity_id": "input_boolean.garage_auto_close_enabled"
+            }
+          }
+        },
+        {
+          "rule_uid": "automation.r24_night_closegaragedoor",
+          "rule_id": "1780850451101",
+          "rule_alias": "R24_Night_CloseGarageDoor",
+          "rule_description": "晚上十一点关车库门",
           "section": "condition",
           "yaml_path": "condition[0].entity_id",
           "platform": null,
@@ -370,39 +195,18 @@
           "post_value": null,
           "node_excerpt": {
             "condition": "state",
-            "entity_id": "input_boolean.ke_ting_di_nuan",
-            "state": "off"
-          }
-        },
-        {
-          "rule_uid": "automation.r7_living_room_heating",
-          "rule_id": "1741538058532",
-          "rule_alias": "R7-Living Room Heating",
-          "rule_description": "When the living room temperature is below 24℃, and the living room floor heating is off, turn on the living room floor heating.",
-          "section": "action",
-          "yaml_path": "action[0].target",
-          "platform": null,
-          "condition": null,
-          "service": "input_boolean.turn_on",
-          "operation": "turn_on",
-          "post_value": "on",
-          "node_excerpt": {
-            "service": "input_boolean.turn_on",
-            "metadata": {},
-            "data": {},
-            "target": {
-              "entity_id": "input_boolean.ke_ting_di_nuan"
-            }
+            "entity_id": "input_boolean.garage_auto_close_enabled",
+            "state": "on"
           }
         }
       ],
       "primary_role": "hybrid",
-      "display_name": "Living Room Floor Heating (input_boolean.ke_ting_di_nuan)",
+      "display_name": "garage_auto_close_enabled (input_boolean.garage_auto_close_enabled)",
       "registry": {
         "name": null,
-        "original_name": "Living Room Floor Heating",
+        "original_name": "garage_auto_close_enabled",
         "aliases": [],
-        "area_id": "ke_ting",
+        "area_id": "garage",
         "device_class": null,
         "original_device_class": null,
         "platform": "input_boolean",
@@ -410,9 +214,9 @@
       }
     },
     {
-      "entity_id": "input_boolean.ke_ting_jia_shi_qi",
+      "entity_id": "input_boolean.garage_door",
       "domain": "input_boolean",
-      "object_id": "ke_ting_jia_shi_qi",
+      "object_id": "garage_door",
       "value_type_hint": "state",
       "positions": [
         "action",
@@ -423,21 +227,19 @@
         "actuator"
       ],
       "rules": [
-        "automation.r5_humidifier_on",
-        "automation.r6_humidifier_off"
+        "automation.r24_night_closegaragedoor"
       ],
       "operations": [
-        "turn_off",
-        "turn_on"
+        "turn_off"
       ],
       "raw_contexts": [
         {
-          "rule_uid": "automation.r5_humidifier_on",
-          "rule_id": "1741537793019",
-          "rule_alias": "R5-Humidifier On",
-          "rule_description": "When the living room humidity is below 40%, and the humidifier is off, turn on the living room humidifier.",
+          "rule_uid": "automation.r24_night_closegaragedoor",
+          "rule_id": "1780850451101",
+          "rule_alias": "R24_Night_CloseGarageDoor",
+          "rule_description": "晚上十一点关车库门",
           "section": "condition",
-          "yaml_path": "condition[0].entity_id",
+          "yaml_path": "condition[1].entity_id",
           "platform": null,
           "condition": "state",
           "service": null,
@@ -445,54 +247,15 @@
           "post_value": null,
           "node_excerpt": {
             "condition": "state",
-            "entity_id": "input_boolean.ke_ting_jia_shi_qi",
-            "state": "off"
-          }
-        },
-        {
-          "rule_uid": "automation.r5_humidifier_on",
-          "rule_id": "1741537793019",
-          "rule_alias": "R5-Humidifier On",
-          "rule_description": "When the living room humidity is below 40%, and the humidifier is off, turn on the living room humidifier.",
-          "section": "action",
-          "yaml_path": "action[0].target",
-          "platform": null,
-          "condition": null,
-          "service": "input_boolean.turn_on",
-          "operation": "turn_on",
-          "post_value": "on",
-          "node_excerpt": {
-            "service": "input_boolean.turn_on",
-            "metadata": {},
-            "data": {},
-            "target": {
-              "entity_id": "input_boolean.ke_ting_jia_shi_qi"
-            }
-          }
-        },
-        {
-          "rule_uid": "automation.r6_humidifier_off",
-          "rule_id": "1741537872533",
-          "rule_alias": "R6-Humidifier Off",
-          "rule_description": "When the living room humidity is above 60%, and the humidifier is on, turn off the living room humidifier.",
-          "section": "condition",
-          "yaml_path": "condition[0].entity_id",
-          "platform": null,
-          "condition": "state",
-          "service": null,
-          "operation": null,
-          "post_value": null,
-          "node_excerpt": {
-            "condition": "state",
-            "entity_id": "input_boolean.ke_ting_jia_shi_qi",
+            "entity_id": "input_boolean.garage_door",
             "state": "on"
           }
         },
         {
-          "rule_uid": "automation.r6_humidifier_off",
-          "rule_id": "1741537872533",
-          "rule_alias": "R6-Humidifier Off",
-          "rule_description": "When the living room humidity is above 60%, and the humidifier is on, turn off the living room humidifier.",
+          "rule_uid": "automation.r24_night_closegaragedoor",
+          "rule_id": "1780850451101",
+          "rule_alias": "R24_Night_CloseGarageDoor",
+          "rule_description": "晚上十一点关车库门",
           "section": "action",
           "yaml_path": "action[0].target",
           "platform": null,
@@ -502,20 +265,21 @@
           "post_value": "off",
           "node_excerpt": {
             "service": "input_boolean.turn_off",
+            "metadata": {},
+            "data": {},
             "target": {
-              "entity_id": "input_boolean.ke_ting_jia_shi_qi"
-            },
-            "data": {}
+              "entity_id": "input_boolean.garage_door"
+            }
           }
         }
       ],
       "primary_role": "hybrid",
-      "display_name": "Living Room Humidifier (input_boolean.ke_ting_jia_shi_qi)",
+      "display_name": "garage_door (input_boolean.garage_door)",
       "registry": {
         "name": null,
-        "original_name": "Living Room Humidifier",
+        "original_name": "garage_door",
         "aliases": [],
-        "area_id": "ke_ting",
+        "area_id": "garage",
         "device_class": null,
         "original_device_class": null,
         "platform": "input_boolean",
@@ -523,9 +287,62 @@
       }
     },
     {
-      "entity_id": "input_boolean.ke_ting_kong_diao_kai_guan",
+      "entity_id": "input_boolean.nursery_window",
       "domain": "input_boolean",
-      "object_id": "ke_ting_kong_diao_kai_guan",
+      "object_id": "nursery_window",
+      "value_type_hint": "state",
+      "positions": [
+        "action"
+      ],
+      "roles": [
+        "actuator"
+      ],
+      "rules": [
+        "automation.r22_temphigh_windowopen"
+      ],
+      "operations": [
+        "turn_on"
+      ],
+      "raw_contexts": [
+        {
+          "rule_uid": "automation.r22_temphigh_windowopen",
+          "rule_id": "1780849846827",
+          "rule_alias": "R22_TempHigh_WindowOpen",
+          "rule_description": "温度高，童锁disabled，开窗",
+          "section": "action",
+          "yaml_path": "action[0].target",
+          "platform": null,
+          "condition": null,
+          "service": "input_boolean.turn_on",
+          "operation": "turn_on",
+          "post_value": "on",
+          "node_excerpt": {
+            "service": "input_boolean.turn_on",
+            "metadata": {},
+            "data": {},
+            "target": {
+              "entity_id": "input_boolean.nursery_window"
+            }
+          }
+        }
+      ],
+      "primary_role": "actuator",
+      "display_name": "nursery_window (input_boolean.nursery_window)",
+      "registry": {
+        "name": null,
+        "original_name": "nursery_window",
+        "aliases": [],
+        "area_id": "nursery",
+        "device_class": null,
+        "original_device_class": null,
+        "platform": "input_boolean",
+        "unit_of_measurement": null
+      }
+    },
+    {
+      "entity_id": "input_boolean.nursery_window_latch",
+      "domain": "input_boolean",
+      "object_id": "nursery_window_latch",
       "value_type_hint": "state",
       "positions": [
         "action",
@@ -536,17 +353,39 @@
         "actuator"
       ],
       "rules": [
-        "automation.r8_living_room_cooling"
+        "automation.r21_cleanmode_disablelatch",
+        "automation.r22_temphigh_windowopen"
       ],
       "operations": [
         "turn_on"
       ],
       "raw_contexts": [
         {
-          "rule_uid": "automation.r8_living_room_cooling",
-          "rule_id": "1741538133764",
-          "rule_alias": "R8-Living Room Cooling",
-          "rule_description": "When the living room temperature is above 30℃, and the living room air conditioner is off, turn on the living room air conditioner and set it to 27℃.",
+          "rule_uid": "automation.r21_cleanmode_disablelatch",
+          "rule_id": "1780849082145",
+          "rule_alias": "R21_CleanMode_DisableLatch",
+          "rule_description": "清洁模式，关闭窗户童锁",
+          "section": "action",
+          "yaml_path": "action[0].target",
+          "platform": null,
+          "condition": null,
+          "service": "input_boolean.turn_on",
+          "operation": "turn_on",
+          "post_value": "on",
+          "node_excerpt": {
+            "service": "input_boolean.turn_on",
+            "metadata": {},
+            "data": {},
+            "target": {
+              "entity_id": "input_boolean.nursery_window_latch"
+            }
+          }
+        },
+        {
+          "rule_uid": "automation.r22_temphigh_windowopen",
+          "rule_id": "1780849846827",
+          "rule_alias": "R22_TempHigh_WindowOpen",
+          "rule_description": "温度高，童锁disabled，开窗",
           "section": "condition",
           "yaml_path": "condition[0].entity_id",
           "platform": null,
@@ -556,39 +395,18 @@
           "post_value": null,
           "node_excerpt": {
             "condition": "state",
-            "entity_id": "input_boolean.ke_ting_kong_diao_kai_guan",
-            "state": "off"
-          }
-        },
-        {
-          "rule_uid": "automation.r8_living_room_cooling",
-          "rule_id": "1741538133764",
-          "rule_alias": "R8-Living Room Cooling",
-          "rule_description": "When the living room temperature is above 30℃, and the living room air conditioner is off, turn on the living room air conditioner and set it to 27℃.",
-          "section": "action",
-          "yaml_path": "action[0].target",
-          "platform": null,
-          "condition": null,
-          "service": "input_boolean.turn_on",
-          "operation": "turn_on",
-          "post_value": "on",
-          "node_excerpt": {
-            "service": "input_boolean.turn_on",
-            "metadata": {},
-            "data": {},
-            "target": {
-              "entity_id": "input_boolean.ke_ting_kong_diao_kai_guan"
-            }
+            "entity_id": "input_boolean.nursery_window_latch",
+            "state": "on"
           }
         }
       ],
       "primary_role": "hybrid",
-      "display_name": "Living Room Air Conditioner Switch (input_boolean.ke_ting_kong_diao_kai_guan)",
+      "display_name": "nursery_window_latch (input_boolean.nursery_window_latch)",
       "registry": {
         "name": null,
-        "original_name": "Living Room Air Conditioner Switch",
+        "original_name": "nursery_window_latch",
         "aliases": [],
-        "area_id": "ke_ting",
+        "area_id": "nursery",
         "device_class": null,
         "original_device_class": null,
         "platform": "input_boolean",
@@ -596,961 +414,9 @@
       }
     },
     {
-      "entity_id": "input_boolean.men_lang_deng",
-      "domain": "input_boolean",
-      "object_id": "men_lang_deng",
-      "value_type_hint": "state",
-      "positions": [
-        "action"
-      ],
-      "roles": [
-        "actuator"
-      ],
-      "rules": [
-        "automation.r15_lights_off_when_leaving_home",
-        "automation.r1_door_open_lights",
-        "automation.r3_porch_light"
-      ],
-      "operations": [
-        "turn_off",
-        "turn_on"
-      ],
-      "raw_contexts": [
-        {
-          "rule_uid": "automation.r1_door_open_lights",
-          "rule_id": "1741536976427",
-          "rule_alias": "R1-Door Open Lights",
-          "rule_description": "When the door lock is opened, if the brightness sensor is below 50lux, turn on the outside door light and porch light.",
-          "section": "action",
-          "yaml_path": "action[0].target",
-          "platform": null,
-          "condition": null,
-          "service": "input_boolean.turn_on",
-          "operation": "turn_on",
-          "post_value": "on",
-          "node_excerpt": {
-            "service": "input_boolean.turn_on",
-            "metadata": {},
-            "data": {},
-            "target": {
-              "entity_id": [
-                "input_boolean.men_wai_deng",
-                "input_boolean.men_lang_deng"
-              ]
-            }
-          }
-        },
-        {
-          "rule_uid": "automation.r15_lights_off_when_leaving_home",
-          "rule_id": "1741537129329",
-          "rule_alias": "R15-Lights Off When Leaving Home",
-          "rule_description": "When the door lock is closed, turn off the porch light and greenhouse light.",
-          "section": "action",
-          "yaml_path": "action[0].target",
-          "platform": null,
-          "condition": null,
-          "service": "input_boolean.turn_off",
-          "operation": "turn_off",
-          "post_value": "off",
-          "node_excerpt": {
-            "service": "input_boolean.turn_off",
-            "metadata": {},
-            "data": {},
-            "target": {
-              "entity_id": "input_boolean.men_lang_deng"
-            }
-          }
-        },
-        {
-          "rule_uid": "automation.r3_porch_light",
-          "rule_id": "1741537258059",
-          "rule_alias": "R3-Porch Light",
-          "rule_description": "When the porch motion sensor is triggered, if the brightness sensor is below 50lux, turn on the porch light.",
-          "section": "action",
-          "yaml_path": "action[0].target",
-          "platform": null,
-          "condition": null,
-          "service": "input_boolean.turn_on",
-          "operation": "turn_on",
-          "post_value": "on",
-          "node_excerpt": {
-            "service": "input_boolean.turn_on",
-            "metadata": {},
-            "data": {},
-            "target": {
-              "entity_id": "input_boolean.men_lang_deng"
-            }
-          }
-        }
-      ],
-      "primary_role": "actuator",
-      "display_name": "Porch Light (input_boolean.men_lang_deng)",
-      "registry": {
-        "name": null,
-        "original_name": "Porch Light",
-        "aliases": [],
-        "area_id": "men_lang",
-        "device_class": null,
-        "original_device_class": null,
-        "platform": "input_boolean",
-        "unit_of_measurement": null
-      }
-    },
-    {
-      "entity_id": "input_boolean.men_wai_deng",
-      "domain": "input_boolean",
-      "object_id": "men_wai_deng",
-      "value_type_hint": "state",
-      "positions": [
-        "action"
-      ],
-      "roles": [
-        "actuator"
-      ],
-      "rules": [
-        "automation.r1_door_open_lights"
-      ],
-      "operations": [
-        "turn_on"
-      ],
-      "raw_contexts": [
-        {
-          "rule_uid": "automation.r1_door_open_lights",
-          "rule_id": "1741536976427",
-          "rule_alias": "R1-Door Open Lights",
-          "rule_description": "When the door lock is opened, if the brightness sensor is below 50lux, turn on the outside door light and porch light.",
-          "section": "action",
-          "yaml_path": "action[0].target",
-          "platform": null,
-          "condition": null,
-          "service": "input_boolean.turn_on",
-          "operation": "turn_on",
-          "post_value": "on",
-          "node_excerpt": {
-            "service": "input_boolean.turn_on",
-            "metadata": {},
-            "data": {},
-            "target": {
-              "entity_id": [
-                "input_boolean.men_wai_deng",
-                "input_boolean.men_lang_deng"
-              ]
-            }
-          }
-        }
-      ],
-      "primary_role": "actuator",
-      "display_name": "Outside Door Light (input_boolean.men_wai_deng)",
-      "registry": {
-        "name": null,
-        "original_name": "Outside Door Light",
-        "aliases": [],
-        "area_id": "men_wai",
-        "device_class": null,
-        "original_device_class": null,
-        "platform": "input_boolean",
-        "unit_of_measurement": null
-      }
-    },
-    {
-      "entity_id": "input_boolean.wen_shi_chuang_hu",
-      "domain": "input_boolean",
-      "object_id": "wen_shi_chuang_hu",
-      "value_type_hint": "state",
-      "positions": [
-        "action"
-      ],
-      "roles": [
-        "actuator"
-      ],
-      "rules": [
-        "automation.r17_greenhouse_window"
-      ],
-      "operations": [
-        "turn_on"
-      ],
-      "raw_contexts": [
-        {
-          "rule_uid": "automation.r17_greenhouse_window",
-          "rule_id": "1741538950856",
-          "rule_alias": "R17-Greenhouse Window",
-          "rule_description": "When the greenhouse temperature reaches 32℃, open the window and turn off the heating.",
-          "section": "action",
-          "yaml_path": "action[0].target",
-          "platform": null,
-          "condition": null,
-          "service": "input_boolean.turn_on",
-          "operation": "turn_on",
-          "post_value": "on",
-          "node_excerpt": {
-            "service": "input_boolean.turn_on",
-            "metadata": {},
-            "data": {},
-            "target": {
-              "entity_id": "input_boolean.wen_shi_chuang_hu"
-            }
-          }
-        }
-      ],
-      "primary_role": "actuator",
-      "display_name": "Greenhouse Window (input_boolean.wen_shi_chuang_hu)",
-      "registry": {
-        "name": null,
-        "original_name": "Greenhouse Window",
-        "aliases": [],
-        "area_id": "wen_shi",
-        "device_class": null,
-        "original_device_class": null,
-        "platform": "input_boolean",
-        "unit_of_measurement": null
-      }
-    },
-    {
-      "entity_id": "input_boolean.wen_shi_deng",
-      "domain": "input_boolean",
-      "object_id": "wen_shi_deng",
-      "value_type_hint": "state",
-      "positions": [
-        "action",
-        "trigger"
-      ],
-      "roles": [
-        "sensor",
-        "actuator"
-      ],
-      "rules": [
-        "automation.r15_lights_off_when_leaving_home",
-        "automation.r2_greenhouse_light_re_enable_and_door_unlock"
-      ],
-      "operations": [
-        "turn_off"
-      ],
-      "raw_contexts": [
-        {
-          "rule_uid": "automation.r15_lights_off_when_leaving_home",
-          "rule_id": "1741537129329",
-          "rule_alias": "R15-Lights Off When Leaving Home",
-          "rule_description": "When the door lock is closed, turn off the porch light and greenhouse light.",
-          "section": "action",
-          "yaml_path": "action[1].target",
-          "platform": null,
-          "condition": null,
-          "service": "input_boolean.turn_off",
-          "operation": "turn_off",
-          "post_value": "off",
-          "node_excerpt": {
-            "service": "input_boolean.turn_off",
-            "metadata": {},
-            "data": {},
-            "target": {
-              "entity_id": "input_boolean.wen_shi_deng"
-            }
-          }
-        },
-        {
-          "rule_uid": "automation.r2_greenhouse_light_re_enable_and_door_unlock",
-          "rule_id": "1741537673053",
-          "rule_alias": "R2-Greenhouse Light Re-enable and Door Unlock",
-          "rule_description": "If the greenhouse light is turned off, open the door lock and turn the porch light back on.",
-          "section": "trigger",
-          "yaml_path": "trigger[0].entity_id",
-          "platform": "state",
-          "condition": null,
-          "service": null,
-          "operation": null,
-          "post_value": null,
-          "node_excerpt": {
-            "platform": "state",
-            "entity_id": [
-              "input_boolean.wen_shi_deng"
-            ],
-            "from": "on",
-            "to": "off"
-          }
-        }
-      ],
-      "primary_role": "hybrid",
-      "display_name": "Greenhouse Light (input_boolean.wen_shi_deng)",
-      "registry": {
-        "name": null,
-        "original_name": "Greenhouse Light",
-        "aliases": [],
-        "area_id": "wen_shi",
-        "device_class": null,
-        "original_device_class": null,
-        "platform": "input_boolean",
-        "unit_of_measurement": null
-      }
-    },
-    {
-      "entity_id": "input_boolean.wen_shi_nuan_qi",
-      "domain": "input_boolean",
-      "object_id": "wen_shi_nuan_qi",
-      "value_type_hint": "state",
-      "positions": [
-        "action"
-      ],
-      "roles": [
-        "actuator"
-      ],
-      "rules": [
-        "automation.r16_greenhouse_heating",
-        "automation.r17_greenhouse_window"
-      ],
-      "operations": [
-        "turn_off",
-        "turn_on"
-      ],
-      "raw_contexts": [
-        {
-          "rule_uid": "automation.r16_greenhouse_heating",
-          "rule_id": "1741538884366",
-          "rule_alias": "R16-Greenhouse Heating",
-          "rule_description": "At 7 PM, turn on the greenhouse heating.",
-          "section": "action",
-          "yaml_path": "action[0].target",
-          "platform": null,
-          "condition": null,
-          "service": "input_boolean.turn_on",
-          "operation": "turn_on",
-          "post_value": "on",
-          "node_excerpt": {
-            "service": "input_boolean.turn_on",
-            "metadata": {},
-            "data": {},
-            "target": {
-              "entity_id": "input_boolean.wen_shi_nuan_qi"
-            }
-          }
-        },
-        {
-          "rule_uid": "automation.r17_greenhouse_window",
-          "rule_id": "1741538950856",
-          "rule_alias": "R17-Greenhouse Window",
-          "rule_description": "When the greenhouse temperature reaches 32℃, open the window and turn off the heating.",
-          "section": "action",
-          "yaml_path": "action[1].target",
-          "platform": null,
-          "condition": null,
-          "service": "input_boolean.turn_off",
-          "operation": "turn_off",
-          "post_value": "off",
-          "node_excerpt": {
-            "service": "input_boolean.turn_off",
-            "data": {},
-            "target": {
-              "entity_id": "input_boolean.wen_shi_nuan_qi"
-            }
-          }
-        }
-      ],
-      "primary_role": "actuator",
-      "display_name": "Greenhouse Heater (input_boolean.wen_shi_nuan_qi)",
-      "registry": {
-        "name": null,
-        "original_name": "Greenhouse Heater",
-        "aliases": [],
-        "area_id": "wen_shi",
-        "device_class": null,
-        "original_device_class": null,
-        "platform": "input_boolean",
-        "unit_of_measurement": null
-      }
-    },
-    {
-      "entity_id": "input_boolean.wo_shi_chuang_hu",
-      "domain": "input_boolean",
-      "object_id": "wo_shi_chuang_hu",
-      "value_type_hint": "state",
-      "positions": [
-        "action"
-      ],
-      "roles": [
-        "actuator"
-      ],
-      "rules": [
-        "automation.r14_bedroom_window"
-      ],
-      "operations": [
-        "turn_on"
-      ],
-      "raw_contexts": [
-        {
-          "rule_uid": "automation.r14_bedroom_window",
-          "rule_id": "1741538821346",
-          "rule_alias": "R14-Bedroom Window",
-          "rule_description": "When the bedroom temperature reaches 30℃, open the window and turn off the heating.",
-          "section": "action",
-          "yaml_path": "action[0].target",
-          "platform": null,
-          "condition": null,
-          "service": "input_boolean.turn_on",
-          "operation": "turn_on",
-          "post_value": "on",
-          "node_excerpt": {
-            "service": "input_boolean.turn_on",
-            "metadata": {},
-            "data": {},
-            "target": {
-              "entity_id": "input_boolean.wo_shi_chuang_hu"
-            }
-          }
-        }
-      ],
-      "primary_role": "actuator",
-      "display_name": "Bedroom Window (input_boolean.wo_shi_chuang_hu)",
-      "registry": {
-        "name": null,
-        "original_name": "Bedroom Window",
-        "aliases": [],
-        "area_id": "wo_shi",
-        "device_class": null,
-        "original_device_class": null,
-        "platform": "input_boolean",
-        "unit_of_measurement": null
-      }
-    },
-    {
-      "entity_id": "input_boolean.wo_shi_deng",
-      "domain": "input_boolean",
-      "object_id": "wo_shi_deng",
-      "value_type_hint": "state",
-      "positions": [
-        "action"
-      ],
-      "roles": [
-        "actuator"
-      ],
-      "rules": [
-        "automation.r12_bedroom_light"
-      ],
-      "operations": [
-        "turn_on"
-      ],
-      "raw_contexts": [
-        {
-          "rule_uid": "automation.r12_bedroom_light",
-          "rule_id": "1741537625039",
-          "rule_alias": "R12-Bedroom Light",
-          "rule_description": "When the bedroom motion sensor is triggered, if the brightness sensor is below 50lux, turn on the bedroom light.",
-          "section": "action",
-          "yaml_path": "action[0].target",
-          "platform": null,
-          "condition": null,
-          "service": "input_boolean.turn_on",
-          "operation": "turn_on",
-          "post_value": "on",
-          "node_excerpt": {
-            "service": "input_boolean.turn_on",
-            "metadata": {},
-            "data": {},
-            "target": {
-              "entity_id": "input_boolean.wo_shi_deng"
-            }
-          }
-        }
-      ],
-      "primary_role": "actuator",
-      "display_name": "Bedroom Light (input_boolean.wo_shi_deng)",
-      "registry": {
-        "name": null,
-        "original_name": "Bedroom Light",
-        "aliases": [],
-        "area_id": "wo_shi",
-        "device_class": null,
-        "original_device_class": null,
-        "platform": "input_boolean",
-        "unit_of_measurement": null
-      }
-    },
-    {
-      "entity_id": "input_boolean.wo_shi_nuan_qi",
-      "domain": "input_boolean",
-      "object_id": "wo_shi_nuan_qi",
-      "value_type_hint": "state",
-      "positions": [
-        "action"
-      ],
-      "roles": [
-        "actuator"
-      ],
-      "rules": [
-        "automation.r13_bedroom_heating",
-        "automation.r14_bedroom_window"
-      ],
-      "operations": [
-        "turn_off",
-        "turn_on"
-      ],
-      "raw_contexts": [
-        {
-          "rule_uid": "automation.r13_bedroom_heating",
-          "rule_id": "1741538698986",
-          "rule_alias": "R13-Bedroom Heating",
-          "rule_description": "At 7 PM, turn on the bedroom heating.",
-          "section": "action",
-          "yaml_path": "action[0].target",
-          "platform": null,
-          "condition": null,
-          "service": "input_boolean.turn_on",
-          "operation": "turn_on",
-          "post_value": "on",
-          "node_excerpt": {
-            "service": "input_boolean.turn_on",
-            "metadata": {},
-            "data": {},
-            "target": {
-              "entity_id": "input_boolean.wo_shi_nuan_qi"
-            }
-          }
-        },
-        {
-          "rule_uid": "automation.r14_bedroom_window",
-          "rule_id": "1741538821346",
-          "rule_alias": "R14-Bedroom Window",
-          "rule_description": "When the bedroom temperature reaches 30℃, open the window and turn off the heating.",
-          "section": "action",
-          "yaml_path": "action[1].target",
-          "platform": null,
-          "condition": null,
-          "service": "input_boolean.turn_off",
-          "operation": "turn_off",
-          "post_value": "off",
-          "node_excerpt": {
-            "service": "input_boolean.turn_off",
-            "target": {
-              "entity_id": "input_boolean.wo_shi_nuan_qi"
-            },
-            "data": {}
-          }
-        }
-      ],
-      "primary_role": "actuator",
-      "display_name": "Bedroom Heater (input_boolean.wo_shi_nuan_qi)",
-      "registry": {
-        "name": null,
-        "original_name": "Bedroom Heater",
-        "aliases": [],
-        "area_id": "wo_shi",
-        "device_class": null,
-        "original_device_class": null,
-        "platform": "input_boolean",
-        "unit_of_measurement": null
-      }
-    },
-    {
-      "entity_id": "input_boolean.xiao_fang_pen_lin_tou",
-      "domain": "input_boolean",
-      "object_id": "xiao_fang_pen_lin_tou",
-      "value_type_hint": "state",
-      "positions": [
-        "action"
-      ],
-      "roles": [
-        "actuator"
-      ],
-      "rules": [
-        "automation.r11_fire_suppression"
-      ],
-      "operations": [
-        "turn_on"
-      ],
-      "raw_contexts": [
-        {
-          "rule_uid": "automation.r11_fire_suppression",
-          "rule_id": "1741538409237",
-          "rule_alias": "R11-Fire Suppression",
-          "rule_description": "When the smoke alarm is turned on, turn on the fire sprinkler.",
-          "section": "action",
-          "yaml_path": "action[0].target",
-          "platform": null,
-          "condition": null,
-          "service": "input_boolean.turn_on",
-          "operation": "turn_on",
-          "post_value": "on",
-          "node_excerpt": {
-            "service": "input_boolean.turn_on",
-            "metadata": {},
-            "data": {},
-            "target": {
-              "entity_id": "input_boolean.xiao_fang_pen_lin_tou"
-            }
-          }
-        }
-      ],
-      "primary_role": "actuator",
-      "display_name": "Fire Sprinkler (input_boolean.xiao_fang_pen_lin_tou)",
-      "registry": {
-        "name": null,
-        "original_name": "Fire Sprinkler",
-        "aliases": [],
-        "area_id": "chu_fang",
-        "device_class": null,
-        "original_device_class": null,
-        "platform": "input_boolean",
-        "unit_of_measurement": null
-      }
-    },
-    {
-      "entity_id": "input_boolean.zhi_neng_men_suo",
-      "domain": "input_boolean",
-      "object_id": "zhi_neng_men_suo",
-      "value_type_hint": "state",
-      "positions": [
-        "action",
-        "trigger"
-      ],
-      "roles": [
-        "sensor",
-        "actuator"
-      ],
-      "rules": [
-        "automation.r15_lights_off_when_leaving_home",
-        "automation.r1_door_open_lights",
-        "automation.r2_greenhouse_light_re_enable_and_door_unlock"
-      ],
-      "operations": [
-        "turn_on"
-      ],
-      "raw_contexts": [
-        {
-          "rule_uid": "automation.r1_door_open_lights",
-          "rule_id": "1741536976427",
-          "rule_alias": "R1-Door Open Lights",
-          "rule_description": "When the door lock is opened, if the brightness sensor is below 50lux, turn on the outside door light and porch light.",
-          "section": "trigger",
-          "yaml_path": "trigger[0].entity_id",
-          "platform": "state",
-          "condition": null,
-          "service": null,
-          "operation": null,
-          "post_value": null,
-          "node_excerpt": {
-            "platform": "state",
-            "entity_id": [
-              "input_boolean.zhi_neng_men_suo"
-            ],
-            "from": "off",
-            "to": "on"
-          }
-        },
-        {
-          "rule_uid": "automation.r15_lights_off_when_leaving_home",
-          "rule_id": "1741537129329",
-          "rule_alias": "R15-Lights Off When Leaving Home",
-          "rule_description": "When the door lock is closed, turn off the porch light and greenhouse light.",
-          "section": "trigger",
-          "yaml_path": "trigger[0].entity_id",
-          "platform": "state",
-          "condition": null,
-          "service": null,
-          "operation": null,
-          "post_value": null,
-          "node_excerpt": {
-            "platform": "state",
-            "entity_id": [
-              "input_boolean.zhi_neng_men_suo"
-            ],
-            "from": "on",
-            "to": "off"
-          }
-        },
-        {
-          "rule_uid": "automation.r2_greenhouse_light_re_enable_and_door_unlock",
-          "rule_id": "1741537673053",
-          "rule_alias": "R2-Greenhouse Light Re-enable and Door Unlock",
-          "rule_description": "If the greenhouse light is turned off, open the door lock and turn the porch light back on.",
-          "section": "action",
-          "yaml_path": "action[0].target",
-          "platform": null,
-          "condition": null,
-          "service": "input_boolean.turn_on",
-          "operation": "turn_on",
-          "post_value": "on",
-          "node_excerpt": {
-            "service": "input_boolean.turn_on",
-            "metadata": {},
-            "data": {},
-            "target": {
-              "entity_id": "input_boolean.zhi_neng_men_suo"
-            }
-          }
-        }
-      ],
-      "primary_role": "hybrid",
-      "display_name": "Smart Door Lock (input_boolean.zhi_neng_men_suo)",
-      "registry": {
-        "name": null,
-        "original_name": "Smart Door Lock",
-        "aliases": [],
-        "area_id": "men_wai",
-        "device_class": null,
-        "original_device_class": null,
-        "platform": "input_boolean",
-        "unit_of_measurement": null
-      }
-    },
-    {
-      "entity_id": "input_boolean.zhong_yang_shui_fa",
-      "domain": "input_boolean",
-      "object_id": "zhong_yang_shui_fa",
-      "value_type_hint": "state",
-      "positions": [
-        "action"
-      ],
-      "roles": [
-        "actuator"
-      ],
-      "rules": [
-        "automation.r10_water_shutoff"
-      ],
-      "operations": [
-        "turn_off"
-      ],
-      "raw_contexts": [
-        {
-          "rule_uid": "automation.r10_water_shutoff",
-          "rule_id": "1741538310528",
-          "rule_alias": "R10-Water Shutoff",
-          "rule_description": "When the water leak sensor is triggered, turn off the central water valve.",
-          "section": "action",
-          "yaml_path": "action[0].target",
-          "platform": null,
-          "condition": null,
-          "service": "input_boolean.turn_off",
-          "operation": "turn_off",
-          "post_value": "off",
-          "node_excerpt": {
-            "service": "input_boolean.turn_off",
-            "metadata": {},
-            "data": {},
-            "target": {
-              "entity_id": "input_boolean.zhong_yang_shui_fa"
-            }
-          }
-        }
-      ],
-      "primary_role": "actuator",
-      "display_name": "input_boolean.zhong_yang_shui_fa",
-      "registry": {
-        "name": null,
-        "original_name": null,
-        "aliases": [],
-        "area_id": null,
-        "device_class": null,
-        "original_device_class": null,
-        "platform": null,
-        "unit_of_measurement": null
-      }
-    },
-    {
-      "entity_id": "input_button.wo_shi_yun_dong_chuan_gan_qi",
-      "domain": "input_button",
-      "object_id": "wo_shi_yun_dong_chuan_gan_qi",
-      "value_type_hint": "event",
-      "positions": [
-        "trigger"
-      ],
-      "roles": [
-        "sensor"
-      ],
-      "rules": [
-        "automation.r12_bedroom_light"
-      ],
-      "operations": [],
-      "raw_contexts": [
-        {
-          "rule_uid": "automation.r12_bedroom_light",
-          "rule_id": "1741537625039",
-          "rule_alias": "R12-Bedroom Light",
-          "rule_description": "When the bedroom motion sensor is triggered, if the brightness sensor is below 50lux, turn on the bedroom light.",
-          "section": "trigger",
-          "yaml_path": "trigger[0].entity_id",
-          "platform": "state",
-          "condition": null,
-          "service": null,
-          "operation": null,
-          "post_value": null,
-          "node_excerpt": {
-            "platform": "state",
-            "entity_id": [
-              "input_button.wo_shi_yun_dong_chuan_gan_qi"
-            ],
-            "from": null,
-            "to": null
-          }
-        }
-      ],
-      "primary_role": "sensor",
-      "display_name": "Bedroom Motion Sensor (input_button.wo_shi_yun_dong_chuan_gan_qi)",
-      "registry": {
-        "name": null,
-        "original_name": "Bedroom Motion Sensor",
-        "aliases": [],
-        "area_id": "wo_shi",
-        "device_class": null,
-        "original_device_class": null,
-        "platform": "input_button",
-        "unit_of_measurement": null
-      }
-    },
-    {
-      "entity_id": "input_button.yun_dong_chuan_gan_qi",
-      "domain": "input_button",
-      "object_id": "yun_dong_chuan_gan_qi",
-      "value_type_hint": "event",
-      "positions": [
-        "trigger"
-      ],
-      "roles": [
-        "sensor"
-      ],
-      "rules": [
-        "automation.r3_porch_light"
-      ],
-      "operations": [],
-      "raw_contexts": [
-        {
-          "rule_uid": "automation.r3_porch_light",
-          "rule_id": "1741537258059",
-          "rule_alias": "R3-Porch Light",
-          "rule_description": "When the porch motion sensor is triggered, if the brightness sensor is below 50lux, turn on the porch light.",
-          "section": "trigger",
-          "yaml_path": "trigger[0].entity_id",
-          "platform": "state",
-          "condition": null,
-          "service": null,
-          "operation": null,
-          "post_value": null,
-          "node_excerpt": {
-            "platform": "state",
-            "entity_id": [
-              "input_button.yun_dong_chuan_gan_qi"
-            ],
-            "from": null,
-            "to": null
-          }
-        }
-      ],
-      "primary_role": "sensor",
-      "display_name": "Porch Motion Sensor (input_button.yun_dong_chuan_gan_qi)",
-      "registry": {
-        "name": null,
-        "original_name": "Porch Motion Sensor",
-        "aliases": [],
-        "area_id": "men_lang",
-        "device_class": null,
-        "original_device_class": null,
-        "platform": "input_button",
-        "unit_of_measurement": null
-      }
-    },
-    {
-      "entity_id": "input_button.yun_dong_chuan_gan_qi_2",
-      "domain": "input_button",
-      "object_id": "yun_dong_chuan_gan_qi_2",
-      "value_type_hint": "event",
-      "positions": [
-        "trigger"
-      ],
-      "roles": [
-        "sensor"
-      ],
-      "rules": [
-        "automation.r4_living_room_light"
-      ],
-      "operations": [],
-      "raw_contexts": [
-        {
-          "rule_uid": "automation.r4_living_room_light",
-          "rule_id": "1741537430474",
-          "rule_alias": "R4-Living Room Light",
-          "rule_description": "When the living room motion sensor is triggered, if the brightness sensor is below 50lux, turn on the living room light.",
-          "section": "trigger",
-          "yaml_path": "trigger[0].entity_id",
-          "platform": "state",
-          "condition": null,
-          "service": null,
-          "operation": null,
-          "post_value": null,
-          "node_excerpt": {
-            "platform": "state",
-            "entity_id": [
-              "input_button.yun_dong_chuan_gan_qi_2"
-            ],
-            "from": null,
-            "to": null
-          }
-        }
-      ],
-      "primary_role": "sensor",
-      "display_name": "Living Room Motion Sensor (input_button.yun_dong_chuan_gan_qi_2)",
-      "registry": {
-        "name": null,
-        "original_name": "Living Room Motion Sensor",
-        "aliases": [],
-        "area_id": "ke_ting",
-        "device_class": null,
-        "original_device_class": null,
-        "platform": "input_button",
-        "unit_of_measurement": null
-      }
-    },
-    {
-      "entity_id": "input_button.yun_dong_chuan_gan_qi_3",
-      "domain": "input_button",
-      "object_id": "yun_dong_chuan_gan_qi_3",
-      "value_type_hint": "event",
-      "positions": [
-        "trigger"
-      ],
-      "roles": [
-        "sensor"
-      ],
-      "rules": [
-        "automation.r9_kitchen_light"
-      ],
-      "operations": [],
-      "raw_contexts": [
-        {
-          "rule_uid": "automation.r9_kitchen_light",
-          "rule_id": "1741537509709",
-          "rule_alias": "R9-Kitchen Light",
-          "rule_description": "When the kitchen motion sensor is triggered, if the brightness sensor is below 50lux, turn on the kitchen light.",
-          "section": "trigger",
-          "yaml_path": "trigger[0].entity_id",
-          "platform": "state",
-          "condition": null,
-          "service": null,
-          "operation": null,
-          "post_value": null,
-          "node_excerpt": {
-            "platform": "state",
-            "entity_id": [
-              "input_button.yun_dong_chuan_gan_qi_3"
-            ],
-            "from": null,
-            "to": null
-          }
-        }
-      ],
-      "primary_role": "sensor",
-      "display_name": "Kitchen Motion Sensor (input_button.yun_dong_chuan_gan_qi_3)",
-      "registry": {
-        "name": null,
-        "original_name": "Kitchen Motion Sensor",
-        "aliases": [],
-        "area_id": "chu_fang",
-        "device_class": null,
-        "original_device_class": null,
-        "platform": "input_button",
-        "unit_of_measurement": null
-      }
-    },
-    {
-      "entity_id": "input_datetime.xi_tong_shi_jian",
+      "entity_id": "input_datetime.systemtime",
       "domain": "input_datetime",
-      "object_id": "xi_tong_shi_jian",
+      "object_id": "systemtime",
       "value_type_hint": "datetime",
       "positions": [
         "trigger"
@@ -1559,15 +425,15 @@
         "sensor"
       ],
       "rules": [
-        "automation.r13_bedroom_heating"
+        "automation.r24_night_closegaragedoor"
       ],
       "operations": [],
       "raw_contexts": [
         {
-          "rule_uid": "automation.r13_bedroom_heating",
-          "rule_id": "1741538698986",
-          "rule_alias": "R13-Bedroom Heating",
-          "rule_description": "At 7 PM, turn on the bedroom heating.",
+          "rule_uid": "automation.r24_night_closegaragedoor",
+          "rule_id": "1780850451101",
+          "rule_alias": "R24_Night_CloseGarageDoor",
+          "rule_description": "晚上十一点关车库门",
           "section": "trigger",
           "yaml_path": "trigger[0].entity_id",
           "platform": "numeric_state",
@@ -1578,20 +444,21 @@
           "node_excerpt": {
             "platform": "numeric_state",
             "entity_id": [
-              "input_datetime.xi_tong_shi_jian"
+              "input_datetime.systemtime"
             ],
             "attribute": "hour",
-            "above": 19
+            "above": 22,
+            "below": 24
           }
         }
       ],
       "primary_role": "sensor",
-      "display_name": "System time (input_datetime.xi_tong_shi_jian)",
+      "display_name": "SystemTime (input_datetime.systemtime)",
       "registry": {
         "name": null,
-        "original_name": "System time",
+        "original_name": "SystemTime",
         "aliases": [],
-        "area_id": "xi_tong",
+        "area_id": "system",
         "device_class": null,
         "original_device_class": null,
         "platform": "input_datetime",
@@ -1599,57 +466,9 @@
       }
     },
     {
-      "entity_id": "input_number.chu_fang_liang_du_chuan_gan_qi",
+      "entity_id": "input_number.nursery_temp_sensor",
       "domain": "input_number",
-      "object_id": "chu_fang_liang_du_chuan_gan_qi",
-      "value_type_hint": "numeric",
-      "positions": [
-        "condition"
-      ],
-      "roles": [
-        "sensor"
-      ],
-      "rules": [
-        "automation.r9_kitchen_light"
-      ],
-      "operations": [],
-      "raw_contexts": [
-        {
-          "rule_uid": "automation.r9_kitchen_light",
-          "rule_id": "1741537509709",
-          "rule_alias": "R9-Kitchen Light",
-          "rule_description": "When the kitchen motion sensor is triggered, if the brightness sensor is below 50lux, turn on the kitchen light.",
-          "section": "condition",
-          "yaml_path": "condition[0].entity_id",
-          "platform": null,
-          "condition": "numeric_state",
-          "service": null,
-          "operation": null,
-          "post_value": null,
-          "node_excerpt": {
-            "condition": "numeric_state",
-            "entity_id": "input_number.chu_fang_liang_du_chuan_gan_qi",
-            "below": 50
-          }
-        }
-      ],
-      "primary_role": "sensor",
-      "display_name": "Kitchen Light Sensor (input_number.chu_fang_liang_du_chuan_gan_qi)",
-      "registry": {
-        "name": null,
-        "original_name": "Kitchen Light Sensor",
-        "aliases": [],
-        "area_id": "chu_fang",
-        "device_class": null,
-        "original_device_class": null,
-        "platform": "input_number",
-        "unit_of_measurement": null
-      }
-    },
-    {
-      "entity_id": "input_number.greenhouse_temperature_sensor",
-      "domain": "input_number",
-      "object_id": "greenhouse_temperature_sensor",
+      "object_id": "nursery_temp_sensor",
       "value_type_hint": "numeric",
       "positions": [
         "trigger"
@@ -1658,15 +477,15 @@
         "sensor"
       ],
       "rules": [
-        "automation.r17_greenhouse_window"
+        "automation.r22_temphigh_windowopen"
       ],
       "operations": [],
       "raw_contexts": [
         {
-          "rule_uid": "automation.r17_greenhouse_window",
-          "rule_id": "1741538950856",
-          "rule_alias": "R17-Greenhouse Window",
-          "rule_description": "When the greenhouse temperature reaches 32℃, open the window and turn off the heating.",
+          "rule_uid": "automation.r22_temphigh_windowopen",
+          "rule_id": "1780849846827",
+          "rule_alias": "R22_TempHigh_WindowOpen",
+          "rule_description": "温度高，童锁disabled，开窗",
           "section": "trigger",
           "yaml_path": "trigger[0].entity_id",
           "platform": "numeric_state",
@@ -1677,429 +496,19 @@
           "node_excerpt": {
             "platform": "numeric_state",
             "entity_id": [
-              "input_number.greenhouse_temperature_sensor"
+              "input_number.nursery_temp_sensor"
             ],
             "above": 30
           }
         }
       ],
       "primary_role": "sensor",
-      "display_name": "Greenhouse Temperature Sensor (input_number.greenhouse_temperature_sensor)",
+      "display_name": "nursery_temp_sensor (input_number.nursery_temp_sensor)",
       "registry": {
         "name": null,
-        "original_name": "Greenhouse Temperature Sensor",
+        "original_name": "nursery_temp_sensor",
         "aliases": [],
-        "area_id": "wen_shi",
-        "device_class": null,
-        "original_device_class": null,
-        "platform": "input_number",
-        "unit_of_measurement": null
-      }
-    },
-    {
-      "entity_id": "input_number.ke_ting_kong_diao_shu_zhi",
-      "domain": "input_number",
-      "object_id": "ke_ting_kong_diao_shu_zhi",
-      "value_type_hint": "numeric",
-      "positions": [
-        "action"
-      ],
-      "roles": [
-        "actuator"
-      ],
-      "rules": [
-        "automation.r8_living_room_cooling"
-      ],
-      "operations": [
-        "set_value"
-      ],
-      "raw_contexts": [
-        {
-          "rule_uid": "automation.r8_living_room_cooling",
-          "rule_id": "1741538133764",
-          "rule_alias": "R8-Living Room Cooling",
-          "rule_description": "When the living room temperature is above 30℃, and the living room air conditioner is off, turn on the living room air conditioner and set it to 27℃.",
-          "section": "action",
-          "yaml_path": "action[1].target",
-          "platform": null,
-          "condition": null,
-          "service": "input_number.set_value",
-          "operation": "set_value",
-          "post_value": 27,
-          "node_excerpt": {
-            "service": "input_number.set_value",
-            "metadata": {},
-            "data": {
-              "value": 27
-            },
-            "target": {
-              "entity_id": "input_number.ke_ting_kong_diao_shu_zhi"
-            }
-          }
-        }
-      ],
-      "primary_role": "actuator",
-      "display_name": "Living Room Air Conditioner Value (input_number.ke_ting_kong_diao_shu_zhi)",
-      "registry": {
-        "name": null,
-        "original_name": "Living Room Air Conditioner Value",
-        "aliases": [],
-        "area_id": "ke_ting",
-        "device_class": null,
-        "original_device_class": null,
-        "platform": "input_number",
-        "unit_of_measurement": null
-      }
-    },
-    {
-      "entity_id": "input_number.ke_ting_liang_du_chuan_gan_qi",
-      "domain": "input_number",
-      "object_id": "ke_ting_liang_du_chuan_gan_qi",
-      "value_type_hint": "numeric",
-      "positions": [
-        "condition"
-      ],
-      "roles": [
-        "sensor"
-      ],
-      "rules": [
-        "automation.r1_door_open_lights",
-        "automation.r4_living_room_light"
-      ],
-      "operations": [],
-      "raw_contexts": [
-        {
-          "rule_uid": "automation.r1_door_open_lights",
-          "rule_id": "1741536976427",
-          "rule_alias": "R1-Door Open Lights",
-          "rule_description": "When the door lock is opened, if the brightness sensor is below 50lux, turn on the outside door light and porch light.",
-          "section": "condition",
-          "yaml_path": "condition[0].entity_id",
-          "platform": null,
-          "condition": "numeric_state",
-          "service": null,
-          "operation": null,
-          "post_value": null,
-          "node_excerpt": {
-            "condition": "numeric_state",
-            "entity_id": "input_number.ke_ting_liang_du_chuan_gan_qi",
-            "below": 50
-          }
-        },
-        {
-          "rule_uid": "automation.r4_living_room_light",
-          "rule_id": "1741537430474",
-          "rule_alias": "R4-Living Room Light",
-          "rule_description": "When the living room motion sensor is triggered, if the brightness sensor is below 50lux, turn on the living room light.",
-          "section": "condition",
-          "yaml_path": "condition[0].entity_id",
-          "platform": null,
-          "condition": "numeric_state",
-          "service": null,
-          "operation": null,
-          "post_value": null,
-          "node_excerpt": {
-            "condition": "numeric_state",
-            "entity_id": "input_number.ke_ting_liang_du_chuan_gan_qi",
-            "below": 50
-          }
-        }
-      ],
-      "primary_role": "sensor",
-      "display_name": "Living Room Light Sensor (input_number.ke_ting_liang_du_chuan_gan_qi)",
-      "registry": {
-        "name": null,
-        "original_name": "Living Room Light Sensor",
-        "aliases": [],
-        "area_id": "ke_ting",
-        "device_class": null,
-        "original_device_class": null,
-        "platform": "input_number",
-        "unit_of_measurement": null
-      }
-    },
-    {
-      "entity_id": "input_number.ke_ting_shi_du_chuan_gan_qi",
-      "domain": "input_number",
-      "object_id": "ke_ting_shi_du_chuan_gan_qi",
-      "value_type_hint": "numeric",
-      "positions": [
-        "trigger"
-      ],
-      "roles": [
-        "sensor"
-      ],
-      "rules": [
-        "automation.r5_humidifier_on",
-        "automation.r6_humidifier_off"
-      ],
-      "operations": [],
-      "raw_contexts": [
-        {
-          "rule_uid": "automation.r5_humidifier_on",
-          "rule_id": "1741537793019",
-          "rule_alias": "R5-Humidifier On",
-          "rule_description": "When the living room humidity is below 40%, and the humidifier is off, turn on the living room humidifier.",
-          "section": "trigger",
-          "yaml_path": "trigger[0].entity_id",
-          "platform": "numeric_state",
-          "condition": null,
-          "service": null,
-          "operation": null,
-          "post_value": null,
-          "node_excerpt": {
-            "platform": "numeric_state",
-            "entity_id": [
-              "input_number.ke_ting_shi_du_chuan_gan_qi"
-            ],
-            "below": 40
-          }
-        },
-        {
-          "rule_uid": "automation.r6_humidifier_off",
-          "rule_id": "1741537872533",
-          "rule_alias": "R6-Humidifier Off",
-          "rule_description": "When the living room humidity is above 60%, and the humidifier is on, turn off the living room humidifier.",
-          "section": "trigger",
-          "yaml_path": "trigger[0].entity_id",
-          "platform": "numeric_state",
-          "condition": null,
-          "service": null,
-          "operation": null,
-          "post_value": null,
-          "node_excerpt": {
-            "platform": "numeric_state",
-            "entity_id": [
-              "input_number.ke_ting_shi_du_chuan_gan_qi"
-            ],
-            "above": 60
-          }
-        }
-      ],
-      "primary_role": "sensor",
-      "display_name": "Living Room Humidity Sensor (input_number.ke_ting_shi_du_chuan_gan_qi)",
-      "registry": {
-        "name": null,
-        "original_name": "Living Room Humidity Sensor",
-        "aliases": [],
-        "area_id": "ke_ting",
-        "device_class": null,
-        "original_device_class": null,
-        "platform": "input_number",
-        "unit_of_measurement": null
-      }
-    },
-    {
-      "entity_id": "input_number.ke_ting_wen_du_chuan_gan_qi",
-      "domain": "input_number",
-      "object_id": "ke_ting_wen_du_chuan_gan_qi",
-      "value_type_hint": "numeric",
-      "positions": [
-        "trigger"
-      ],
-      "roles": [
-        "sensor"
-      ],
-      "rules": [
-        "automation.r7_living_room_heating",
-        "automation.r8_living_room_cooling"
-      ],
-      "operations": [],
-      "raw_contexts": [
-        {
-          "rule_uid": "automation.r7_living_room_heating",
-          "rule_id": "1741538058532",
-          "rule_alias": "R7-Living Room Heating",
-          "rule_description": "When the living room temperature is below 24℃, and the living room floor heating is off, turn on the living room floor heating.",
-          "section": "trigger",
-          "yaml_path": "trigger[0].entity_id",
-          "platform": "numeric_state",
-          "condition": null,
-          "service": null,
-          "operation": null,
-          "post_value": null,
-          "node_excerpt": {
-            "platform": "numeric_state",
-            "entity_id": [
-              "input_number.ke_ting_wen_du_chuan_gan_qi"
-            ],
-            "below": 24
-          }
-        },
-        {
-          "rule_uid": "automation.r8_living_room_cooling",
-          "rule_id": "1741538133764",
-          "rule_alias": "R8-Living Room Cooling",
-          "rule_description": "When the living room temperature is above 30℃, and the living room air conditioner is off, turn on the living room air conditioner and set it to 27℃.",
-          "section": "trigger",
-          "yaml_path": "trigger[0].entity_id",
-          "platform": "numeric_state",
-          "condition": null,
-          "service": null,
-          "operation": null,
-          "post_value": null,
-          "node_excerpt": {
-            "platform": "numeric_state",
-            "entity_id": [
-              "input_number.ke_ting_wen_du_chuan_gan_qi"
-            ],
-            "above": 30
-          }
-        }
-      ],
-      "primary_role": "sensor",
-      "display_name": "Living Room Temperature Sensor (input_number.ke_ting_wen_du_chuan_gan_qi)",
-      "registry": {
-        "name": null,
-        "original_name": "Living Room Temperature Sensor",
-        "aliases": [],
-        "area_id": "ke_ting",
-        "device_class": null,
-        "original_device_class": null,
-        "platform": "input_number",
-        "unit_of_measurement": null
-      }
-    },
-    {
-      "entity_id": "input_number.liang_du_chuan_gan_qi_2",
-      "domain": "input_number",
-      "object_id": "liang_du_chuan_gan_qi_2",
-      "value_type_hint": "numeric",
-      "positions": [
-        "condition"
-      ],
-      "roles": [
-        "sensor"
-      ],
-      "rules": [
-        "automation.r3_porch_light"
-      ],
-      "operations": [],
-      "raw_contexts": [
-        {
-          "rule_uid": "automation.r3_porch_light",
-          "rule_id": "1741537258059",
-          "rule_alias": "R3-Porch Light",
-          "rule_description": "When the porch motion sensor is triggered, if the brightness sensor is below 50lux, turn on the porch light.",
-          "section": "condition",
-          "yaml_path": "condition[0].entity_id",
-          "platform": null,
-          "condition": "numeric_state",
-          "service": null,
-          "operation": null,
-          "post_value": null,
-          "node_excerpt": {
-            "condition": "numeric_state",
-            "entity_id": "input_number.liang_du_chuan_gan_qi_2",
-            "below": 50
-          }
-        }
-      ],
-      "primary_role": "sensor",
-      "display_name": "Porch Light Sensor (input_number.liang_du_chuan_gan_qi_2)",
-      "registry": {
-        "name": null,
-        "original_name": "Porch Light Sensor",
-        "aliases": [],
-        "area_id": "men_lang",
-        "device_class": null,
-        "original_device_class": null,
-        "platform": "input_number",
-        "unit_of_measurement": null
-      }
-    },
-    {
-      "entity_id": "input_number.wo_shi_liang_du_chuan_gan_qi",
-      "domain": "input_number",
-      "object_id": "wo_shi_liang_du_chuan_gan_qi",
-      "value_type_hint": "numeric",
-      "positions": [
-        "condition"
-      ],
-      "roles": [
-        "sensor"
-      ],
-      "rules": [
-        "automation.r12_bedroom_light"
-      ],
-      "operations": [],
-      "raw_contexts": [
-        {
-          "rule_uid": "automation.r12_bedroom_light",
-          "rule_id": "1741537625039",
-          "rule_alias": "R12-Bedroom Light",
-          "rule_description": "When the bedroom motion sensor is triggered, if the brightness sensor is below 50lux, turn on the bedroom light.",
-          "section": "condition",
-          "yaml_path": "condition[0].entity_id",
-          "platform": null,
-          "condition": "numeric_state",
-          "service": null,
-          "operation": null,
-          "post_value": null,
-          "node_excerpt": {
-            "condition": "numeric_state",
-            "entity_id": "input_number.wo_shi_liang_du_chuan_gan_qi",
-            "below": 50
-          }
-        }
-      ],
-      "primary_role": "sensor",
-      "display_name": "Bedroom Light Sensor (input_number.wo_shi_liang_du_chuan_gan_qi)",
-      "registry": {
-        "name": null,
-        "original_name": "Bedroom Light Sensor",
-        "aliases": [],
-        "area_id": "wo_shi",
-        "device_class": null,
-        "original_device_class": null,
-        "platform": "input_number",
-        "unit_of_measurement": null
-      }
-    },
-    {
-      "entity_id": "input_number.wo_shi_wen_du_chuan_gan_qi",
-      "domain": "input_number",
-      "object_id": "wo_shi_wen_du_chuan_gan_qi",
-      "value_type_hint": "numeric",
-      "positions": [
-        "trigger"
-      ],
-      "roles": [
-        "sensor"
-      ],
-      "rules": [
-        "automation.r14_bedroom_window"
-      ],
-      "operations": [],
-      "raw_contexts": [
-        {
-          "rule_uid": "automation.r14_bedroom_window",
-          "rule_id": "1741538821346",
-          "rule_alias": "R14-Bedroom Window",
-          "rule_description": "When the bedroom temperature reaches 30℃, open the window and turn off the heating.",
-          "section": "trigger",
-          "yaml_path": "trigger[0].entity_id",
-          "platform": "numeric_state",
-          "condition": null,
-          "service": null,
-          "operation": null,
-          "post_value": null,
-          "node_excerpt": {
-            "platform": "numeric_state",
-            "entity_id": [
-              "input_number.wo_shi_wen_du_chuan_gan_qi"
-            ],
-            "above": 30
-          }
-        }
-      ],
-      "primary_role": "sensor",
-      "display_name": "Bedroom Temperature Sensor (input_number.wo_shi_wen_du_chuan_gan_qi)",
-      "registry": {
-        "name": null,
-        "original_name": "Bedroom Temperature Sensor",
-        "aliases": [],
-        "area_id": "wo_shi",
+        "area_id": "nursery",
         "device_class": null,
         "original_device_class": null,
         "platform": "input_number",

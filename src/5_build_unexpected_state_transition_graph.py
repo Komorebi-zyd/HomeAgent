@@ -345,12 +345,34 @@ def extract_action_posts(tcae: Dict[str, Any]) -> Dict[str, List[Dict[str, Any]]
     return dict(out)
 
 
-def find_weak_unexpected_action_posts(
+def collect_normal_related_action_posts(
     action_posts: Dict[str, List[Dict[str, Any]]],
     normal_entities: Dict[str, Dict[str, Any]],
-) -> Tuple[Dict[str, List[Dict[str, Any]]], List[Dict[str, Any]]]:
-    """Return abnormal action-node posts and skipped uncertain posts."""
-    abnormal: Dict[str, List[Dict[str, Any]]] = defaultdict(list)
+) -> Tuple[Dict[str, List[Dict[str, Any]]], Dict[str, List[Dict[str, Any]]], List[Dict[str, Any]]]:
+    """Collect all action posts related to normal-config entities.
+
+    Returns:
+      normal_related_actions:
+        action_node -> list of action-post records whose target entity appears in
+        normal_config, regardless of whether the post moves toward or away from
+        the normal state.
+      weak_unexpected_actions:
+        subset of normal_related_actions whose post value itself is outside the
+        configured normal_values.
+      skipped_uncertain:
+        action posts on normal entities whose target value is unknown/toggle and
+        therefore cannot be judged statically.
+
+    Rationale:
+      A non-expected state may arise either because an action moves a sensitive
+      entity away from normal, or because an association disables / prevents a
+      *normalizing* action from executing. Therefore, any association path whose
+      terminal rule action touches a normal-config entity should be retained in
+      USTG; later steps distinguish whether the risk comes from an abnormal post
+      or from blocked restoration.
+    """
+    normal_related: Dict[str, List[Dict[str, Any]]] = defaultdict(list)
+    weak_unexpected: Dict[str, List[Dict[str, Any]]] = defaultdict(list)
     skipped_uncertain: List[Dict[str, Any]] = []
 
     for node_id, posts in action_posts.items():
@@ -364,26 +386,29 @@ def find_weak_unexpected_action_posts(
                         "action_node": node_id,
                         "entity_id": entity_id,
                         "post": post.get("post"),
-                        "reason": "post value is unknown/toggle/non-concrete; weak static unexpectedness is not decided",
+                        "reason": "post value is unknown/toggle/non-concrete; static relation to normal state is undecidable",
                     }
                 )
                 continue
-            post_key = comparable_value_key(post.get("post"))
-            normal_keys = set(normal_entities[entity_id].get("normal_value_keys", []))
-            if post_key not in normal_keys:
-                abnormal[node_id].append(
-                    {
-                        **post,
-                        "normal_values": normal_entities[entity_id].get("normal_values", []),
-                        "normal_value_keys": sorted(normal_keys),
-                        "post_key": post_key,
-                        "weak_unexpected": True,
-                        "safety_level": normal_entities[entity_id].get("safety_level"),
-                        "normal_reason": normal_entities[entity_id].get("reason"),
-                    }
-                )
 
-    return dict(abnormal), skipped_uncertain
+            normal_keys = set(normal_entities[entity_id].get("normal_value_keys", []))
+            post_key = comparable_value_key(post.get("post"))
+            toward_normal = post_key in normal_keys
+            record = {
+                **post,
+                "normal_values": normal_entities[entity_id].get("normal_values", []),
+                "normal_value_keys": sorted(normal_keys),
+                "post_key": post_key,
+                "relationship_to_normal": "toward_normal" if toward_normal else "away_from_normal",
+                "weak_unexpected": not toward_normal,
+                "safety_level": normal_entities[entity_id].get("safety_level"),
+                "normal_reason": normal_entities[entity_id].get("reason"),
+            }
+            normal_related[node_id].append(record)
+            if not toward_normal:
+                weak_unexpected[node_id].append(record)
+
+    return dict(normal_related), dict(weak_unexpected), skipped_uncertain
 
 
 # ---------------------------------------------------------------------------
@@ -493,18 +518,18 @@ def find_unexpected_paths_for_terminal(
 
 def find_unexpected_paths(
     graph: Dict[str, Any],
-    abnormal_actions: Dict[str, List[Dict[str, Any]]],
+    terminal_actions: Dict[str, List[Dict[str, Any]]],
     max_depth: int = 6,
     max_paths_per_outcome: int = 500,
     positive_only: bool = False,
 ) -> List[Dict[str, Any]]:
     _, _, reverse_edges = build_edge_maps(graph)
     all_paths: List[Dict[str, Any]] = []
-    for terminal_node in sorted(abnormal_actions):
+    for terminal_node in sorted(terminal_actions):
         paths = find_unexpected_paths_for_terminal(
             terminal_node,
             reverse_edges,
-            abnormal_actions[terminal_node],
+            terminal_actions[terminal_node],
             max_depth=max_depth,
             max_paths=max_paths_per_outcome,
             positive_only=positive_only,
@@ -519,14 +544,47 @@ def find_unexpected_paths(
 
 
 def extract_subgraph(graph: Dict[str, Any], paths: List[Dict[str, Any]]) -> Tuple[List[Dict[str, Any]], List[Dict[str, Any]]]:
+    """Extract the USTG subgraph and complete intra-rule control-flow chains.
+
+    Besides edges/nodes explicitly appearing in unexpected paths, this function
+    also restores the *full internal path* of every involved rule:
+      - T -> C -> A, or
+      - T -> A
+    This avoids incomplete subgraphs such as only C -> A without the trigger
+    predecessor, which is undesirable for later inspection and runtime mapping.
+    """
     node_ids: Set[str] = set()
     edge_ids: Set[str] = set()
     for path in paths:
         node_ids.update(path.get("nodes", []) or [])
         edge_ids.update(path.get("edges", []) or [])
 
-    nodes = [n for n in graph.get("nodes", []) or [] if n.get("node_id") in node_ids]
-    edges = [e for e in graph.get("edges", []) or [] if e.get("edge_id") in edge_ids]
+    all_nodes = [n for n in graph.get("nodes", []) or [] if isinstance(n, dict)]
+    all_edges = [e for e in graph.get("edges", []) or [] if isinstance(e, dict)]
+
+    # Any rule that already appears in the selected subgraph should contribute
+    # its full intra-rule control-flow chain.
+    involved_rule_uids: Set[str] = set()
+    for node in all_nodes:
+        if node.get("node_id") in node_ids and node.get("rule_uid"):
+            involved_rule_uids.add(str(node.get("rule_uid")))
+
+    for node in all_nodes:
+        if node.get("rule_uid") in involved_rule_uids and node.get("node_type") in {"trigger", "condition", "action"}:
+            node_ids.add(node.get("node_id"))
+
+    for edge in all_edges:
+        meta = edge.get("metadata") or {}
+        if edge.get("edge_group") == "intra" and meta.get("rule_uid") in involved_rule_uids:
+            if edge.get("source"):
+                node_ids.add(edge.get("source"))
+            if edge.get("target"):
+                node_ids.add(edge.get("target"))
+            if edge.get("edge_id"):
+                edge_ids.add(edge.get("edge_id"))
+
+    nodes = [n for n in all_nodes if n.get("node_id") in node_ids]
+    edges = [e for e in all_edges if e.get("edge_id") in edge_ids]
     nodes = sorted(nodes, key=lambda n: n.get("node_id", ""))
     edges = sorted(edges, key=lambda e: e.get("edge_id", ""))
     return nodes, edges
@@ -546,10 +604,10 @@ def build_unexpected_state_transition_graph(
 ) -> Dict[str, Any]:
     normal_entities = load_normal_entities(normal_config)
     action_posts = extract_action_posts(tcae)
-    abnormal_actions, skipped_uncertain = find_weak_unexpected_action_posts(action_posts, normal_entities)
+    normal_related_actions, weak_unexpected_actions, skipped_uncertain = collect_normal_related_action_posts(action_posts, normal_entities)
     paths = find_unexpected_paths(
         rule_association_graph,
-        abnormal_actions,
+        normal_related_actions,
         max_depth=max_depth,
         max_paths_per_outcome=max_paths_per_outcome,
         positive_only=positive_only,
@@ -570,7 +628,8 @@ def build_unexpected_state_transition_graph(
         "edges": edges,
         "unexpected_paths": paths,
         "action_posts": dict(sorted(action_posts.items())),
-        "abnormal_actions": dict(sorted(abnormal_actions.items())),
+        "normal_related_actions": dict(sorted(normal_related_actions.items())),
+        "weak_unexpected_actions": dict(sorted(weak_unexpected_actions.items())),
         "normal_entities": normal_entities,
         "skipped_uncertain_posts": skipped_uncertain,
         "parameters": {
@@ -589,7 +648,8 @@ def build_unexpected_state_transition_graph(
         "summary": {
             "normal_entity_count": len(normal_entities),
             "action_node_count": len(action_posts),
-            "abnormal_action_node_count": len(abnormal_actions),
+            "normal_related_action_node_count": len(normal_related_actions),
+            "weak_unexpected_action_node_count": len(weak_unexpected_actions),
             "unexpected_path_count": len(paths),
             "node_count": len(nodes),
             "edge_count": len(edges),
@@ -666,7 +726,7 @@ def draw_graph(graph: Dict[str, Any], output_path: Path) -> bool:
 def main() -> None:
     parser = argparse.ArgumentParser(description="Build the Unexpected State Transition Graph from RAG, TCAE and normal_config.")
     parser.add_argument("--max-depth", type=int, default=6, help="Maximum number of edges in each association path. Default: 6")
-    parser.add_argument("--max-paths-per-outcome", type=int, default=500, help="Path cap for each abnormal terminal action node. Default: 500")
+    parser.add_argument("--max-paths-per-outcome", type=int, default=500, help="Path cap for each terminal action node touching a normal-config entity. Default: 500")
     parser.add_argument("--positive-only", action="store_true", help="Keep only paths with positive path polarity. Default keeps both polarities for static over-approximation.")
     parser.add_argument("--draw", action="store_true", help="Also generate images/unexpected_state_transition_graph.png if optional drawing dependencies exist.")
     parser.add_argument("--print-pseudocode", action="store_true", help="Print USTG generation pseudocode and exit.")

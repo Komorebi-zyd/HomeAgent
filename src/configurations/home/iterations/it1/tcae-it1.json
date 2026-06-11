@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0",
-  "generated_at": "2026-06-07T20:14:08.533638+00:00",
+  "generated_at": "2026-06-07T20:20:08.488180+00:00",
   "model": "TCAE",
   "rules": [
     {
@@ -71,12 +71,13 @@
       "rule_id": "1780849846827",
       "display_alias": "R22_TempHigh_WindowOpen",
       "entity_display": {
+        "input_boolean.cleaning_mode_switch": "cleaning_mode_switch (input_boolean.cleaning_mode_switch)",
         "input_boolean.nursery_window": "nursery_window (input_boolean.nursery_window)",
         "input_boolean.nursery_window_latch": "nursery_window_latch (input_boolean.nursery_window_latch)",
         "input_number.nursery_temp_sensor": "nursery_temp_sensor (input_number.nursery_temp_sensor)"
       },
       "alias": "R22_TempHigh_WindowOpen",
-      "description": "温度高，童锁disabled，开窗",
+      "description": "Only open the nursery window when temperature is high, the latch is enabled, and cleaning mode is currently active. This prevents stale latch state from reopening the window after cleaning ends.",
       "mode": "single",
       "T": [
         {
@@ -91,6 +92,11 @@
         {
           "type": "state",
           "entity_id": "input_boolean.nursery_window_latch",
+          "state": "on"
+        },
+        {
+          "type": "state",
+          "entity_id": "input_boolean.cleaning_mode_switch",
           "state": "on"
         }
       ],
@@ -155,9 +161,8 @@
         ]
       },
       "raw": {
-        "id": "1780849846827",
         "alias": "R22_TempHigh_WindowOpen",
-        "description": "温度高，童锁disabled，开窗",
+        "description": "Only open the nursery window when temperature is high, the latch is enabled, and cleaning mode is currently active. This prevents stale latch state from reopening the window after cleaning ends.",
         "trigger": [
           {
             "platform": "numeric_state",
@@ -172,6 +177,11 @@
             "condition": "state",
             "entity_id": "input_boolean.nursery_window_latch",
             "state": "on"
+          },
+          {
+            "condition": "state",
+            "entity_id": "input_boolean.cleaning_mode_switch",
+            "state": "on"
           }
         ],
         "action": [
@@ -184,7 +194,8 @@
             }
           }
         ],
-        "mode": "single"
+        "mode": "single",
+        "id": "1780849846827"
       }
     },
     {
@@ -337,10 +348,90 @@
         ],
         "mode": "single"
       }
+    },
+    {
+      "rule_uid": "automation.r25_cleanmode_end_resetlatchandwindow",
+      "rule_id": "it01_c001",
+      "display_alias": "R25_CleanMode_End_ResetLatchAndWindow",
+      "entity_display": {
+        "input_boolean.cleaning_mode_switch": "cleaning_mode_switch (input_boolean.cleaning_mode_switch)",
+        "input_boolean.nursery_window": "nursery_window (input_boolean.nursery_window)",
+        "input_boolean.nursery_window_latch": "nursery_window_latch (input_boolean.nursery_window_latch)"
+      },
+      "alias": "R25_CleanMode_End_ResetLatchAndWindow",
+      "description": "When cleaning mode turns off, restore the nursery to a secured state by turning off the window latch and closing the window.",
+      "mode": "single",
+      "T": [
+        {
+          "type": "state",
+          "entity_id": "input_boolean.cleaning_mode_switch",
+          "from": "on",
+          "to": "off"
+        }
+      ],
+      "C": [],
+      "A": [
+        {
+          "type": "service",
+          "service": "input_boolean.turn_off",
+          "operation": "turn_off",
+          "target_entity": "input_boolean.nursery_window_latch",
+          "post": "off",
+          "data": {}
+        },
+        {
+          "type": "service",
+          "service": "input_boolean.turn_off",
+          "operation": "turn_off",
+          "target_entity": "input_boolean.nursery_window",
+          "post": "off",
+          "data": {}
+        }
+      ],
+      "E": {
+        "E_T": [],
+        "E_C": [],
+        "E_A": []
+      },
+      "raw": {
+        "alias": "R25_CleanMode_End_ResetLatchAndWindow",
+        "description": "When cleaning mode turns off, restore the nursery to a secured state by turning off the window latch and closing the window.",
+        "trigger": [
+          {
+            "platform": "state",
+            "entity_id": [
+              "input_boolean.cleaning_mode_switch"
+            ],
+            "from": "on",
+            "to": "off"
+          }
+        ],
+        "condition": [],
+        "action": [
+          {
+            "service": "input_boolean.turn_off",
+            "metadata": {},
+            "data": {},
+            "target": {
+              "entity_id": "input_boolean.nursery_window_latch"
+            }
+          },
+          {
+            "service": "input_boolean.turn_off",
+            "metadata": {},
+            "data": {},
+            "target": {
+              "entity_id": "input_boolean.nursery_window"
+            }
+          }
+        ],
+        "mode": "single",
+        "id": "it01_c001"
+      }
     }
   ],
   "summary": {
-    "rule_count": 4,
+    "rule_count": 5,
     "env_trigger_ref_count": 1,
     "env_condition_ref_count": 0,
     "env_action_effect_count": 2

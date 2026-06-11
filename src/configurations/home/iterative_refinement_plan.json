@@ -1,0 +1,1954 @@
+{
+  "schema_version": "1.0",
+  "generated_at": "2026-06-07T20:23:52.783546+00:00",
+  "method": "graph_level_iterative_refinement",
+  "rpm": 10,
+  "workers": null,
+  "max_iterations": 3,
+  "base_automations": "E:\\Programming\\MyWork\\HomeAgent\\src\\configurations\\automations.yaml",
+  "iterations_root": "E:\\Programming\\MyWork\\HomeAgent\\src\\configurations\\home\\iterations",
+  "iterations": [
+    {
+      "index": 0,
+      "files": {
+        "automations": "E:\\Programming\\MyWork\\HomeAgent\\src\\configurations\\home\\iterations\\it0\\automations-it0.yaml",
+        "tcae": "E:\\Programming\\MyWork\\HomeAgent\\src\\configurations\\home\\iterations\\it0\\tcae-it0.json",
+        "rule_association_graph": "E:\\Programming\\MyWork\\HomeAgent\\src\\configurations\\home\\iterations\\it0\\rule_association_graph-it0.json",
+        "unexpected_state_transition_graph": "E:\\Programming\\MyWork\\HomeAgent\\src\\configurations\\home\\iterations\\it0\\unexpected_state_transition_graph-it0.json"
+      },
+      "graph_summary": {
+        "rule_count": 4,
+        "rag_summary": {
+          "node_count": 11,
+          "edge_count": 11,
+          "nodes_by_type": {
+            "action": 4,
+            "condition": 2,
+            "environment": 1,
+            "trigger": 4
+          },
+          "edges_by_kind": {
+            "direct-condition-allow": 1,
+            "direct-condition-disable": 1,
+            "env-association": 1,
+            "env-trigger": 1,
+            "flow": 6,
+            "indirect-action": 1
+          },
+          "edges_by_group": {
+            "assoc": 5,
+            "intra": 6
+          },
+          "rule_count": 4
+        },
+        "ustg_summary": {
+          "normal_entity_count": 4,
+          "action_node_count": 4,
+          "normal_related_action_node_count": 4,
+          "weak_unexpected_action_node_count": 3,
+          "unexpected_path_count": 6,
+          "node_count": 11,
+          "edge_count": 10,
+          "nodes_by_type": {
+            "action": 4,
+            "condition": 2,
+            "environment": 1,
+            "trigger": 4
+          },
+          "edges_by_kind": {
+            "direct-condition-allow": 1,
+            "direct-condition-disable": 1,
+            "env-trigger": 1,
+            "flow": 6,
+            "indirect-action": 1
+          },
+          "paths_by_terminal_action": {
+            "automation.r22_temphigh_windowopen::A": 4,
+            "automation.r24_night_closegaragedoor::A": 2
+          },
+          "paths_by_polarity": {
+            "-1": 3,
+            "1": 3
+          },
+          "skipped_uncertain_post_count": 0
+        }
+      },
+      "candidate_count": 2,
+      "pair_discovery_reports": [
+        {
+          "candidate_key": "automation.r21_cleanmode_disablelatch->automation.r22_temphigh_windowopen|condition|direct-condition-allow",
+          "scenario_instances": [
+            {
+              "scenario_id": "s1",
+              "title": "Planned cleaning ventilation",
+              "scenario_type": "boundary_timing",
+              "normal_situation": "The cleaning mode is intentionally turned on during an active cleaning session, so nursery_window_latch becoming on is expected and a later temperature rise above 30 can legitimately allow the window-open rule to run for ventilation.",
+              "dangerous_situation": "If the same cleaning-mode enablement happens outside an actively supervised cleaning session, the same allow path can still let the temperature rule open the window even though the room should stay secured.",
+              "activation_conditions": [
+                {
+                  "kind": "state",
+                  "description": "input_boolean.cleaning_mode_switch changes from off to on"
+                },
+                {
+                  "kind": "state",
+                  "description": "input_boolean.nursery_window_latch is on"
+                },
+                {
+                  "kind": "state",
+                  "description": "input_number.nursery_temp_sensor rises above 30"
+                },
+                {
+                  "kind": "duration",
+                  "description": "The allow state remains active only for the intended cleaning period"
+                }
+              ],
+              "unexpected_outcomes": [
+                {
+                  "entity_id": "input_boolean.nursery_window",
+                  "post_value": "on",
+                  "why_unexpected": "The normal secured state is off, so on means the window is opened."
+                }
+              ],
+              "confidence": 0.84,
+              "needs_rule_refinement": true
+            },
+            {
+              "scenario_id": "s2",
+              "title": "Forgotten cleaning mode after use",
+              "scenario_type": "missing_reset",
+              "normal_situation": "After cleaning ends, cleaning mode is turned back off, so the latch does not remain enabled and later temperature spikes do not trigger an unintended window opening.",
+              "dangerous_situation": "Cleaning mode remains on after the cleaning task is finished; the latch stays enabled, and a later temperature reading above 30 still satisfies the window-open rule, causing the window to open when the nursery should have returned to secured mode.",
+              "activation_conditions": [
+                {
+                  "kind": "state",
+                  "description": "input_boolean.cleaning_mode_switch stays on after the cleaning period"
+                },
+                {
+                  "kind": "absence",
+                  "description": "No reset back to off occurs for the cleaning mode switch"
+                },
+                {
+                  "kind": "duration",
+                  "description": "The on state persists long enough for a later temperature spike to occur"
+                },
+                {
+                  "kind": "state",
+                  "description": "input_number.nursery_temp_sensor later rises above 30"
+                }
+              ],
+              "unexpected_outcomes": [
+                {
+                  "entity_id": "input_boolean.nursery_window",
+                  "post_value": "on",
+                  "why_unexpected": "The normal closed state is off, so on indicates an unintended opening after the cleaning period."
+                }
+              ],
+              "confidence": 0.91,
+              "needs_rule_refinement": true
+            }
+          ],
+          "needs_human_review": true,
+          "candidate_id": "ra00001",
+          "source_rule_uid": "automation.r21_cleanmode_disablelatch",
+          "target_rule_uid": "automation.r22_temphigh_windowopen",
+          "association_kind": "direct-condition-allow"
+        },
+        {
+          "candidate_key": "automation.r23_charger_stopautoclose->automation.r24_night_closegaragedoor|condition|direct-condition-disable",
+          "scenario_instances": [
+            {
+              "scenario_id": "s1",
+              "title": "Charging overlaps the nightly close window",
+              "scenario_type": "boundary_timing",
+              "normal_situation": "The garage is in active use and EV charging starts well before the nightly close trigger. Disabling the automatic-close helper is acceptable because the system should not try to close the garage while charging is underway.",
+              "dangerous_situation": "EV charging starts shortly before the nightly close hour while the garage door is still open. The same disable action blocks the night-close rule at the boundary, so the door is not closed when the time trigger arrives.",
+              "activation_conditions": [
+                {
+                  "kind": "state",
+                  "description": "input_boolean.ev_charger_status changes from off to on"
+                },
+                {
+                  "kind": "time",
+                  "description": "input_datetime.systemtime hour is above 22 and below 24 when the night-close rule would otherwise evaluate"
+                },
+                {
+                  "kind": "state",
+                  "description": "input_boolean.garage_auto_close_enabled is on before the disable action runs"
+                },
+                {
+                  "kind": "state",
+                  "description": "input_boolean.garage_door is on at the time of the nightly close check"
+                }
+              ],
+              "unexpected_outcomes": [
+                {
+                  "entity_id": "input_boolean.garage_auto_close_enabled",
+                  "post_value": "off",
+                  "why_unexpected": "This helper is intentionally turned off by the charging-start rule, but the same state can suppress the later close rule when timing overlaps."
+                },
+                {
+                  "entity_id": "input_boolean.garage_door",
+                  "post_value": "on",
+                  "why_unexpected": "The nightly close action is skipped because its condition is disabled, so the garage remains open instead of being secured."
+                }
+              ],
+              "confidence": 0.93,
+              "needs_rule_refinement": true
+            },
+            {
+              "scenario_id": "s2",
+              "title": "Charging ends but auto-close stays disabled",
+              "scenario_type": "stale_virtual_state",
+              "normal_situation": "During an ongoing charging session, keeping automatic close disabled is correct because the garage should stay open for vehicle access and charging activity.",
+              "dangerous_situation": "Charging stops later, but there is no reset rule to restore automatic close to on. The helper remains off into the night-close window, so the garage door can stay open even though charging is no longer active.",
+              "activation_conditions": [
+                {
+                  "kind": "state",
+                  "description": "input_boolean.ev_charger_status changes from off to on and later returns to off"
+                },
+                {
+                  "kind": "duration",
+                  "description": "input_boolean.garage_auto_close_enabled remains off after the charging session ends"
+                },
+                {
+                  "kind": "absence",
+                  "description": "No separate automation restores input_boolean.garage_auto_close_enabled back to on before the nightly close trigger"
+                },
+                {
+                  "kind": "time",
+                  "description": "input_datetime.systemtime reaches the nightly close range after charging has already ended"
+                }
+              ],
+              "unexpected_outcomes": [
+                {
+                  "entity_id": "input_boolean.garage_auto_close_enabled",
+                  "post_value": "off",
+                  "why_unexpected": "The disabled state persists beyond the charging session, preventing the night-close rule from becoming eligible again."
+                },
+                {
+                  "entity_id": "input_boolean.garage_door",
+                  "post_value": "on",
+                  "why_unexpected": "Because the enabling condition never recovers, the door is not turned off at night and remains open longer than intended."
+                }
+              ],
+              "confidence": 0.88,
+              "needs_rule_refinement": true
+            }
+          ],
+          "needs_human_review": true,
+          "candidate_id": "ra00002",
+          "source_rule_uid": "automation.r23_charger_stopautoclose",
+          "target_rule_uid": "automation.r24_night_closegaragedoor",
+          "association_kind": "direct-condition-disable"
+        }
+      ],
+      "scenario_audit_rounds": [
+        {
+          "round": 1,
+          "is_complete": false,
+          "reason": "The catalog covers the charger timing/stale-state case well, but the cleaning-mode branch still misses the key missing-reset boundary: cleaning can end while nursery_window_latch remains on, so a later high-temperature event can still open the window after the room should have returned to secured mode.",
+          "revised_candidate_scenarios": [
+            {
+              "candidate_key": "automation.r21_cleanmode_disablelatch->automation.r22_temphigh_windowopen|condition|direct-condition-allow",
+              "scenario_instances": [
+                {
+                  "scenario_id": "s1",
+                  "title": "Planned cleaning ventilation",
+                  "scenario_type": "boundary_timing",
+                  "normal_situation": "The cleaning mode is intentionally turned on during an active cleaning session, so nursery_window_latch becoming on is expected and a later temperature rise above 30 can legitimately allow the window-open rule to run for ventilation.",
+                  "dangerous_situation": "If the same cleaning-mode enablement happens outside an actively supervised cleaning session, the same allow path can still let the temperature rule open the window even though the room should stay secured.",
+                  "activation_conditions": [
+                    {
+                      "kind": "state",
+                      "description": "input_boolean.cleaning_mode_switch changes from off to on"
+                    },
+                    {
+                      "kind": "state",
+                      "description": "input_boolean.nursery_window_latch is on"
+                    },
+                    {
+                      "kind": "state",
+                      "description": "input_number.nursery_temp_sensor rises above 30"
+                    },
+                    {
+                      "kind": "duration",
+                      "description": "The allow state remains active only for the intended cleaning period"
+                    }
+                  ],
+                  "unexpected_outcomes": [
+                    {
+                      "entity_id": "input_boolean.nursery_window",
+                      "post_value": "on",
+                      "why_unexpected": "The normal secured state is off, so on means the window is opened."
+                    }
+                  ],
+                  "confidence": 0.84,
+                  "needs_rule_refinement": true
+                },
+                {
+                  "scenario_id": "s2",
+                  "title": "Cleaning ends but latch stays on",
+                  "scenario_type": "missing_reset",
+                  "normal_situation": "After cleaning ends, cleaning mode is turned off and the nursery_window_latch is explicitly reset off, so later temperature spikes do not satisfy the window-open rule.",
+                  "dangerous_situation": "Cleaning mode turns off, but the latch remains on because no reset rule exists; later a temperature reading above 30 still satisfies the window-open condition and opens the window after the nursery should have been secured again.",
+                  "activation_conditions": [
+                    {
+                      "kind": "state",
+                      "description": "input_boolean.cleaning_mode_switch changes from on to off after a cleaning session"
+                    },
+                    {
+                      "kind": "absence",
+                      "description": "No automation or manual reset turns input_boolean.nursery_window_latch back to off"
+                    },
+                    {
+                      "kind": "duration",
+                      "description": "input_boolean.nursery_window_latch remains on after cleaning has ended"
+                    },
+                    {
+                      "kind": "state",
+                      "description": "input_number.nursery_temp_sensor later rises above 30"
+                    }
+                  ],
+                  "unexpected_outcomes": [
+                    {
+                      "entity_id": "input_boolean.nursery_window_latch",
+                      "post_value": "on",
+                      "why_unexpected": "The latch should have been reset after cleaning, but it persists as a stale enabling state."
+                    },
+                    {
+                      "entity_id": "input_boolean.nursery_window",
+                      "post_value": "on",
+                      "why_unexpected": "The window opens even though cleaning is over and the room should have returned to secured mode."
+                    }
+                  ],
+                  "confidence": 0.96,
+                  "needs_rule_refinement": true
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "round": 2,
+          "is_complete": false,
+          "reason": "The catalog covers the nursery latch boundary well, but it is missing the garage auto-close disable boundary and the stale-off/missing-reset cases that can leave the garage door unprotected at night.",
+          "revised_candidate_scenarios": [
+            {
+              "candidate_key": "automation.r21_cleanmode_disablelatch->automation.r22_temphigh_windowopen|condition|direct-condition-allow",
+              "scenario_instances": [
+                {
+                  "scenario_id": "s1",
+                  "title": "Planned cleaning ventilation",
+                  "scenario_type": "boundary_timing",
+                  "normal_situation": "Cleaning mode is intentionally enabled during an active, supervised cleaning session, so the latch turning on is expected and a later temperature rise above 30 can legitimately let the window-open rule run for ventilation.",
+                  "dangerous_situation": "If cleaning mode is enabled outside a supervised cleaning session, the same allow path can still let the temperature rule open the window even though the nursery should remain secured.",
+                  "activation_conditions": [
+                    {
+                      "kind": "state",
+                      "description": "input_boolean.cleaning_mode_switch changes from off to on"
+                    },
+                    {
+                      "kind": "state",
+                      "description": "input_boolean.nursery_window_latch is on"
+                    },
+                    {
+                      "kind": "state",
+                      "description": "input_number.nursery_temp_sensor rises above 30"
+                    },
+                    {
+                      "kind": "duration",
+                      "description": "The allow state persists only for the intended cleaning period"
+                    }
+                  ],
+                  "unexpected_outcomes": [
+                    {
+                      "entity_id": "input_boolean.nursery_window",
+                      "post_value": "on",
+                      "why_unexpected": "The normal secured state is off, so on means the window is opened."
+                    }
+                  ],
+                  "confidence": 0.84,
+                  "needs_rule_refinement": true
+                },
+                {
+                  "scenario_id": "s2",
+                  "title": "Cleaning ends but latch stays on",
+                  "scenario_type": "missing_reset",
+                  "normal_situation": "After cleaning ends, cleaning mode is turned off and the nursery_window_latch is explicitly reset off, so later temperature spikes do not satisfy the window-open rule.",
+                  "dangerous_situation": "Cleaning mode turns off, but the latch remains on because no reset rule exists; later a temperature reading above 30 still satisfies the window-open condition and opens the window after the nursery should have been secured again.",
+                  "activation_conditions": [
+                    {
+                      "kind": "state",
+                      "description": "input_boolean.cleaning_mode_switch changes from on to off after a cleaning session"
+                    },
+                    {
+                      "kind": "absence",
+                      "description": "No automation or manual reset turns input_boolean.nursery_window_latch back to off"
+                    },
+                    {
+                      "kind": "duration",
+                      "description": "input_boolean.nursery_window_latch remains on after cleaning has ended"
+                    },
+                    {
+                      "kind": "state",
+                      "description": "input_number.nursery_temp_sensor later rises above 30"
+                    }
+                  ],
+                  "unexpected_outcomes": [
+                    {
+                      "entity_id": "input_boolean.nursery_window_latch",
+                      "post_value": "on",
+                      "why_unexpected": "The latch should have been reset after cleaning, but it persists as a stale enabling state."
+                    },
+                    {
+                      "entity_id": "input_boolean.nursery_window",
+                      "post_value": "on",
+                      "why_unexpected": "The window opens even though cleaning is over and the room should have returned to secured mode."
+                    }
+                  ],
+                  "confidence": 0.96,
+                  "needs_rule_refinement": true
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "round": 3,
+          "is_complete": false,
+          "reason": "The catalog covers the nursery latch allow path, but it misses the garage auto-close disable path and its reset/stale-state boundary cases, so the normal-vs-dangerous coverage is not sufficient.",
+          "revised_candidate_scenarios": [
+            {
+              "candidate_key": "automation.r21_cleanmode_disablelatch->automation.r22_temphigh_windowopen|condition|direct-condition-allow",
+              "scenario_instances": [
+                {
+                  "scenario_id": "s1",
+                  "title": "Planned cleaning ventilation",
+                  "scenario_type": "boundary_timing",
+                  "normal_situation": "Cleaning mode is intentionally enabled during an active, supervised cleaning session, so the latch turning on is expected and a later temperature rise above 30 can legitimately let the window-open rule run for ventilation.",
+                  "dangerous_situation": "If cleaning mode is enabled outside a supervised cleaning session, the same allow path can still let the temperature rule open the window even though the nursery should remain secured.",
+                  "activation_conditions": [
+                    {
+                      "kind": "state",
+                      "description": "input_boolean.cleaning_mode_switch changes from off to on"
+                    },
+                    {
+                      "kind": "state",
+                      "description": "input_boolean.nursery_window_latch is on"
+                    },
+                    {
+                      "kind": "state",
+                      "description": "input_number.nursery_temp_sensor rises above 30"
+                    },
+                    {
+                      "kind": "duration",
+                      "description": "The allow state persists only for the intended cleaning period"
+                    }
+                  ],
+                  "unexpected_outcomes": [
+                    {
+                      "entity_id": "input_boolean.nursery_window",
+                      "post_value": "on",
+                      "why_unexpected": "The normal secured state is off, so on means the window is opened."
+                    }
+                  ],
+                  "confidence": 0.84,
+                  "needs_rule_refinement": true
+                },
+                {
+                  "scenario_id": "s2",
+                  "title": "Cleaning ends but latch stays on",
+                  "scenario_type": "missing_reset",
+                  "normal_situation": "After cleaning ends, cleaning mode is turned off and the nursery_window_latch is explicitly reset off, so later temperature spikes do not satisfy the window-open rule.",
+                  "dangerous_situation": "Cleaning mode turns off, but the latch remains on because no reset rule exists; later a temperature reading above 30 still satisfies the window-open condition and opens the window after the nursery should have been secured again.",
+                  "activation_conditions": [
+                    {
+                      "kind": "state",
+                      "description": "input_boolean.cleaning_mode_switch changes from on to off after a cleaning session"
+                    },
+                    {
+                      "kind": "absence",
+                      "description": "No automation or manual reset turns input_boolean.nursery_window_latch back to off"
+                    },
+                    {
+                      "kind": "duration",
+                      "description": "input_boolean.nursery_window_latch remains on after cleaning has ended"
+                    },
+                    {
+                      "kind": "state",
+                      "description": "input_number.nursery_temp_sensor later rises above 30"
+                    }
+                  ],
+                  "unexpected_outcomes": [
+                    {
+                      "entity_id": "input_boolean.nursery_window_latch",
+                      "post_value": "on",
+                      "why_unexpected": "The latch should have been reset after cleaning, but it persists as a stale enabling state."
+                    },
+                    {
+                      "entity_id": "input_boolean.nursery_window",
+                      "post_value": "on",
+                      "why_unexpected": "The window opens even though cleaning is over and the room should have returned to secured mode."
+                    }
+                  ],
+                  "confidence": 0.96,
+                  "needs_rule_refinement": true
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "final_candidate_scenarios": [
+        {
+          "candidate_key": "automation.r21_cleanmode_disablelatch->automation.r22_temphigh_windowopen|condition|direct-condition-allow",
+          "scenario_instances": [
+            {
+              "scenario_id": "s1",
+              "title": "Planned cleaning ventilation",
+              "scenario_type": "boundary_timing",
+              "normal_situation": "Cleaning mode is intentionally enabled during an active, supervised cleaning session, so the latch turning on is expected and a later temperature rise above 30 can legitimately let the window-open rule run for ventilation.",
+              "dangerous_situation": "If cleaning mode is enabled outside a supervised cleaning session, the same allow path can still let the temperature rule open the window even though the nursery should remain secured.",
+              "activation_conditions": [
+                {
+                  "kind": "state",
+                  "description": "input_boolean.cleaning_mode_switch changes from off to on"
+                },
+                {
+                  "kind": "state",
+                  "description": "input_boolean.nursery_window_latch is on"
+                },
+                {
+                  "kind": "state",
+                  "description": "input_number.nursery_temp_sensor rises above 30"
+                },
+                {
+                  "kind": "duration",
+                  "description": "The allow state persists only for the intended cleaning period"
+                }
+              ],
+              "unexpected_outcomes": [
+                {
+                  "entity_id": "input_boolean.nursery_window",
+                  "post_value": "on",
+                  "why_unexpected": "The normal secured state is off, so on means the window is opened."
+                }
+              ],
+              "confidence": 0.84,
+              "needs_rule_refinement": true
+            },
+            {
+              "scenario_id": "s2",
+              "title": "Cleaning ends but latch stays on",
+              "scenario_type": "missing_reset",
+              "normal_situation": "After cleaning ends, cleaning mode is turned off and the nursery_window_latch is explicitly reset off, so later temperature spikes do not satisfy the window-open rule.",
+              "dangerous_situation": "Cleaning mode turns off, but the latch remains on because no reset rule exists; later a temperature reading above 30 still satisfies the window-open condition and opens the window after the nursery should have been secured again.",
+              "activation_conditions": [
+                {
+                  "kind": "state",
+                  "description": "input_boolean.cleaning_mode_switch changes from on to off after a cleaning session"
+                },
+                {
+                  "kind": "absence",
+                  "description": "No automation or manual reset turns input_boolean.nursery_window_latch back to off"
+                },
+                {
+                  "kind": "duration",
+                  "description": "input_boolean.nursery_window_latch remains on after cleaning has ended"
+                },
+                {
+                  "kind": "state",
+                  "description": "input_number.nursery_temp_sensor later rises above 30"
+                }
+              ],
+              "unexpected_outcomes": [
+                {
+                  "entity_id": "input_boolean.nursery_window_latch",
+                  "post_value": "on",
+                  "why_unexpected": "The latch should have been reset after cleaning, but it persists as a stale enabling state."
+                },
+                {
+                  "entity_id": "input_boolean.nursery_window",
+                  "post_value": "on",
+                  "why_unexpected": "The window opens even though cleaning is over and the room should have returned to secured mode."
+                }
+              ],
+              "confidence": 0.96,
+              "needs_rule_refinement": true
+            }
+          ]
+        }
+      ],
+      "rule_update_plan": {
+        "candidate_reports": [
+          {
+            "candidate_key": "automation.r21_cleanmode_disablelatch->automation.r22_temphigh_windowopen|condition|direct-condition-allow",
+            "coverage_status": "needs_more_iteration",
+            "reason": "The missing reset and stale-latch path in s2 can be addressed with rule updates, but s1 still cannot be cleanly distinguished from unsafe use because the system has no supervision/occupancy signal for validating whether cleaning mode is intentionally active.",
+            "remaining_context_gaps": [
+              {
+                "scenario_id": "s1",
+                "reason": "Cleaning mode can be enabled outside a supervised cleaning session, and there is no existing entity to distinguish intentional ventilation from unsafe or unsupervised enabling."
+              }
+            ],
+            "needs_human_review": true
+          }
+        ],
+        "rule_updates": [
+          {
+            "update_id": "u1",
+            "update_type": "rule_modification",
+            "goal": "guard_condition",
+            "reused_entity_ids": [
+              "input_boolean.cleaning_mode_switch",
+              "input_boolean.nursery_window_latch",
+              "input_number.nursery_temp_sensor"
+            ],
+            "target_rule_uid": "automation.r22_temphigh_windowopen",
+            "candidate_rule": {
+              "alias": "R22_TempHigh_WindowOpen",
+              "description": "Only open the nursery window when temperature is high, the latch is enabled, and cleaning mode is currently active. This prevents stale latch state from reopening the window after cleaning ends.",
+              "trigger": [
+                {
+                  "platform": "numeric_state",
+                  "entity_id": [
+                    "input_number.nursery_temp_sensor"
+                  ],
+                  "above": 30
+                }
+              ],
+              "condition": [
+                {
+                  "condition": "state",
+                  "entity_id": "input_boolean.nursery_window_latch",
+                  "state": "on"
+                },
+                {
+                  "condition": "state",
+                  "entity_id": "input_boolean.cleaning_mode_switch",
+                  "state": "on"
+                }
+              ],
+              "action": [
+                {
+                  "service": "input_boolean.turn_on",
+                  "metadata": {},
+                  "data": {},
+                  "target": {
+                    "entity_id": "input_boolean.nursery_window"
+                  }
+                }
+              ],
+              "mode": "single"
+            },
+            "expected_effect": "Blocks the window-opening path unless cleaning mode is currently active, reducing unsafe openings caused by a stale latch after cleaning ends.",
+            "confidence": 0.85,
+            "reason": "This reuses the existing cleaning-mode signal as a guard to better distinguish normal cleaning ventilation from dangerous post-cleaning openings.",
+            "referenced_entity_ids": [
+              "input_boolean.cleaning_mode_switch",
+              "input_boolean.nursery_window",
+              "input_boolean.nursery_window_latch",
+              "input_number.nursery_temp_sensor"
+            ],
+            "invalid_referenced_entity_ids": [],
+            "entity_validation_passed": true,
+            "target_rule_uid_valid": true,
+            "update_validation_passed": true
+          },
+          {
+            "update_id": "u2",
+            "update_type": "rule_completion",
+            "goal": "auto_restore",
+            "reused_entity_ids": [
+              "input_boolean.cleaning_mode_switch",
+              "input_boolean.nursery_window_latch",
+              "input_boolean.nursery_window"
+            ],
+            "target_rule_uid": null,
+            "candidate_rule": {
+              "alias": "R25_CleanMode_End_ResetLatchAndWindow",
+              "description": "When cleaning mode turns off, restore the nursery to a secured state by turning off the window latch and closing the window.",
+              "trigger": [
+                {
+                  "platform": "state",
+                  "entity_id": [
+                    "input_boolean.cleaning_mode_switch"
+                  ],
+                  "from": "on",
+                  "to": "off"
+                }
+              ],
+              "condition": [],
+              "action": [
+                {
+                  "service": "input_boolean.turn_off",
+                  "metadata": {},
+                  "data": {},
+                  "target": {
+                    "entity_id": "input_boolean.nursery_window_latch"
+                  }
+                },
+                {
+                  "service": "input_boolean.turn_off",
+                  "metadata": {},
+                  "data": {},
+                  "target": {
+                    "entity_id": "input_boolean.nursery_window"
+                  }
+                }
+              ],
+              "mode": "single"
+            },
+            "expected_effect": "Automatically clears the enabling latch and closes the window at the end of cleaning, preventing later temperature spikes from reusing a stale cleaning session.",
+            "confidence": 0.92,
+            "reason": "This directly addresses the missing reset in s2 using only existing entities and services.",
+            "referenced_entity_ids": [
+              "input_boolean.cleaning_mode_switch",
+              "input_boolean.nursery_window",
+              "input_boolean.nursery_window_latch"
+            ],
+            "invalid_referenced_entity_ids": [],
+            "entity_validation_passed": true,
+            "target_rule_uid_valid": true,
+            "update_validation_passed": true
+          }
+        ],
+        "needs_human_review": true
+      },
+      "accepted_updates": [
+        {
+          "update_id": "u1",
+          "update_type": "rule_modification",
+          "goal": "guard_condition",
+          "reused_entity_ids": [
+            "input_boolean.cleaning_mode_switch",
+            "input_boolean.nursery_window_latch",
+            "input_number.nursery_temp_sensor"
+          ],
+          "target_rule_uid": "automation.r22_temphigh_windowopen",
+          "candidate_rule": {
+            "alias": "R22_TempHigh_WindowOpen",
+            "description": "Only open the nursery window when temperature is high, the latch is enabled, and cleaning mode is currently active. This prevents stale latch state from reopening the window after cleaning ends.",
+            "trigger": [
+              {
+                "platform": "numeric_state",
+                "entity_id": [
+                  "input_number.nursery_temp_sensor"
+                ],
+                "above": 30
+              }
+            ],
+            "condition": [
+              {
+                "condition": "state",
+                "entity_id": "input_boolean.nursery_window_latch",
+                "state": "on"
+              },
+              {
+                "condition": "state",
+                "entity_id": "input_boolean.cleaning_mode_switch",
+                "state": "on"
+              }
+            ],
+            "action": [
+              {
+                "service": "input_boolean.turn_on",
+                "metadata": {},
+                "data": {},
+                "target": {
+                  "entity_id": "input_boolean.nursery_window"
+                }
+              }
+            ],
+            "mode": "single"
+          },
+          "expected_effect": "Blocks the window-opening path unless cleaning mode is currently active, reducing unsafe openings caused by a stale latch after cleaning ends.",
+          "confidence": 0.85,
+          "reason": "This reuses the existing cleaning-mode signal as a guard to better distinguish normal cleaning ventilation from dangerous post-cleaning openings.",
+          "referenced_entity_ids": [
+            "input_boolean.cleaning_mode_switch",
+            "input_boolean.nursery_window",
+            "input_boolean.nursery_window_latch",
+            "input_number.nursery_temp_sensor"
+          ],
+          "invalid_referenced_entity_ids": [],
+          "entity_validation_passed": true,
+          "target_rule_uid_valid": true,
+          "update_validation_passed": true
+        },
+        {
+          "update_id": "u2",
+          "update_type": "rule_completion",
+          "goal": "auto_restore",
+          "reused_entity_ids": [
+            "input_boolean.cleaning_mode_switch",
+            "input_boolean.nursery_window_latch",
+            "input_boolean.nursery_window"
+          ],
+          "target_rule_uid": null,
+          "candidate_rule": {
+            "alias": "R25_CleanMode_End_ResetLatchAndWindow",
+            "description": "When cleaning mode turns off, restore the nursery to a secured state by turning off the window latch and closing the window.",
+            "trigger": [
+              {
+                "platform": "state",
+                "entity_id": [
+                  "input_boolean.cleaning_mode_switch"
+                ],
+                "from": "on",
+                "to": "off"
+              }
+            ],
+            "condition": [],
+            "action": [
+              {
+                "service": "input_boolean.turn_off",
+                "metadata": {},
+                "data": {},
+                "target": {
+                  "entity_id": "input_boolean.nursery_window_latch"
+                }
+              },
+              {
+                "service": "input_boolean.turn_off",
+                "metadata": {},
+                "data": {},
+                "target": {
+                  "entity_id": "input_boolean.nursery_window"
+                }
+              }
+            ],
+            "mode": "single"
+          },
+          "expected_effect": "Automatically clears the enabling latch and closes the window at the end of cleaning, preventing later temperature spikes from reusing a stale cleaning session.",
+          "confidence": 0.92,
+          "reason": "This directly addresses the missing reset in s2 using only existing entities and services.",
+          "referenced_entity_ids": [
+            "input_boolean.cleaning_mode_switch",
+            "input_boolean.nursery_window",
+            "input_boolean.nursery_window_latch"
+          ],
+          "invalid_referenced_entity_ids": [],
+          "entity_validation_passed": true,
+          "target_rule_uid_valid": true,
+          "update_validation_passed": true
+        }
+      ],
+      "invalid_updates": [],
+      "stopped_reason": "updates_applied_continue"
+    },
+    {
+      "index": 1,
+      "files": {
+        "automations": "E:\\Programming\\MyWork\\HomeAgent\\src\\configurations\\home\\iterations\\it1\\automations-it1.yaml",
+        "tcae": "E:\\Programming\\MyWork\\HomeAgent\\src\\configurations\\home\\iterations\\it1\\tcae-it1.json",
+        "rule_association_graph": "E:\\Programming\\MyWork\\HomeAgent\\src\\configurations\\home\\iterations\\it1\\rule_association_graph-it1.json",
+        "unexpected_state_transition_graph": "E:\\Programming\\MyWork\\HomeAgent\\src\\configurations\\home\\iterations\\it1\\unexpected_state_transition_graph-it1.json"
+      },
+      "graph_summary": {
+        "rule_count": 5,
+        "rag_summary": {
+          "node_count": 13,
+          "edge_count": 17,
+          "nodes_by_type": {
+            "action": 5,
+            "condition": 2,
+            "environment": 1,
+            "trigger": 5
+          },
+          "edges_by_kind": {
+            "direct-action": 4,
+            "direct-condition-allow": 1,
+            "direct-condition-disable": 2,
+            "env-association": 1,
+            "env-trigger": 1,
+            "flow": 7,
+            "indirect-action": 1
+          },
+          "edges_by_group": {
+            "assoc": 10,
+            "intra": 7
+          },
+          "rule_count": 5
+        },
+        "ustg_summary": {
+          "normal_entity_count": 4,
+          "action_node_count": 5,
+          "normal_related_action_node_count": 5,
+          "weak_unexpected_action_node_count": 3,
+          "unexpected_path_count": 32,
+          "node_count": 13,
+          "edge_count": 16,
+          "nodes_by_type": {
+            "action": 5,
+            "condition": 2,
+            "environment": 1,
+            "trigger": 5
+          },
+          "edges_by_kind": {
+            "direct-action": 4,
+            "direct-condition-allow": 1,
+            "direct-condition-disable": 2,
+            "env-trigger": 1,
+            "flow": 7,
+            "indirect-action": 1
+          },
+          "paths_by_terminal_action": {
+            "automation.r21_cleanmode_disablelatch::A": 7,
+            "automation.r22_temphigh_windowopen::A": 14,
+            "automation.r24_night_closegaragedoor::A": 2,
+            "automation.r25_cleanmode_end_resetlatchandwindow::A": 9
+          },
+          "paths_by_polarity": {
+            "-1": 20,
+            "1": 12
+          },
+          "skipped_uncertain_post_count": 0
+        }
+      },
+      "candidate_count": 7,
+      "pair_discovery_reports": [
+        {
+          "candidate_key": "automation.r21_cleanmode_disablelatch->automation.r22_temphigh_windowopen|condition|direct-condition-allow",
+          "scenario_instances": [
+            {
+              "scenario_id": "s1",
+              "title": "Cleaning ventilation works as intended",
+              "scenario_type": "boundary_timing",
+              "normal_situation": "Cleaning mode is intentionally turned on while the nursery temperature is already above 30, so turning on the window latch is appropriate because it lets the high-temperature rule open the nursery window during supervised cleaning.",
+              "dangerous_situation": "If cleaning mode is enabled at an unintended moment, the same latch-enable step can still satisfy the window-open rule and open the nursery window even though ventilation was not actually desired.",
+              "activation_conditions": [
+                {
+                  "kind": "state",
+                  "description": "input_boolean.cleaning_mode_switch is on"
+                },
+                {
+                  "kind": "state",
+                  "description": "input_boolean.nursery_window_latch is on"
+                },
+                {
+                  "kind": "state",
+                  "description": "input_number.nursery_temp_sensor is above 30"
+                }
+              ],
+              "unexpected_outcomes": [
+                {
+                  "entity_id": "input_boolean.nursery_window",
+                  "post_value": "on",
+                  "why_unexpected": "The window opens as a side effect of the allow-link; this is acceptable only when cleaning is truly intended."
+                }
+              ],
+              "confidence": 0.83,
+              "needs_rule_refinement": true
+            },
+            {
+              "scenario_id": "s2",
+              "title": "Cleaning mode left active too long",
+              "scenario_type": "stale_virtual_state",
+              "normal_situation": "During an active cleaning session, the latch being on is a valid temporary state that keeps the temperature-driven window-opening rule eligible to run.",
+              "dangerous_situation": "If cleaning mode stays on after the cleaning session should have ended, the latch remains permissive and any later high-temperature event can reopen the nursery window when the room was expected to have been restored to a secured state.",
+              "activation_conditions": [
+                {
+                  "kind": "state",
+                  "description": "input_boolean.cleaning_mode_switch remains on beyond the intended cleaning period"
+                },
+                {
+                  "kind": "state",
+                  "description": "input_boolean.nursery_window_latch is on"
+                },
+                {
+                  "kind": "state",
+                  "description": "input_number.nursery_temp_sensor rises above 30 after the session has already ended"
+                }
+              ],
+              "unexpected_outcomes": [
+                {
+                  "entity_id": "input_boolean.nursery_window",
+                  "post_value": "on",
+                  "why_unexpected": "The nursery window opens later from a stale permissive state, which is unsafe because the secured end-of-cleaning reset was not reached in time."
+                }
+              ],
+              "confidence": 0.78,
+              "needs_rule_refinement": true
+            }
+          ],
+          "needs_human_review": true,
+          "candidate_id": "ra00001",
+          "source_rule_uid": "automation.r21_cleanmode_disablelatch",
+          "target_rule_uid": "automation.r22_temphigh_windowopen",
+          "association_kind": "direct-condition-allow"
+        },
+        {
+          "candidate_key": "automation.r21_cleanmode_disablelatch->automation.r25_cleanmode_end_resetlatchandwindow|action|direct-action",
+          "scenario_instances": [
+            {
+              "scenario_id": "s1",
+              "title": "Clean mode ends after a finished cleaning session",
+              "scenario_type": "boundary_timing",
+              "normal_situation": "The nursery is being cleaned, so the latch is intentionally disabled first. When cleaning is finished, cleaning mode is turned off and the reset automation restores the latch to its secured state.",
+              "dangerous_situation": "If this same reset happens while cleaning is still underway, the latch is restored too early and the window is closed before the room is actually ready, interrupting ventilation or access.",
+              "activation_conditions": [
+                {
+                  "kind": "state",
+                  "description": "input_boolean.cleaning_mode_switch changes from on to off after being on for a meaningful cleaning interval"
+                },
+                {
+                  "kind": "state",
+                  "description": "input_boolean.nursery_window_latch was previously turned on by the clean-mode automation"
+                },
+                {
+                  "kind": "duration",
+                  "description": "the on period lasts long enough to represent a real cleaning session rather than a brief toggle"
+                }
+              ],
+              "unexpected_outcomes": [
+                {
+                  "entity_id": "input_boolean.nursery_window_latch",
+                  "post_value": "off",
+                  "why_unexpected": "The latch is restored immediately when cleaning mode ends, which is safe only if cleaning has truly completed."
+                },
+                {
+                  "entity_id": "input_boolean.nursery_window",
+                  "post_value": "off",
+                  "why_unexpected": "The window is also closed by the reset action, which can be disruptive if ventilation is still needed."
+                }
+              ],
+              "confidence": 0.94,
+              "needs_rule_refinement": true
+            },
+            {
+              "scenario_id": "s2",
+              "title": "Cleaning-mode state drifts from real activity",
+              "scenario_type": "stale_virtual_state",
+              "normal_situation": "The cleaning-mode switch accurately reflects the real cleaning state, so turning it off correctly triggers the reset of the latch and window at the right time.",
+              "dangerous_situation": "If the switch state becomes stale or is turned off by mistake while cleaning is still happening, the reset automation runs on outdated state and re-enables the latch and closes the window unexpectedly.",
+              "activation_conditions": [
+                {
+                  "kind": "state",
+                  "description": "input_boolean.cleaning_mode_switch is turned off even though the real cleaning activity is still ongoing"
+                },
+                {
+                  "kind": "other",
+                  "description": "the virtual state of cleaning mode no longer matches the actual room condition"
+                },
+                {
+                  "kind": "absence",
+                  "description": "there is no separate confirmation that cleaning has really finished before the reset fires"
+                }
+              ],
+              "unexpected_outcomes": [
+                {
+                  "entity_id": "input_boolean.nursery_window_latch",
+                  "post_value": "off",
+                  "why_unexpected": "The latch is restored based only on the stale switch state, not on actual completion of cleaning."
+                },
+                {
+                  "entity_id": "input_boolean.nursery_window",
+                  "post_value": "off",
+                  "why_unexpected": "The window closes even though the room may still need access or airflow."
+                }
+              ],
+              "confidence": 0.88,
+              "needs_rule_refinement": true
+            }
+          ],
+          "needs_human_review": true,
+          "candidate_id": "ra00002",
+          "source_rule_uid": "automation.r21_cleanmode_disablelatch",
+          "target_rule_uid": "automation.r25_cleanmode_end_resetlatchandwindow",
+          "association_kind": "direct-action"
+        },
+        {
+          "candidate_key": "automation.r22_temphigh_windowopen->automation.r25_cleanmode_end_resetlatchandwindow|action|direct-action",
+          "scenario_instances": [
+            {
+              "scenario_id": "s1",
+              "title": "Planned cleanup reset after ventilation",
+              "scenario_type": "boundary_timing",
+              "normal_situation": "Cleaning mode ends after the nursery has already been ventilated and it is appropriate to restore a secured state; the window close and latch reset from R25 are acceptable after R22 previously opened the window for heat relief.",
+              "dangerous_situation": "Cleaning mode ends while the nursery is still hot and the open window is still needed for cooling; the same reset closes the window too early and removes ventilation.",
+              "activation_conditions": [
+                {
+                  "kind": "state",
+                  "description": "input_boolean.cleaning_mode_switch changes from on to off"
+                },
+                {
+                  "kind": "state",
+                  "description": "input_boolean.nursery_window is on immediately before the reset"
+                },
+                {
+                  "kind": "state",
+                  "description": "input_number.nursery_temp_sensor remains above 30 around the transition"
+                }
+              ],
+              "unexpected_outcomes": [
+                {
+                  "entity_id": "input_boolean.nursery_window_latch",
+                  "post_value": "off",
+                  "why_unexpected": "The latch is cleared as part of the reset; this is acceptable in the normal case, but it can become problematic if the room still needs the open-window state preserved."
+                },
+                {
+                  "entity_id": "input_boolean.nursery_window",
+                  "post_value": "off",
+                  "why_unexpected": "The window is closed as a cleanup-ending reset; this is only safe when ventilation is no longer needed."
+                }
+              ],
+              "confidence": 0.92,
+              "needs_rule_refinement": true
+            },
+            {
+              "scenario_id": "s2",
+              "title": "Stale cleaning-mode state forces an unwanted close",
+              "scenario_type": "stale_virtual_state",
+              "normal_situation": "The cleaning-mode boolean accurately reflects that cleaning is finished, so R25 may safely close the nursery window and clear the latch after R22 opened the window earlier.",
+              "dangerous_situation": "The cleaning-mode boolean is stale, mistaken, or toggled off by accident while the window is still intentionally being used for cooling; R25 then closes the window even though the physical situation still calls for it to remain open.",
+              "activation_conditions": [
+                {
+                  "kind": "state",
+                  "description": "input_boolean.cleaning_mode_switch changes from on to off without the physical cleanup actually being complete"
+                },
+                {
+                  "kind": "state",
+                  "description": "input_boolean.nursery_window is on from the earlier high-temperature opening"
+                },
+                {
+                  "kind": "state",
+                  "description": "input_number.nursery_temp_sensor is still above 30"
+                }
+              ],
+              "unexpected_outcomes": [
+                {
+                  "entity_id": "input_boolean.nursery_window_latch",
+                  "post_value": "off",
+                  "why_unexpected": "A stale mode transition clears the latch even though the system may still need the latch-enabled state for further temperature-driven behavior."
+                },
+                {
+                  "entity_id": "input_boolean.nursery_window",
+                  "post_value": "off",
+                  "why_unexpected": "The reset closes the window despite the ongoing high-temperature context, so the closure is unexpected from the real-world situation even if it matches the rule."
+                }
+              ],
+              "confidence": 0.88,
+              "needs_rule_refinement": true
+            }
+          ],
+          "needs_human_review": true,
+          "candidate_id": "ra00003",
+          "source_rule_uid": "automation.r22_temphigh_windowopen",
+          "target_rule_uid": "automation.r25_cleanmode_end_resetlatchandwindow",
+          "association_kind": "direct-action"
+        },
+        {
+          "candidate_key": "automation.r23_charger_stopautoclose->automation.r24_night_closegaragedoor|condition|direct-condition-disable",
+          "scenario_instances": [
+            {
+              "scenario_id": "s1",
+              "title": "Charging starts before the night-close window",
+              "scenario_type": "boundary_timing",
+              "normal_situation": "The vehicle begins charging in the evening, and disabling automatic garage closing is correct because the garage should not be closed while charging is in progress.",
+              "dangerous_situation": "The same disabled state is still in effect when the 23:00 closing rule runs, so the garage-close automation is blocked and the garage door can remain open overnight.",
+              "activation_conditions": [
+                {
+                  "kind": "state",
+                  "description": "input_boolean.ev_charger_status changes from off to on"
+                },
+                {
+                  "kind": "time",
+                  "description": "input_datetime.systemtime hour is above 22 and below 24"
+                },
+                {
+                  "kind": "state",
+                  "description": "input_boolean.garage_door is on when the closing window arrives"
+                }
+              ],
+              "unexpected_outcomes": [
+                {
+                  "entity_id": "input_boolean.garage_auto_close_enabled",
+                  "post_value": "off",
+                  "why_unexpected": "The source automation disables the condition needed by the night-close rule, so the expected on state for automatic closing is removed."
+                },
+                {
+                  "entity_id": "input_boolean.garage_door",
+                  "post_value": "on",
+                  "why_unexpected": "The night-close automation may fail to turn the door off because its enabling condition was disabled."
+                }
+              ],
+              "confidence": 0.93,
+              "needs_rule_refinement": true
+            },
+            {
+              "scenario_id": "s2",
+              "title": "Charger status remains on after charging is no longer active",
+              "scenario_type": "stale_virtual_state",
+              "normal_situation": "The charger-status boolean is accurately on during a real charging session, so turning off automatic closing is intentional and prevents interference with charging.",
+              "dangerous_situation": "The charger-status boolean stays on after charging has ended or is falsely reported as on, so automatic closing remains disabled even though the garage should be able to close at night.",
+              "activation_conditions": [
+                {
+                  "kind": "state",
+                  "description": "input_boolean.ev_charger_status is on for an extended period after the initial off-to-on transition"
+                },
+                {
+                  "kind": "duration",
+                  "description": "the on state persists into the nightly closing period instead of returning to off"
+                },
+                {
+                  "kind": "absence",
+                  "description": "no later reset of input_boolean.garage_auto_close_enabled back to on before the night-close trigger"
+                }
+              ],
+              "unexpected_outcomes": [
+                {
+                  "entity_id": "input_boolean.garage_auto_close_enabled",
+                  "post_value": "off",
+                  "why_unexpected": "A stale or false-positive charger state keeps the automatic-close permission disabled longer than intended."
+                },
+                {
+                  "entity_id": "input_boolean.garage_door",
+                  "post_value": "on",
+                  "why_unexpected": "Because the night-close condition is still disabled, the garage door may remain open when it should have been secured."
+                }
+              ],
+              "confidence": 0.88,
+              "needs_rule_refinement": true
+            }
+          ],
+          "needs_human_review": true,
+          "candidate_id": "ra00004",
+          "source_rule_uid": "automation.r23_charger_stopautoclose",
+          "target_rule_uid": "automation.r24_night_closegaragedoor",
+          "association_kind": "direct-condition-disable"
+        },
+        {
+          "candidate_key": "automation.r25_cleanmode_end_resetlatchandwindow->automation.r21_cleanmode_disablelatch|action|direct-action",
+          "scenario_instances": [
+            {
+              "scenario_id": "s1",
+              "title": "Intended clean-session restart",
+              "scenario_type": "boundary_timing",
+              "normal_situation": "Cleaning mode is intentionally turned off to restore the nursery to a secured state, and later a new cleaning session is intentionally started again. In that case, the latch being turned off by the reset rule and then turned on by the clean-mode rule is acceptable because the two actions belong to separate, deliberate cleaning cycles.",
+              "dangerous_situation": "The same off-then-on latch transition happens too quickly because the cleaning switch bounces or is toggled back on immediately after reset. Then the latch is re-disabled right after the nursery was secured, leaving the room easier to open than intended outside a real cleaning session.",
+              "activation_conditions": [
+                {
+                  "kind": "state",
+                  "description": "input_boolean.cleaning_mode_switch transitions from on to off, and then from off back to on in a short interval."
+                },
+                {
+                  "kind": "duration",
+                  "description": "The gap between the reset action and the next clean-mode activation is very short, so the two rules overlap at the boundary of two cleaning cycles."
+                }
+              ],
+              "unexpected_outcomes": [
+                {
+                  "entity_id": "input_boolean.nursery_window_latch",
+                  "post_value": "on",
+                  "why_unexpected": "The latch is re-disabled after the nursery was just restored to a secured state; that is only safe if a new cleaning session is truly starting."
+                }
+              ],
+              "confidence": 0.84,
+              "needs_rule_refinement": true
+            },
+            {
+              "scenario_id": "s2",
+              "title": "Stale clean-mode state after cleanup",
+              "scenario_type": "stale_virtual_state",
+              "normal_situation": "The cleaning-mode state in Home Assistant matches the real-world cleaning activity, so the latch is only turned on while cleaning access is actually needed and turned off again when cleaning ends.",
+              "dangerous_situation": "The cleaning-mode state becomes stale or lags behind reality, so the clean-mode rule turns the latch on even though cleaning has already ended. That overrides the secured reset and leaves the nursery in a less protected state than intended.",
+              "activation_conditions": [
+                {
+                  "kind": "state",
+                  "description": "input_boolean.cleaning_mode_switch reports on even though the real cleaning session has already ended or never actually started."
+                },
+                {
+                  "kind": "other",
+                  "description": "The state update is delayed or stale, so the rule reacts to a virtual on-state instead of the current physical situation."
+                }
+              ],
+              "unexpected_outcomes": [
+                {
+                  "entity_id": "input_boolean.nursery_window_latch",
+                  "post_value": "on",
+                  "why_unexpected": "The target rule re-enables the latch after the reset rule has already returned the nursery to a secured state, which can defeat the intended post-cleaning protection."
+                }
+              ],
+              "confidence": 0.79,
+              "needs_rule_refinement": true
+            }
+          ],
+          "needs_human_review": true,
+          "candidate_id": "ra00005",
+          "source_rule_uid": "automation.r25_cleanmode_end_resetlatchandwindow",
+          "target_rule_uid": "automation.r21_cleanmode_disablelatch",
+          "association_kind": "direct-action"
+        },
+        {
+          "candidate_key": "automation.r25_cleanmode_end_resetlatchandwindow->automation.r22_temphigh_windowopen|action|direct-action",
+          "scenario_instances": [
+            {
+              "scenario_id": "s1",
+              "title": "Clean mode ends while it is still hot",
+              "scenario_type": "boundary_timing",
+              "normal_situation": "input_boolean.cleaning_mode_switch changes from on to off after cleaning is finished, and the intended state is to restore the nursery to a secured configuration by turning input_boolean.nursery_window off. In this case, the opposite action in automation.r22_temphigh_windowopen is not supposed to run because the cleaning-mode condition is no longer satisfied.",
+              "dangerous_situation": "The temperature is still above 30 at the same time that cleaning mode is ending, so automation.r22_temphigh_windowopen can evaluate or fire in the same transition window. If its turn_on action runs after the reset action from automation.r25_cleanmode_end_resetlatchandwindow, the nursery window is reopened immediately after being closed.",
+              "activation_conditions": [
+                {
+                  "kind": "state",
+                  "description": "input_boolean.cleaning_mode_switch transitions from on to off"
+                },
+                {
+                  "kind": "state",
+                  "description": "input_number.nursery_temp_sensor is above 30"
+                },
+                {
+                  "kind": "other",
+                  "description": "automation.r22_temphigh_windowopen is evaluated or queued close to the same moment as the reset action, before the new cleaning-mode state fully suppresses it"
+                }
+              ],
+              "unexpected_outcomes": [
+                {
+                  "entity_id": "input_boolean.nursery_window",
+                  "post_value": "on",
+                  "why_unexpected": "The reset rule is meant to leave the window closed/off when cleaning ends, so a reopen immediately after the reset indicates the opposite action fired at the boundary."
+                }
+              ],
+              "confidence": 0.9,
+              "needs_rule_refinement": true
+            },
+            {
+              "scenario_id": "s2",
+              "title": "Delayed high-temperature replay",
+              "scenario_type": "stale_virtual_state",
+              "normal_situation": "After the nursery is cleaned, the window latch and window are both turned off and remain off. When automation.r22_temphigh_windowopen later checks its conditions, it should see the updated off state for cleaning mode and not reopen the window.",
+              "dangerous_situation": "A delayed or stale evaluation of automation.r22_temphigh_windowopen still sees the pre-reset state as usable, so the window-open action runs after automation.r25_cleanmode_end_resetlatchandwindow has already closed the window. This creates a stale-state reopen that defeats the security reset.",
+              "activation_conditions": [
+                {
+                  "kind": "state",
+                  "description": "input_number.nursery_temp_sensor remains above 30"
+                },
+                {
+                  "kind": "state",
+                  "description": "input_boolean.cleaning_mode_switch has just changed from on to off"
+                },
+                {
+                  "kind": "duration",
+                  "description": "The temperature-triggered evaluation happens immediately after the reset, before state propagation fully settles"
+                }
+              ],
+              "unexpected_outcomes": [
+                {
+                  "entity_id": "input_boolean.nursery_window",
+                  "post_value": "on",
+                  "why_unexpected": "The reset automation explicitly turns the window off, so an on state after the reset means the older open-window behavior was replayed against stale state."
+                }
+              ],
+              "confidence": 0.85,
+              "needs_rule_refinement": true
+            }
+          ],
+          "needs_human_review": true,
+          "candidate_id": "ra00006",
+          "source_rule_uid": "automation.r25_cleanmode_end_resetlatchandwindow",
+          "target_rule_uid": "automation.r22_temphigh_windowopen",
+          "association_kind": "direct-action"
+        },
+        {
+          "candidate_key": "automation.r25_cleanmode_end_resetlatchandwindow->automation.r22_temphigh_windowopen|condition|direct-condition-disable",
+          "scenario_instances": [
+            {
+              "scenario_id": "s1",
+              "title": "Clean cycle ends after cooling is no longer needed",
+              "scenario_type": "boundary_timing",
+              "normal_situation": "Cleaning mode turns off after the nursery has already cooled or temperature is no longer above the threshold. In that case, turning off the nursery window latch is the intended secure reset, and it is acceptable that the temperature rule no longer opens the window.",
+              "dangerous_situation": "Cleaning mode turns off while the nursery is still above the temperature threshold and ventilation is still needed. The latch is then disabled, so the temperature rule cannot open the window even though heat relief is still required.",
+              "activation_conditions": [
+                {
+                  "kind": "state",
+                  "description": "input_boolean.cleaning_mode_switch changes from on to off"
+                },
+                {
+                  "kind": "state",
+                  "description": "input_number.nursery_temp_sensor is above 30 at or shortly after the cleaning-mode reset"
+                },
+                {
+                  "kind": "state",
+                  "description": "input_boolean.nursery_window_latch is turned off by the reset automation"
+                }
+              ],
+              "unexpected_outcomes": [
+                {
+                  "entity_id": "input_boolean.nursery_window",
+                  "post_value": "off",
+                  "why_unexpected": "In the dangerous timing case, the window stays closed even though the high-temperature rule would otherwise have opened it for cooling."
+                }
+              ],
+              "confidence": 0.91,
+              "needs_rule_refinement": true
+            },
+            {
+              "scenario_id": "s2",
+              "title": "Stale latch-off blocks later heat response",
+              "scenario_type": "stale_virtual_state",
+              "normal_situation": "After cleaning ends, the latch-off state is a deliberate reset that prevents an old cleaning permission from reopening the window later. This is acceptable when the room is already at a safe temperature.",
+              "dangerous_situation": "The latch remains off from the previous clean cycle, and later the nursery temperature rises above the trigger threshold. Because the high-temperature window rule requires the latch to be on, the window does not open and the room cannot shed heat.",
+              "activation_conditions": [
+                {
+                  "kind": "state",
+                  "description": "input_boolean.cleaning_mode_switch transitions from on to off, causing the latch reset"
+                },
+                {
+                  "kind": "duration",
+                  "description": "input_boolean.nursery_window_latch remains off after the cleaning session has ended"
+                },
+                {
+                  "kind": "state",
+                  "description": "input_number.nursery_temp_sensor later rises above 30 while the latch is still off"
+                }
+              ],
+              "unexpected_outcomes": [
+                {
+                  "entity_id": "input_boolean.nursery_window",
+                  "post_value": "off",
+                  "why_unexpected": "The temperature-driven opening path is blocked by the disabled latch, so the window does not open even when the nursery becomes hot."
+                }
+              ],
+              "confidence": 0.87,
+              "needs_rule_refinement": true
+            }
+          ],
+          "needs_human_review": true,
+          "candidate_id": "ra00007",
+          "source_rule_uid": "automation.r25_cleanmode_end_resetlatchandwindow",
+          "target_rule_uid": "automation.r22_temphigh_windowopen",
+          "association_kind": "direct-condition-disable"
+        }
+      ],
+      "scenario_audit_rounds": [
+        {
+          "round": 1,
+          "is_complete": true,
+          "reason": "The catalog already covers the key normal-vs-dangerous boundaries for all discovered associations, including timing races, stale mode/state, and the missing reset/exit paths for the nursery clean-mode and garage auto-close chains. No major scenario gap remains.",
+          "revised_candidate_scenarios": []
+        }
+      ],
+      "final_candidate_scenarios": [
+        {
+          "candidate_key": "automation.r21_cleanmode_disablelatch->automation.r22_temphigh_windowopen|condition|direct-condition-allow",
+          "scenario_instances": [
+            {
+              "scenario_id": "s1",
+              "title": "Cleaning ventilation works as intended",
+              "scenario_type": "boundary_timing",
+              "normal_situation": "Cleaning mode is intentionally turned on while the nursery temperature is already above 30, so turning on the window latch is appropriate because it lets the high-temperature rule open the nursery window during supervised cleaning.",
+              "dangerous_situation": "If cleaning mode is enabled at an unintended moment, the same latch-enable step can still satisfy the window-open rule and open the nursery window even though ventilation was not actually desired.",
+              "activation_conditions": [
+                {
+                  "kind": "state",
+                  "description": "input_boolean.cleaning_mode_switch is on"
+                },
+                {
+                  "kind": "state",
+                  "description": "input_boolean.nursery_window_latch is on"
+                },
+                {
+                  "kind": "state",
+                  "description": "input_number.nursery_temp_sensor is above 30"
+                }
+              ],
+              "unexpected_outcomes": [
+                {
+                  "entity_id": "input_boolean.nursery_window",
+                  "post_value": "on",
+                  "why_unexpected": "The window opens as a side effect of the allow-link; this is acceptable only when cleaning is truly intended."
+                }
+              ],
+              "confidence": 0.83,
+              "needs_rule_refinement": true
+            },
+            {
+              "scenario_id": "s2",
+              "title": "Cleaning mode left active too long",
+              "scenario_type": "stale_virtual_state",
+              "normal_situation": "During an active cleaning session, the latch being on is a valid temporary state that keeps the temperature-driven window-opening rule eligible to run.",
+              "dangerous_situation": "If cleaning mode stays on after the cleaning session should have ended, the latch remains permissive and any later high-temperature event can reopen the nursery window when the room was expected to have been restored to a secured state.",
+              "activation_conditions": [
+                {
+                  "kind": "state",
+                  "description": "input_boolean.cleaning_mode_switch remains on beyond the intended cleaning period"
+                },
+                {
+                  "kind": "state",
+                  "description": "input_boolean.nursery_window_latch is on"
+                },
+                {
+                  "kind": "state",
+                  "description": "input_number.nursery_temp_sensor rises above 30 after the session has already ended"
+                }
+              ],
+              "unexpected_outcomes": [
+                {
+                  "entity_id": "input_boolean.nursery_window",
+                  "post_value": "on",
+                  "why_unexpected": "The nursery window opens later from a stale permissive state, which is unsafe because the secured end-of-cleaning reset was not reached in time."
+                }
+              ],
+              "confidence": 0.78,
+              "needs_rule_refinement": true
+            }
+          ]
+        },
+        {
+          "candidate_key": "automation.r21_cleanmode_disablelatch->automation.r25_cleanmode_end_resetlatchandwindow|action|direct-action",
+          "scenario_instances": [
+            {
+              "scenario_id": "s1",
+              "title": "Clean mode ends after a finished cleaning session",
+              "scenario_type": "boundary_timing",
+              "normal_situation": "The nursery is being cleaned, so the latch is intentionally disabled first. When cleaning is finished, cleaning mode is turned off and the reset automation restores the latch to its secured state.",
+              "dangerous_situation": "If this same reset happens while cleaning is still underway, the latch is restored too early and the window is closed before the room is actually ready, interrupting ventilation or access.",
+              "activation_conditions": [
+                {
+                  "kind": "state",
+                  "description": "input_boolean.cleaning_mode_switch changes from on to off after being on for a meaningful cleaning interval"
+                },
+                {
+                  "kind": "state",
+                  "description": "input_boolean.nursery_window_latch was previously turned on by the clean-mode automation"
+                },
+                {
+                  "kind": "duration",
+                  "description": "the on period lasts long enough to represent a real cleaning session rather than a brief toggle"
+                }
+              ],
+              "unexpected_outcomes": [
+                {
+                  "entity_id": "input_boolean.nursery_window_latch",
+                  "post_value": "off",
+                  "why_unexpected": "The latch is restored immediately when cleaning mode ends, which is safe only if cleaning has truly completed."
+                },
+                {
+                  "entity_id": "input_boolean.nursery_window",
+                  "post_value": "off",
+                  "why_unexpected": "The window is also closed by the reset action, which can be disruptive if ventilation is still needed."
+                }
+              ],
+              "confidence": 0.94,
+              "needs_rule_refinement": true
+            },
+            {
+              "scenario_id": "s2",
+              "title": "Cleaning-mode state drifts from real activity",
+              "scenario_type": "stale_virtual_state",
+              "normal_situation": "The cleaning-mode switch accurately reflects the real cleaning state, so turning it off correctly triggers the reset of the latch and window at the right time.",
+              "dangerous_situation": "If the switch state becomes stale or is turned off by mistake while cleaning is still happening, the reset automation runs on outdated state and re-enables the latch and closes the window unexpectedly.",
+              "activation_conditions": [
+                {
+                  "kind": "state",
+                  "description": "input_boolean.cleaning_mode_switch is turned off even though the real cleaning activity is still ongoing"
+                },
+                {
+                  "kind": "other",
+                  "description": "the virtual state of cleaning mode no longer matches the actual room condition"
+                },
+                {
+                  "kind": "absence",
+                  "description": "there is no separate confirmation that cleaning has really finished before the reset fires"
+                }
+              ],
+              "unexpected_outcomes": [
+                {
+                  "entity_id": "input_boolean.nursery_window_latch",
+                  "post_value": "off",
+                  "why_unexpected": "The latch is restored based only on the stale switch state, not on actual completion of cleaning."
+                },
+                {
+                  "entity_id": "input_boolean.nursery_window",
+                  "post_value": "off",
+                  "why_unexpected": "The window closes even though the room may still need access or airflow."
+                }
+              ],
+              "confidence": 0.88,
+              "needs_rule_refinement": true
+            }
+          ]
+        },
+        {
+          "candidate_key": "automation.r22_temphigh_windowopen->automation.r25_cleanmode_end_resetlatchandwindow|action|direct-action",
+          "scenario_instances": [
+            {
+              "scenario_id": "s1",
+              "title": "Planned cleanup reset after ventilation",
+              "scenario_type": "boundary_timing",
+              "normal_situation": "Cleaning mode ends after the nursery has already been ventilated and it is appropriate to restore a secured state; the window close and latch reset from R25 are acceptable after R22 previously opened the window for heat relief.",
+              "dangerous_situation": "Cleaning mode ends while the nursery is still hot and the open window is still needed for cooling; the same reset closes the window too early and removes ventilation.",
+              "activation_conditions": [
+                {
+                  "kind": "state",
+                  "description": "input_boolean.cleaning_mode_switch changes from on to off"
+                },
+                {
+                  "kind": "state",
+                  "description": "input_boolean.nursery_window is on immediately before the reset"
+                },
+                {
+                  "kind": "state",
+                  "description": "input_number.nursery_temp_sensor remains above 30 around the transition"
+                }
+              ],
+              "unexpected_outcomes": [
+                {
+                  "entity_id": "input_boolean.nursery_window_latch",
+                  "post_value": "off",
+                  "why_unexpected": "The latch is cleared as part of the reset; this is acceptable in the normal case, but it can become problematic if the room still needs the open-window state preserved."
+                },
+                {
+                  "entity_id": "input_boolean.nursery_window",
+                  "post_value": "off",
+                  "why_unexpected": "The window is closed as a cleanup-ending reset; this is only safe when ventilation is no longer needed."
+                }
+              ],
+              "confidence": 0.92,
+              "needs_rule_refinement": true
+            },
+            {
+              "scenario_id": "s2",
+              "title": "Stale cleaning-mode state forces an unwanted close",
+              "scenario_type": "stale_virtual_state",
+              "normal_situation": "The cleaning-mode boolean accurately reflects that cleaning is finished, so R25 may safely close the nursery window and clear the latch after R22 opened the window earlier.",
+              "dangerous_situation": "The cleaning-mode boolean is stale, mistaken, or toggled off by accident while the window is still intentionally being used for cooling; R25 then closes the window even though the physical situation still calls for it to remain open.",
+              "activation_conditions": [
+                {
+                  "kind": "state",
+                  "description": "input_boolean.cleaning_mode_switch changes from on to off without the physical cleanup actually being complete"
+                },
+                {
+                  "kind": "state",
+                  "description": "input_boolean.nursery_window is on from the earlier high-temperature opening"
+                },
+                {
+                  "kind": "state",
+                  "description": "input_number.nursery_temp_sensor is still above 30"
+                }
+              ],
+              "unexpected_outcomes": [
+                {
+                  "entity_id": "input_boolean.nursery_window_latch",
+                  "post_value": "off",
+                  "why_unexpected": "A stale mode transition clears the latch even though the system may still need the latch-enabled state for further temperature-driven behavior."
+                },
+                {
+                  "entity_id": "input_boolean.nursery_window",
+                  "post_value": "off",
+                  "why_unexpected": "The reset closes the window despite the ongoing high-temperature context, so the closure is unexpected from the real-world situation even if it matches the rule."
+                }
+              ],
+              "confidence": 0.88,
+              "needs_rule_refinement": true
+            }
+          ]
+        },
+        {
+          "candidate_key": "automation.r23_charger_stopautoclose->automation.r24_night_closegaragedoor|condition|direct-condition-disable",
+          "scenario_instances": [
+            {
+              "scenario_id": "s1",
+              "title": "Charging starts before the night-close window",
+              "scenario_type": "boundary_timing",
+              "normal_situation": "The vehicle begins charging in the evening, and disabling automatic garage closing is correct because the garage should not be closed while charging is in progress.",
+              "dangerous_situation": "The same disabled state is still in effect when the 23:00 closing rule runs, so the garage-close automation is blocked and the garage door can remain open overnight.",
+              "activation_conditions": [
+                {
+                  "kind": "state",
+                  "description": "input_boolean.ev_charger_status changes from off to on"
+                },
+                {
+                  "kind": "time",
+                  "description": "input_datetime.systemtime hour is above 22 and below 24"
+                },
+                {
+                  "kind": "state",
+                  "description": "input_boolean.garage_door is on when the closing window arrives"
+                }
+              ],
+              "unexpected_outcomes": [
+                {
+                  "entity_id": "input_boolean.garage_auto_close_enabled",
+                  "post_value": "off",
+                  "why_unexpected": "The source automation disables the condition needed by the night-close rule, so the expected on state for automatic closing is removed."
+                },
+                {
+                  "entity_id": "input_boolean.garage_door",
+                  "post_value": "on",
+                  "why_unexpected": "The night-close automation may fail to turn the door off because its enabling condition was disabled."
+                }
+              ],
+              "confidence": 0.93,
+              "needs_rule_refinement": true
+            },
+            {
+              "scenario_id": "s2",
+              "title": "Charger status remains on after charging is no longer active",
+              "scenario_type": "stale_virtual_state",
+              "normal_situation": "The charger-status boolean is accurately on during a real charging session, so turning off automatic closing is intentional and prevents interference with charging.",
+              "dangerous_situation": "The charger-status boolean stays on after charging has ended or is falsely reported as on, so automatic closing remains disabled even though the garage should be able to close at night.",
+              "activation_conditions": [
+                {
+                  "kind": "state",
+                  "description": "input_boolean.ev_charger_status is on for an extended period after the initial off-to-on transition"
+                },
+                {
+                  "kind": "duration",
+                  "description": "the on state persists into the nightly closing period instead of returning to off"
+                },
+                {
+                  "kind": "absence",
+                  "description": "no later reset of input_boolean.garage_auto_close_enabled back to on before the night-close trigger"
+                }
+              ],
+              "unexpected_outcomes": [
+                {
+                  "entity_id": "input_boolean.garage_auto_close_enabled",
+                  "post_value": "off",
+                  "why_unexpected": "A stale or false-positive charger state keeps the automatic-close permission disabled longer than intended."
+                },
+                {
+                  "entity_id": "input_boolean.garage_door",
+                  "post_value": "on",
+                  "why_unexpected": "Because the night-close condition is still disabled, the garage door may remain open when it should have been secured."
+                }
+              ],
+              "confidence": 0.88,
+              "needs_rule_refinement": true
+            }
+          ]
+        },
+        {
+          "candidate_key": "automation.r25_cleanmode_end_resetlatchandwindow->automation.r21_cleanmode_disablelatch|action|direct-action",
+          "scenario_instances": [
+            {
+              "scenario_id": "s1",
+              "title": "Intended clean-session restart",
+              "scenario_type": "boundary_timing",
+              "normal_situation": "Cleaning mode is intentionally turned off to restore the nursery to a secured state, and later a new cleaning session is intentionally started again. In that case, the latch being turned off by the reset rule and then turned on by the clean-mode rule is acceptable because the two actions belong to separate, deliberate cleaning cycles.",
+              "dangerous_situation": "The same off-then-on latch transition happens too quickly because the cleaning switch bounces or is toggled back on immediately after reset. Then the latch is re-disabled right after the nursery was secured, leaving the room easier to open than intended outside a real cleaning session.",
+              "activation_conditions": [
+                {
+                  "kind": "state",
+                  "description": "input_boolean.cleaning_mode_switch transitions from on to off, and then from off back to on in a short interval."
+                },
+                {
+                  "kind": "duration",
+                  "description": "The gap between the reset action and the next clean-mode activation is very short, so the two rules overlap at the boundary of two cleaning cycles."
+                }
+              ],
+              "unexpected_outcomes": [
+                {
+                  "entity_id": "input_boolean.nursery_window_latch",
+                  "post_value": "on",
+                  "why_unexpected": "The latch is re-disabled after the nursery was just restored to a secured state; that is only safe if a new cleaning session is truly starting."
+                }
+              ],
+              "confidence": 0.84,
+              "needs_rule_refinement": true
+            },
+            {
+              "scenario_id": "s2",
+              "title": "Stale clean-mode state after cleanup",
+              "scenario_type": "stale_virtual_state",
+              "normal_situation": "The cleaning-mode state in Home Assistant matches the real-world cleaning activity, so the latch is only turned on while cleaning access is actually needed and turned off again when cleaning ends.",
+              "dangerous_situation": "The cleaning-mode state becomes stale or lags behind reality, so the clean-mode rule turns the latch on even though cleaning has already ended. That overrides the secured reset and leaves the nursery in a less protected state than intended.",
+              "activation_conditions": [
+                {
+                  "kind": "state",
+                  "description": "input_boolean.cleaning_mode_switch reports on even though the real cleaning session has already ended or never actually started."
+                },
+                {
+                  "kind": "other",
+                  "description": "The state update is delayed or stale, so the rule reacts to a virtual on-state instead of the current physical situation."
+                }
+              ],
+              "unexpected_outcomes": [
+                {
+                  "entity_id": "input_boolean.nursery_window_latch",
+                  "post_value": "on",
+                  "why_unexpected": "The target rule re-enables the latch after the reset rule has already returned the nursery to a secured state, which can defeat the intended post-cleaning protection."
+                }
+              ],
+              "confidence": 0.79,
+              "needs_rule_refinement": true
+            }
+          ]
+        },
+        {
+          "candidate_key": "automation.r25_cleanmode_end_resetlatchandwindow->automation.r22_temphigh_windowopen|action|direct-action",
+          "scenario_instances": [
+            {
+              "scenario_id": "s1",
+              "title": "Clean mode ends while it is still hot",
+              "scenario_type": "boundary_timing",
+              "normal_situation": "input_boolean.cleaning_mode_switch changes from on to off after cleaning is finished, and the intended state is to restore the nursery to a secured configuration by turning input_boolean.nursery_window off. In this case, the opposite action in automation.r22_temphigh_windowopen is not supposed to run because the cleaning-mode condition is no longer satisfied.",
+              "dangerous_situation": "The temperature is still above 30 at the same time that cleaning mode is ending, so automation.r22_temphigh_windowopen can evaluate or fire in the same transition window. If its turn_on action runs after the reset action from automation.r25_cleanmode_end_resetlatchandwindow, the nursery window is reopened immediately after being closed.",
+              "activation_conditions": [
+                {
+                  "kind": "state",
+                  "description": "input_boolean.cleaning_mode_switch transitions from on to off"
+                },
+                {
+                  "kind": "state",
+                  "description": "input_number.nursery_temp_sensor is above 30"
+                },
+                {
+                  "kind": "other",
+                  "description": "automation.r22_temphigh_windowopen is evaluated or queued close to the same moment as the reset action, before the new cleaning-mode state fully suppresses it"
+                }
+              ],
+              "unexpected_outcomes": [
+                {
+                  "entity_id": "input_boolean.nursery_window",
+                  "post_value": "on",
+                  "why_unexpected": "The reset rule is meant to leave the window closed/off when cleaning ends, so a reopen immediately after the reset indicates the opposite action fired at the boundary."
+                }
+              ],
+              "confidence": 0.9,
+              "needs_rule_refinement": true
+            },
+            {
+              "scenario_id": "s2",
+              "title": "Delayed high-temperature replay",
+              "scenario_type": "stale_virtual_state",
+              "normal_situation": "After the nursery is cleaned, the window latch and window are both turned off and remain off. When automation.r22_temphigh_windowopen later checks its conditions, it should see the updated off state for cleaning mode and not reopen the window.",
+              "dangerous_situation": "A delayed or stale evaluation of automation.r22_temphigh_windowopen still sees the pre-reset state as usable, so the window-open action runs after automation.r25_cleanmode_end_resetlatchandwindow has already closed the window. This creates a stale-state reopen that defeats the security reset.",
+              "activation_conditions": [
+                {
+                  "kind": "state",
+                  "description": "input_number.nursery_temp_sensor remains above 30"
+                },
+                {
+                  "kind": "state",
+                  "description": "input_boolean.cleaning_mode_switch has just changed from on to off"
+                },
+                {
+                  "kind": "duration",
+                  "description": "The temperature-triggered evaluation happens immediately after the reset, before state propagation fully settles"
+                }
+              ],
+              "unexpected_outcomes": [
+                {
+                  "entity_id": "input_boolean.nursery_window",
+                  "post_value": "on",
+                  "why_unexpected": "The reset automation explicitly turns the window off, so an on state after the reset means the older open-window behavior was replayed against stale state."
+                }
+              ],
+              "confidence": 0.85,
+              "needs_rule_refinement": true
+            }
+          ]
+        },
+        {
+          "candidate_key": "automation.r25_cleanmode_end_resetlatchandwindow->automation.r22_temphigh_windowopen|condition|direct-condition-disable",
+          "scenario_instances": [
+            {
+              "scenario_id": "s1",
+              "title": "Clean cycle ends after cooling is no longer needed",
+              "scenario_type": "boundary_timing",
+              "normal_situation": "Cleaning mode turns off after the nursery has already cooled or temperature is no longer above the threshold. In that case, turning off the nursery window latch is the intended secure reset, and it is acceptable that the temperature rule no longer opens the window.",
+              "dangerous_situation": "Cleaning mode turns off while the nursery is still above the temperature threshold and ventilation is still needed. The latch is then disabled, so the temperature rule cannot open the window even though heat relief is still required.",
+              "activation_conditions": [
+                {
+                  "kind": "state",
+                  "description": "input_boolean.cleaning_mode_switch changes from on to off"
+                },
+                {
+                  "kind": "state",
+                  "description": "input_number.nursery_temp_sensor is above 30 at or shortly after the cleaning-mode reset"
+                },
+                {
+                  "kind": "state",
+                  "description": "input_boolean.nursery_window_latch is turned off by the reset automation"
+                }
+              ],
+              "unexpected_outcomes": [
+                {
+                  "entity_id": "input_boolean.nursery_window",
+                  "post_value": "off",
+                  "why_unexpected": "In the dangerous timing case, the window stays closed even though the high-temperature rule would otherwise have opened it for cooling."
+                }
+              ],
+              "confidence": 0.91,
+              "needs_rule_refinement": true
+            },
+            {
+              "scenario_id": "s2",
+              "title": "Stale latch-off blocks later heat response",
+              "scenario_type": "stale_virtual_state",
+              "normal_situation": "After cleaning ends, the latch-off state is a deliberate reset that prevents an old cleaning permission from reopening the window later. This is acceptable when the room is already at a safe temperature.",
+              "dangerous_situation": "The latch remains off from the previous clean cycle, and later the nursery temperature rises above the trigger threshold. Because the high-temperature window rule requires the latch to be on, the window does not open and the room cannot shed heat.",
+              "activation_conditions": [
+                {
+                  "kind": "state",
+                  "description": "input_boolean.cleaning_mode_switch transitions from on to off, causing the latch reset"
+                },
+                {
+                  "kind": "duration",
+                  "description": "input_boolean.nursery_window_latch remains off after the cleaning session has ended"
+                },
+                {
+                  "kind": "state",
+                  "description": "input_number.nursery_temp_sensor later rises above 30 while the latch is still off"
+                }
+              ],
+              "unexpected_outcomes": [
+                {
+                  "entity_id": "input_boolean.nursery_window",
+                  "post_value": "off",
+                  "why_unexpected": "The temperature-driven opening path is blocked by the disabled latch, so the window does not open even when the nursery becomes hot."
+                }
+              ],
+              "confidence": 0.87,
+              "needs_rule_refinement": true
+            }
+          ]
+        }
+      ],
+      "rule_update_plan": {
+        "candidate_reports": [],
+        "rule_updates": [],
+        "needs_human_review": true,
+        "error": "AI connection error: HTTPSConnectionPool(host='aiapi.exe.xyz', port=443): Read timed out. (read timeout=120)"
+      },
+      "accepted_updates": [],
+      "invalid_updates": [],
+      "stopped_reason": "no_valid_rule_updates"
+    }
+  ],
+  "final_iteration_index": 1,
+  "final_files": {
+    "automations": "E:\\Programming\\MyWork\\HomeAgent\\src\\configurations\\home\\iterations\\it1\\automations-it1.yaml",
+    "tcae": "E:\\Programming\\MyWork\\HomeAgent\\src\\configurations\\home\\iterations\\it1\\tcae-it1.json",
+    "rule_association_graph": "E:\\Programming\\MyWork\\HomeAgent\\src\\configurations\\home\\iterations\\it1\\rule_association_graph-it1.json",
+    "unexpected_state_transition_graph": "E:\\Programming\\MyWork\\HomeAgent\\src\\configurations\\home\\iterations\\it1\\unexpected_state_transition_graph-it1.json"
+  },
+  "final_candidate_reports": [
+    {
+      "candidate_key": "automation.r21_cleanmode_disablelatch->automation.r22_temphigh_windowopen|condition|direct-condition-allow",
+      "coverage_status": "needs_more_iteration",
+      "reason": "The missing reset and stale-latch path in s2 can be addressed with rule updates, but s1 still cannot be cleanly distinguished from unsafe use because the system has no supervision/occupancy signal for validating whether cleaning mode is intentionally active.",
+      "remaining_context_gaps": [
+        {
+          "scenario_id": "s1",
+          "reason": "Cleaning mode can be enabled outside a supervised cleaning session, and there is no existing entity to distinguish intentional ventilation from unsafe or unsupervised enabling."
+        }
+      ],
+      "needs_human_review": true
+    }
+  ],
+  "summary": {
+    "iteration_count": 2,
+    "final_candidate_count": 7,
+    "total_scenario_instance_count": 16,
+    "accepted_rule_update_count": 2,
+    "invalid_rule_update_count": 0,
+    "coverage_status_counts": {
+      "needs_more_iteration": 1
+    },
+    "final_stopped_reason": "no_valid_rule_updates"
+  }
+}

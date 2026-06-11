@@ -15,9 +15,10 @@
     target:
       entity_id: input_boolean.nursery_window_latch
   mode: single
-- id: '1780849846827'
-  alias: R22_TempHigh_WindowOpen
-  description: 温度高，童锁disabled，开窗
+- alias: R22_TempHigh_WindowOpen
+  description: Only open the nursery window when temperature is high, the latch is
+    enabled, and cleaning mode is currently active. This prevents stale latch state
+    from reopening the window after cleaning ends.
   trigger:
   - platform: numeric_state
     entity_id:
@@ -27,6 +28,9 @@
   - condition: state
     entity_id: input_boolean.nursery_window_latch
     state: 'on'
+  - condition: state
+    entity_id: input_boolean.cleaning_mode_switch
+    state: 'on'
   action:
   - service: input_boolean.turn_on
     metadata: {}
@@ -34,6 +38,7 @@
     target:
       entity_id: input_boolean.nursery_window
   mode: single
+  id: '1780849846827'
 - id: '1780849977378'
   alias: R23_Charger_StopAutoClose
   description: 刚开始充电，禁用自动关门
@@ -75,3 +80,26 @@
     target:
       entity_id: input_boolean.garage_door
   mode: single
+- alias: R25_CleanMode_End_ResetLatchAndWindow
+  description: When cleaning mode turns off, restore the nursery to a secured state
+    by turning off the window latch and closing the window.
+  trigger:
+  - platform: state
+    entity_id:
+    - input_boolean.cleaning_mode_switch
+    from: 'on'
+    to: 'off'
+  condition: []
+  action:
+  - service: input_boolean.turn_off
+    metadata: {}
+    data: {}
+    target:
+      entity_id: input_boolean.nursery_window_latch
+  - service: input_boolean.turn_off
+    metadata: {}
+    data: {}
+    target:
+      entity_id: input_boolean.nursery_window
+  mode: single
+  id: it01_c001

@@ -1,4 +1,15 @@
-## HomeGuard
+## HomeAgent
+
+### 思考
+
+1. 非预期状态为什么会发生？
+  1. 规则关联模式角度：规则之间存在多样的关联模式，可能会导致非预期状态的发生
+  2. 特殊情境：即使相同的规则关联模式，在不同情况下表现不同，例如R21与R22育儿室清洁模式开启后，如果是正常清洁，R22的开窗规则是没有问题的，但是如果是已经境界完成，但是忘记关闭清洁模式，那么R22的开窗规则就出现了问题
+  3. 虚拟与现实的映射：R21如果是清洁模式，是否始终保持清洁模式？本工作前提是虚拟与现实的映射是正确的，但是规则对情景定义的不足会导致虚拟与现实的映射出现偏差，因此在这一方面应当避免
+2. 解决方案：
+  1. 规则关联模式：更新规则列表，迭代更新足够详细的情境，细化得到非预期状态的情境，从而进行避免，新设置的规则只能够依赖已有的设备，而不能新增,规则补全的目的是使得当前的规则能够很好地区分所有情境与非预期状态情境，因此判断标准也是如此，每次迭代都要给出当前的图，当前已经区分的情境，让AI查看是否还有特殊情景没有发现，如果有的话再尝试规则补全以进行情境区分
+  2. 对于无法避免的情境，则使用处理策略,非预期状态处理策略的目的是处理发生的非预期状态情境
+  3. 对于以上两种解决方案，都有个保底方案，即通知用户，例如长时间没有更改清洁模式，则设一个清洁模式半小时后，童锁如果disabled状态，则enable童锁，然后通知用户；对于处理策略，则是通知用户预期执行某个操作，是否同意，还是执行器其他操作
 
 ### TODO
 
@@ -15,22 +26,26 @@
     - [X] 边定义
   - [X] 规则关联非预期结果定义（即违反实体常态配置）
   - [X] 非预期状态转换图（规则关联图根据实体常态配置得到的结果）
-- [ ] 方案设计【Agent+】
+- [X] 方案设计【Agent+】
   - [X] zone+channel感知
   - [X] TCAE建模
   - [X] 规则关联图生成算法（静态代码分析）
   - [X] 非预期状态转换图生成算法（规则关联图根据实体常态配置得到的结果）
-  - [X] 非预期状态处理策略生成算法（家庭环境上下文+产生关联的规则事件上下文+模板+AI判断）
-  - [ ] 图游走算法
-- [ ] 规则关联边定义与规则冲突实例设计（8+8）
-  - [ ] 触发（直接/间接） $\rightarrow 2$
-  - [ ] 条件（使允许/使禁用）（直接/间接） $\rightarrow 2\times 2=4$
-  - [ ] 执行动作 $\rightarrow 2$
+  - [ ] 非预期状态转换图迭代算法
+    - [ ] 实例生成（寻找会产生非预期状态的情境实例）：相同的规则关联不一定会导致非预期状态，一些非预期结果仅仅实在特殊情况下发生，需要AI根据图与冲突处理策略生成仍旧存在的异常状态实例
+    - [ ] 规则补全（包括**情境进行补齐**，用规则补全的方法对情境进行区分，从而避免情境补全导致的非预期状态的发生），例如R21与R22育儿室清洁模式开启后，久久没关闭，那么是否会出现是用户忘记关闭清洁模式，设定对应的规则避免这种情况，补全规则时只能复用已有的设备，而不能定义新的设备，如果设备实在不支持情境补齐，例如这里的车库自动关门模式没法通过定义打开，则采用保底规则：触发器是变成充电状态10分钟后，条件是车库门不允许自动关闭，动作是通知用户改变“车库门自动关闭许可”，然后图关联算法和非预期转换图生成要重新执行
+    - [ ] 迭代以上两步流程直到所有的情境被查出且都有规则进行详细区分
+  - [X] 规则补全不能够保证非预期状态不再出现，还是要搭配非预期状态处理策略，即预期状态处理策略生成算法（家庭环境上下文+产生关联的规则事件上下文+模板+AI判断），处理策略也有个保底：通知用户默认执行某个操作
+  - [X] 图游走算法
+- [X] 规则关联边定义与非预期状态实例设计（8+8）
+  - [X] 触发（直接/间接） $\rightarrow 2$
+  - [X] 条件（使允许/使禁用）（直接/间接） $\rightarrow 2\times 2=4$
+  - [X] 执行动作（直接/间接）$\rightarrow 2$
 - [ ] 实验与优化（反哺设计）
   - [ ] 之前定义的判断标准是：规则交互/冲突类型是否检测到，但是不同方案设计并不相同，因此结果展示效果不好
 - [ ] 其他实验比对
-  - [ ] 冲突检测结果（设计的冲突是否检测出来）
-  - [ ] 冲突应对效果
+  - [ ] 检测结果（设计的冲突是否检测出来）
+  - [ ] 应对效果
   - [ ] 性能
 
 ### 环境配置
@@ -66,7 +81,8 @@ HomeAgent/
     ├── 3_build_rule_association_graph.py         //根据TCAE生成规则关联图
     ├── 4_generate_normal_config.py               //用AI生成实体常态配置
     ├── 5_build_unexpected_state_transition_graph.py //根据常态配置剪枝生成非预期状态转换图
-    ├── 6_generate_resolution_rules.py            //根据常态、家庭环境、关联模式和模板生成处理规则
+    ├── 6_iterative_refinement_plan.py            //非预期状态图迭代算法
+    ├── 7_generate_resolution_rules.py            //非预期状态处理策略算法
     │
     ├── configurations/
     │   ├── config.json                           //系统配置文件
@@ -590,18 +606,22 @@ $$
   - **动作节点非预期后态**
     - 若存在：$(e,v')\in\operatorname{Post}(v_r^A)$ 满足：$e\in\mathcal{E}_n$，且：$N_e(v')=0$，则称动作节点 $v_r^A$ 可能产生非预期后态。
     - 定义为：$\operatorname{Abn}_{\mathcal{N}}(v_r^A)\Longleftrightarrow \exists(e,v')\in\operatorname{Post}(v_r^A),\ e\in\mathcal{E}_n\land N_e(v')=0$
-- **规则关联非预期结果**：规则关联本身不是非预期结果，只有当某条关联路径最终到达一个可能产生非预期后态的动作节点时，才认为该关联路径诱导了规则关联非预期结果。
+- **规则关联非预期结果**：规则关联本身不是非预期结果，只有当某条关联路径最终到达一个与实体常态配置相关的动作节点时，才认为该路径需要进入非预期状态分析。
+  - 这里的“与实体常态配置相关”包括两种情况：
+    1. 该终点动作会把实体**推离常态**；
+    2. 该终点动作本来会把实体**拉回常态**，但这条路径表达的是该动作可能被上游关联**禁止、绕过或取消**。
+  - 因此，非预期状态分析不仅保留“危险动作”，也保留“恢复常态但可能被阻止的动作”。
   - **终止于动作节点的关联路径**
     - 设 $p=\langle v_0,v_1,\dots,v_k\rangle$ 是一条关联路径
     - 若 $v_k\in V^A$，则该路径终止于动作节点
   - **规则关联非预期结果**
-    - 若路径 $p$ 满足以下条件，则称路径 $p$ 诱导一个规则关联非预期结果
+    - 若路径 $p$ 满足以下条件，则称路径 $p$ 诱导一个需要进一步分析的规则关联非预期结果
       1. $p$ 是关联路径；
       2. $p$ 终止于动作节点 $v_k\in V^A$；
-      3. 该动作节点可能产生非预期后态：$\operatorname{Abn}_{\mathcal{N}}(v_k)$
-    - 定义：$\operatorname{UOutcome}_{\mathcal{N}}(p)\Longleftrightarrow \operatorname{AssocPath}(p)\land \operatorname{last}(p)\in V^A\land \operatorname{Abn}_{\mathcal{N}}(\operatorname{last}(p))$
-      - $\operatorname{AssocPath}(p)$ 表示 $p$ 是关联路径
-      - $\operatorname{last}(p)$ 表示路径终点节点
+      3. 该动作节点作用于某个已配置常态的实体，即 $\exists(e,v')\in\operatorname{Post}(v_k),\ e\in\mathcal{E}_n$
+    - 定义：$\operatorname{UOutcome}_{\mathcal{N}}(p)\Longleftrightarrow \operatorname{AssocPath}(p)\land \operatorname{last}(p)\in V^A\land \exists(e,v')\in\operatorname{Post}(\operatorname{last}(p)),\ e\in\mathcal{E}_n$
+      - 若进一步满足 $N_e(v')=0$，则该动作属于**弱非预期后态**；
+      - 若 $N_e(v')=1$，则该动作属于**恢复常态动作**，但其路径仍需保留，因为该动作可能在运行时被上游关联阻止，从而导致实体无法回到常态。
 - **运行时严格非预期结果**：
   - 在运行时，可以观测到动作执行前后的实体状态 $v\to v'$，因此使用严格定义：$\operatorname{RUOutcome}_{\mathcal{N}}(p,t)\Longleftrightarrow \exists(e,v\to v')\in\operatorname{Trans}_t(\operatorname{last}(p)),\operatorname{Unexpected}_{\mathcal{N}}(e,v\to v')$
   - $\operatorname{Trans}_t(\operatorname{last}(p))$ 表示路径终点动作节点在运行时 $t$ 实际诱导的状态转换集合
@@ -876,9 +896,23 @@ Output: Rule Association Graph G_RA = (V, E, ell)
 
 #### 非预期状态转换图生成算法（规则关联图根据实体常态配置得到的结果）
 
-1. 基于AI判断哪些是安全敏感的设备，从而配置设备常态
-2. 人工审核是否需要调整设备的实体常态配置
-3. 基于实体常态配置与规则关联图，剪枝实现非预期状态转换图生成算法，伪代码如下
+1. 基于 AI 判断哪些是安全敏感实体，并生成实体常态配置；
+2. 人工审核是否需要调整实体常态配置；
+3. 基于实体常态配置与规则关联图生成非预期状态转换图。
+
+与传统只保留“危险动作”的做法不同，本工作保留两类终点动作：
+
+- **弱非预期动作**：动作后态本身偏离常态；
+- **恢复常态动作**：动作后态本身符合常态，但该动作若被上游关联禁止或绕过，也可能使系统停留在非常态。
+
+因此，只要一条关联路径的终点动作作用于一个已配置常态的实体，该路径就应进入非预期状态转换图。
+
+同时，为了便于后续检查与运行时映射，若某条规则的任一组件节点进入非预期状态转换图，则该规则的内部路径必须补全为：
+
+- $T \rightarrow C \rightarrow A$，或
+- $T \rightarrow A$
+
+算法伪代码如下：
 
 ```
 Algorithm BuildUnexpectedStateTransitionGraph(G_RA, TCAE, NormalConfig)
@@ -889,195 +923,483 @@ Input :
 Output:
   G_UST = (V_U, E_U, ell_U), Unexpected State Transition Graph
   P_U, unexpected association paths
-  Out_U, path-to-unexpected-post-state annotations
+  Out_U, path-to-terminal-action annotations
 
-1  ActionPost <- empty map from action node id to post-state set
-2  AbnormalActions <- empty map from action node id to unexpected post-states
-3  for each rule r in TCAE.rules do
-4      a_node <- node id of v_r^A
-5      for each action a in A_r do
-6          e <- target entity of action a
-7          Posts <- abstract post-state set of a
-8          for each v' in Posts do
-9              add (e, v') to ActionPost[a_node]
-10             if e is configured in NormalConfig and N_e(v') = 0 then
-11                 add (e, v') to AbnormalActions[a_node]
-12 end for
-13 P_U <- empty list
-14 for each terminal action node vA in AbnormalActions.keys do
-15     perform bounded reverse DFS in G_RA from vA
-16     during DFS, keep node sequence p and edge sequence ep
-17     if p contains at least one association edge and last(p)=vA then
-18         if PositiveOnly is false or path_polarity(p) = +1 then
-19             add p to P_U
-20             Out_U[p] <- AbnormalActions[vA]
-21 end for
-22 V_U <- all nodes appearing in paths P_U
-23 E_U <- all edges appearing in paths P_U
-24 ell_U <- restriction of ell to E_U
-25 return G_UST = (V_U, E_U, ell_U), P_U, Out_U
+1  ActionPost <- extract all action post-states from TCAE
+2  TerminalActions <- empty map
+3  for each action node v_r^A in ActionPost do
+4      if v_r^A targets any entity e configured in NormalConfig then
+5          add Post(v_r^A) to TerminalActions[v_r^A]
+6          mark each post as toward_normal or away_from_normal
+7      end if
+8  end for
+9  P_U <- empty list
+10 for each terminal action node vA in TerminalActions do
+11     perform bounded reverse DFS in G_RA from vA
+12     keep every association path p ending at vA
+13     if PositiveOnly is false or path_polarity(p) = +1 then
+14         add p to P_U
+15         Out_U[p] <- TerminalActions[vA]
+16     end if
+17 end for
+18 V_U <- all nodes appearing in P_U
+19 E_U <- all edges appearing in P_U
+20 for each rule r that already appears in V_U do
+21     add its full intra-rule control flow to G_UST
+22     // T -> C -> A or T -> A
+23 end for
+24 return G_UST = (V_U, E_U, ell_U), P_U, Out_U
 ```
 
-#### 非预期状态处理策略生成算法（家庭环境上下文+产生关联的规则事件上下文+模板+AI判断）
+#### 非预期状态转换图迭代算法
 
-- 将图中的非预期路径规约为若干“源动作规则 $r_i$ 与目标规则 $r_j$”之间的局部关联模式，然后结合家庭环境上下文、两条规则的 TCAE 上下文、关联方式、非预期后态以及处理策略模板，由 AI 选择一个可执行的处理策略。
-- 核心思想如下：
-  - 对于直接关联，若存在 $v_{r_i}^A \rightarrow v_{r_j}^{T/C/A}$，则构造规则对 $(r_i,r_j)$；
-  - 对于间接关联，若存在 $v_{r_i}^A \rightarrow v_{z,c}^E \rightarrow v_{r_j}^{T/C/A}$，则构造规则对 $(r_i,r_j)$；
-  - 只对两两规则之间的局部连接生成策略，不把完整长路径整体发送给 AI；
-  - 若多个非预期路径包含同一个局部规则关联，则合并其证据、路径 ID 和非预期后态；
-  - AI 的输入由四部分组成：
-    1. 家庭环境上下文：实体列表、实体所属区域、实体关联物理通道、实体常态配置；
-    2. 源规则 $r_i$ 的 TCAE 信息；
-    3. 目标规则 $r_j$ 的 TCAE 信息；
-    4. 两条规则之间的关联方式、相关边、环境中继节点、可能导致的非预期后态、处理策略模板。
+本阶段的目标不是直接生成处理策略，而是**持续发现非预期状态发生的边界情境，并用规则补全或规则修改把这些情境区分清楚**。
 
-| 策略编号 | 策略名称                               | 含义                                                     |
-| -------: | -------------------------------------- | -------------------------------------------------------- |
-|        0 | `default`                            | 默认执行，不进行干预                                     |
-|        1 | `only_first_triggered`               | 只执行先触发规则，并禁止后触发规则动作                   |
-|        2 | `only_later_triggered`               | 只执行后触发规则，并撤销先触发规则动作                   |
-|        3 | `force_lexicographic_first`          | 强制保留规则 ID 字典序较小的规则，并撤销或禁止另一条规则 |
-|        4 | `force_lexicographic_second`         | 强制保留规则 ID 字典序较大的规则，并撤销或禁止另一条规则 |
-|        5 | `both_end_with_lexicographic_second` | 两条规则都执行，但以规则 ID 字典序较大的规则作为最终状态 |
-|        6 | `both_end_with_lexicographic_first`  | 两条规则都执行，但以规则 ID 字典序较小的规则作为最终状态 |
-|        7 | `cancel_both`                        | 取消两条规则执行                                         |
+核心思想如下：
 
-- 算法伪代码：
+- 相同的规则关联不一定总会导致非预期状态；
+- 非预期状态往往只在**特殊情境**下发生，例如：
+  - 时间边界；
+  - 模式长期未恢复；
+  - 虚拟状态与现实情境不再一致；
+  - 缺少恢复规则或退出规则；
+- 因此系统不能只看“关联是否存在”，还要继续问：
+  - 该关联在什么情况下是正常的？
+  - 在什么情况下会变成危险的？
+  - 当前规则是否已经足够区分这两类情境？
 
-```
-Algorithm GenerateResolutionRules(G_UST, TCAE, Devices, Channels, Zones, NormalConfig, Templates)
+算法流程如下：
+
+1. 从非预期状态转换图中抽取终点规则关联候选；
+2. 对每个候选，由 AI 生成可能导致非预期状态的**情境实例**；
+3. 让 AI 检查当前规则是否已经足够区分“正常情境”和“危险情境”；
+4. 若不足，则提出两类规则更新建议：
+   - **规则补全**：新增一条规则；
+   - **规则修改**：修改已有规则定义；
+5. 规则更新只能复用已有设备与实体，不能新增设备；
+6. 若某些情境仍无法通过规则区分，则记录为**剩余情境缺口**，并给出通知保底建议；
+7. 将已接受的规则更新重新作为上下文输入，继续下一轮检查；
+8. 直到没有新的特殊情境，或当前规则已经足够区分已发现的情境边界。
+
+算法伪代码如下：
+
+```text
+Algorithm IterativeRefineUnexpectedScenarios(G_UST, TCAE, HomeContext)
 Input :
-  G_UST        = (V_U, E_U, ell_U), unexpected state transition graph
-  TCAE         = TCAE rule set R = {r1, ..., rn}
-  Devices      = extracted Home Assistant entity information
-  Channels     = entity-channel bindings
-  Zones        = human-reviewed entity-zone bindings
-  NormalConfig = entity normal-state predicates
-  Templates    = predefined resolution strategy templates
-
-Parameters:
-  TerminalOnly = true
-      // If true, only generate policies for local associations whose target rule
-      // is the terminal unexpected-action rule.
-  RPM = 10
-      // AI request rate limit.
-
+  G_UST        = unexpected state transition graph
+  TCAE         = current rule set
+  HomeContext  = entities, zones, channels, normal config
 Output:
-  ResolutionRules, AI-selected handling policies for terminal pairwise rule associations
+  IterativeRefinementPlan
 
-1   EdgeMap <- map edge_id to edge in G_UST
-2   NodeMap <- map node_id to node in G_UST
-3   PairCandidates <- empty map
-4   for each unexpected path p in G_UST.unexpected_paths do
-5       EdgeSeq <- edges of p according to p.edges
-6       NodeSeq <- nodes of p according to p.nodes
-7       TerminalAction <- p.terminal_action_node
-8       TerminalRule <- RuleOf(TerminalAction)        // TerminalRule is the rule whose action node produces the weak unexpected post-state.
-9       for each edge e in EdgeSeq do
-10          if e.kind in {direct-trigger, direct-condition-allow, direct-condition-disable, direct-action} then
-11              SourceNode <- source(e)
-12              TargetNode <- target(e)
-13              if SourceNode is action node v_ri^A and TargetNode is component node v_rj^{T/C/A} then
-14                  SourceRule <- RuleOf(SourceNode)
-15                  TargetRule <- RuleOf(TargetNode)
-16                  TargetComponent <- ComponentOf(TargetNode)
-17                  if SourceRule = TargetRule then
-18                      continue
-19                  end if
-20                  if TerminalOnly = true and TargetRule != TerminalRule then
-21                      continue
-                      // Do not generate policy for remote intermediate links.
-                      // Example: in R12 -> R3 -> R15 -> R2, only R15 -> R2 is kept.
-22                  end if
-23                  key <- MakeCandidateKey( SourceRule, TargetRule, TargetComponent, e.kind, via_environment = null)
-24                  merge edge e, path p, and p.out_U into PairCandidates[key]
-25              end if
-26          end if
-27      end for
-28      for each adjacent edge pair (e1, e2) in EdgeSeq do
-29          if e1.kind = env-association and e2.kind in {env-trigger,   indirect-condition-allow,   indirect-condition-disable,   indirect-action} and target(e1) = source(e2) then
-30              SourceNode <- source(e1)
-31              EnvNode <- target(e1)
-32              TargetNode <- target(e2)
-33              if SourceNode is action node v_ri^A     and EnvNode is environment node v_{z,c}^E     and TargetNode is component node v_rj^{T/C/A} then
-34                  SourceRule <- RuleOf(SourceNode)
-35                  TargetRule <- RuleOf(TargetNode)
-36                  TargetComponent <- ComponentOf(TargetNode)
-37                  EnvInfo <- (zone(EnvNode), channel(EnvNode))
-
-38                  if SourceRule = TargetRule then
-39                      continue
-40                  end if
-
-41                  if TerminalOnly = true and TargetRule != TerminalRule then
-42                      continue
-                      // Only keep indirect local associations entering the
-                      // terminal unexpected rule.
-43                  end if
-44                  key <- MakeCandidateKey(SourceRule, TargetRule, TargetComponent, e2.kind, via_environment = EnvInfo )
-45                  merge edge pair (e1, e2), path p, and p.out_U into PairCandidates[key]
-46              end if
-47          end if
-48      end for
-49  end for
-50  HomeContext <- BuildHomeContext(Devices, Channels, Zones, NormalConfig)
-51  ResolutionRules <- empty list
-52  for each candidate q in PairCandidates do
-53      ri <- q.source_rule_uid
-54      rj <- q.target_rule_uid
-55      SourceRuleContext <- TCAE[ri]
-56      TargetRuleContext <- TCAE[rj]
-57      AIPayload <- {
-58          home_context: HomeContext,
-59          source_rule: SourceRuleContext,
-60          target_rule: TargetRuleContext,
-61          association_candidate: q,
-62          unexpected_outcomes: q.unexpected_outcomes,
-63          strategy_templates: Templates,
-64          constraints: {
-65              select_exactly_one_strategy: true,
-66              strategy_id_must_be_one_of: TemplateIDs(Templates),
-67              return_strict_json_only: true
-68          }
-69      }
-70      wait according to RPM limit
-71      AIResponse <- QueryAI(AIPayload)
-72      Policy <- ValidateAndNormalize(AIResponse, Templates)
-73      if Policy.confidence < ReviewThreshold then
-74          Policy.needs_human_review <- true
-75      end if
-76      add {
-77          resolution_rule_id,
-78          candidate_id: q.candidate_id,
-79          source_rule_uid: ri,
-80          target_rule_uid: rj,
-81          target_component: q.target_component,
-82          association_kind: q.association_kind,
-83          association_mode: q.association_mode,
-84          via_environment: q.via_environment,
-85          unexpected_outcomes: q.unexpected_outcomes,
-86          path_ids: q.path_ids,
-87          edge_ids: q.edge_ids,
-88          policy: Policy
-89      } to ResolutionRules
-90  end for
-91  return ResolutionRules
+1  Candidates <- ExtractTerminalPairwiseCandidates(G_UST)
+2  for each candidate q in Candidates do
+3      AcceptedUpdates <- empty set
+4      RoundHistory <- empty list
+5      repeat
+6          Scenarios <- AskAIToGenerateBoundaryScenarios(q, TCAE, HomeContext, AcceptedUpdates, RoundHistory)
+7          Gaps <- AskAIWhetherCurrentRulesStillMissSpecialContexts(Scenarios, TCAE, AcceptedUpdates)
+8          if Gaps is empty then
+9              break
+10         end if
+11         Updates <- AskAIToProposeRuleUpdates(Gaps, TCAE, HomeContext)
+12         Keep only updates that reuse existing entities
+13         Add accepted updates to AcceptedUpdates
+14         Append current round result to RoundHistory
+15     until no new scenario or no valid update or iteration limit reached
+16     Save candidate report
+17 end for
+18 return IterativeRefinementPlan
 ```
 
-- 保守回退策略：
-  - 当 AI 不可用或输出无效时，系统使用保守回退策略：
-    - 若非预期后态安全等级为 `high` 或 `critical`，且源规则与终止规则不同，则默认选择 `S2_ONLY_FIRST_BLOCK_LATER`，并标记 `needs_human_review=true`；
-    - 若非预期后态为 `critical` 但关联关系不清晰，则默认选择 `S8_CANCEL_BOTH`，并要求人工审核；
-    - 其他情况选择 `S1_DEFAULT`，仅报告并等待运行时严格验证。
+输出结果应包含：
+
+- `scenario_instances`：已发现的危险情境实例；
+- `rule_updates`：规则补全或规则修改建议；
+- `remaining_context_gaps`：仍无法用规则区分的情境；
+- `notify_fallbacks`：无法进一步细化时的通知保底建议。
+
+#### 非预期状态处理策略生成算法
+
+本阶段的目标是：**只处理第 6 步之后仍然存在的非预期状态情境**。
+
+也就是说：
+
+- 第 6 步优先尝试通过规则补全或规则修改消除风险；
+- 第 7 步只负责那些**仍无法避免**、需要在运行时处理的剩余情境。
+
+核心思想如下：
+
+- 将非预期状态转换图中的路径规约为若干**终点局部规则关联**；
+- 结合第 6 步输出的情境实例、规则更新建议和剩余缺口；
+- 若某个候选已经被规则更新充分覆盖，则默认不再做运行时干预；
+- 若仍存在残余风险，则由 AI 从固定策略模板中选择一个运行时处理策略；
+- 若策略仍无法完全自动决定，则通知用户作为保底。
+
+策略模板示意如下：
+
+| 编号 | 策略名 | 含义 |
+|---:|---|---|
+| 0 | `default` | 默认执行，不干预 |
+| 1 | `only_first_triggered` | 只执行先触发规则，阻止后触发规则 |
+| 2 | `only_later_triggered` | 只执行后触发规则，补偿先触发规则 |
+| 3 | `force_lexicographic_first` | 强制保留规则 ID 字典序较小的规则 |
+| 4 | `force_lexicographic_second` | 强制保留规则 ID 字典序较大的规则 |
+| 5 | `both_end_with_lexicographic_second` | 两条规则都执行，但以后者状态为准 |
+| 6 | `both_end_with_lexicographic_first` | 两条规则都执行，但以前者状态为准 |
+| 7 | `cancel_both` | 取消两条规则执行 |
+| 8 | `decided_by_user` | 由用户确认后执行 |
+
+算法流程如下：
+
+1. 从非预期状态转换图中抽取终点局部规则关联；
+2. 读取第 6 步的迭代细化结果；
+3. 对每个候选检查：
+   - 是否已经被规则更新充分覆盖；
+   - 是否仍存在剩余风险；
+4. 若仍存在剩余风险，则把以下信息发送给 AI：
+   - 家庭环境上下文；
+   - 源规则与目标规则的 TCAE 信息；
+   - 关联证据与非预期后态；
+   - 第 6 步识别出的情境实例与剩余缺口；
+   - 固定处理策略模板；
+5. 由 AI 选择一个运行时处理策略；
+6. 若 AI 不可用或结果置信度不足，则采用保守回退策略，并要求人工审核。
+
+算法伪代码如下：
+
+```text
+Algorithm GenerateRuntimeResolutionRules(G_UST, TCAE, RefinementPlan)
+Input :
+  G_UST           = unexpected state transition graph
+  TCAE            = current rule set
+  RefinementPlan  = step-6 iterative refinement output
+Output:
+  ResolutionRules
+
+1  Candidates <- ExtractTerminalPairwiseCandidates(G_UST)
+2  for each candidate q in Candidates do
+3      Report <- RefinementPlan[q]
+4      if Report says the risk is already covered by rule updates then
+5          Policy <- default
+6      else
+7          Policy <- AskAIToChooseRuntimePolicy(q, Report, TCAE)
+8          if Policy invalid or low-confidence then
+9              Policy <- conservative fallback
+10         end if
+11     end if
+12     Save policy for q
+13 end for
+14 return ResolutionRules
+```
+
+输出结果应包含：
+
+- `candidate_associations`：需要运行时关注的终点局部关联；
+- `resolution_rules`：每个候选的最终运行时处理策略；
+- `coverage_status`：该候选是否已被第 6 步规则更新覆盖；
+- `residual_risks`：仍需运行时处理的剩余情境。
 
 #### 图游走算法
 
-1. 基于非预期状态转换图，实现图游走算法，伪代码如下
+本阶段的目标是在运行时基于非预期状态转换图 $\mathcal{G}_{UST}$ 进行**局部图游走验证与处理**。与静态阶段不同，运行时不再枚举完整长路径，而是在规则执行链路的两个检查点——**条件判断前**与**条件判断后**——仅检查当前节点在图中的**最近上游动作节点**是否已经激活，并结合真实设备状态、环境状态与条件列表变化，判断是否发生了“规则关联导致的非预期结果”。
 
+##### 运行时节点状态模型
+
+系统维护一个运行时状态存储器 `RuntimeStore`，其键为空间中的节点 ID，值为该节点的**历史状态队列**。每个节点维护的历史状态队列长度默认为 $L=100$，采用先进先出队列。
+
+记节点 $v$ 的状态队列为：
+
+$$
+\mathcal{H}(v)=\langle s_1,s_2,\dots,s_m\rangle,\qquad m\le L
+$$
+
+其中每个状态记录 $s$ 至少包含：
+
+- `state`：节点是否激活，$0/1$；
+- `time`：最后更新时间；
+- `meta`：类型相关附加信息。
+
+不同节点的运行时状态定义如下：
+
+- **触发器节点** $v_r^T$
+  - `state`：是否被观察到已触发；
+  - `time`：最近一次触发时间。
+- **条件节点** $v_r^C$
+  - `state`：当前条件是否成立；
+  - `time`：最近一次更新时间；
+  - `conditions`：该规则条件列表的最近求值结果。
+- **动作节点** $v_r^A$
+  - `state`：该规则执行动作是否仍然有效；
+  - `time`：最近一次动作生效时间；
+  - `actions`：当前仍然处于激活态的动作列表。
+- **环境节点** $v_{z,c}^E$
+  - `state`：该环境是否仍然受到激活动作影响；
+  - `time`：最近一次环境状态更新时间；
+  - `effects`：当前仍影响该环境的设备动作列表，每项形如：
+
+```json
+{
+  "entity_id": "input_boolean.ke_ting_kong_diao",
+  "operation": "set_temperature",
+  "detail": "set 17℃",
+  "polarity": -1,
+  "source_action_node": "automation.r8_living_room_cooling::A",
+  "time": "2026-06-01T12:00:00+00:00"
+}
 ```
 
+##### 检查点定义
+
+运行时仅在两个检查点执行图游走检查：
+
+1. **条件判断前** `before_condition`
+   - 语义：规则触发器已触发，等待条件检查；
+   - 用于检查：
+     - 当前触发器是否由其它规则动作直接/间接导致；
+     - 当前条件是否将被上游动作**禁止**。
+2. **条件判断后** `after_condition`
+   - 语义：规则触发且已通过条件检查，即将执行动作；
+   - 用于检查：
+     - 当前条件是否由其它规则动作直接/间接**允许**；
+     - 当前动作是否与其它动作直接/间接关联。
+
+##### 局部最近上游动作节点
+
+为了避免跨越多个规则的远程长路径导致运行时误报，运行时仅考虑当前检查节点的**最近上游动作节点**。记当前被检查节点为 $v_{cur}$，则仅考虑以下最短局部路径：
+
+- 直接关联：
+  - $v_{r_i}^A \rightarrow v_{cur}$
+- 间接关联：
+  - $v_{r_i}^A \rightarrow v_{z,c}^E \rightarrow v_{cur}$
+
+不考虑如下跨越多个规则内部流的远程路径：
+
+$$
+v_{r_0}^A \rightarrow v_{r_1}^T \rightarrow v_{r_1}^C \rightarrow v_{r_1}^A \rightarrow v_{z,c}^E \rightarrow v_{r_2}^T
+$$
+
+运行时局部检查函数定义为：
+
+$$
+\operatorname{LocalPred}(v_{cur})=\{v_i^A\mid v_i^A\rightarrow v_{cur}\ \text{or}\ v_i^A\rightarrow v_{z,c}^E\rightarrow v_{cur}\}
+$$
+
+##### 懒更新原则
+
+为了避免轮询所有设备，系统采用**检查点懒更新**：
+
+- 仅当进入某个检查点时，才对该节点的最近上游动作节点、相关环境节点和相关设备状态进行刷新；
+- 若某个动作节点理论上仍为激活，但其对应设备的真实状态已不再支持该动作结果，则将该动作节点状态更新为 0；
+- 若某个环境节点理论上仍为激活，但其影响列表中的所有设备动作已失效，则将该环境节点状态更新为 0；
+- 当动作节点状态变为 0 时，其所属规则的触发器节点与条件节点若无其它支撑，也同步变为 0。
+
+##### 直接关联判定
+
+###### 动作对触发器的直接关联
+
+若存在边：
+
+$$
+v_{r_i}^A \rightarrow v_{r_j}^T
+$$
+
+则在 `before_condition` 检查点，通过比较：
+
+- 上游动作节点 $v_{r_i}^A$ 是否激活；
+- 当前规则 $r_j$ 触发器是否刚刚发生；
+- 上游动作对目标实体的真实状态修改是否与触发器条件一致；
+- 两者时间差是否小于阈值 $\delta_T$（例如 1s）；
+
+若满足，则认为：
+
+$$
+\operatorname{CauseTrig}(r_i,r_j,t)=1
+$$
+
+###### 动作对条件的直接关联
+
+若存在边：
+
+$$
+v_{r_i}^A \rightarrow v_{r_j}^C
+$$
+
+则根据条件列表 `conditions` 的前后变化判断：
+
+- 若规则动作使条件从“不满足”变为“满足”，则为**条件允许**；
+- 若规则动作使条件从“满足”变为“不满足”，则为**条件禁止**。
+
+##### 间接关联判定
+
+###### 动作对环境节点的激活
+
+若存在：
+
+$$
+v_{r_i}^A \rightarrow v_{z,c}^E
+$$
+
+且动作执行后真实设备状态仍支持其环境效应，则把该动作加入环境节点的 `effects` 列表，并设置：
+
+$$
+\operatorname{state}(v_{z,c}^E)=1
+$$
+
+###### 环境节点对触发器/条件的影响
+
+若存在：
+
+$$
+v_{z,c}^E \rightarrow v_{r_j}^{T/C}
+$$
+
+则在检查点：
+
+- 若当前环境节点激活；
+- 且相关传感器/条件列表发生了与极性一致的变化；
+- 且变化可由环境节点中的某个激活动作解释；
+
+则认为发生了间接关联。
+
+##### 动作关联判定
+
+###### 动作对动作的直接关联
+
+若存在：
+
+$$
+v_{r_i}^A \rightarrow v_{r_j}^A
+$$
+
+则在 `after_condition` 检查点：
+
+- 检查上游动作节点 $v_{r_i}^A$ 是否仍激活；
+- 检查当前规则即将执行的动作列表是否与上游动作列表作用于同一实体或相同目标设备；
+- 若两者对同一实体/设备产生同向或反向影响，则视为动作关联被激活。
+
+###### 动作对动作的间接关联
+
+若存在：
+
+$$
+v_{r_i}^A \rightarrow v_{z,c}^E \rightarrow v_{r_j}^A
+$$
+
+则结合环境节点是否激活、环境影响列表以及当前动作即将作用的设备，判断是否发生间接动作关联。
+
+##### 动作与环境状态回收
+
+- 对动作节点 $v_r^A$，若其激活动作列表中的全部动作都已被撤销或被后续处理策略抵消，则更新：
+
+$$
+\operatorname{state}(v_r^A)=0
+$$
+
+- 对环境节点 $v_{z,c}^E$，若其 `effects` 列表中所有动作都已失效，则更新：
+
+$$
+\operatorname{state}(v_{z,c}^E)=0
+$$
+
+- 当某动作节点变为 0，且该规则无其它有效动作支撑时，对应的触发器节点与条件节点状态也回收为 0。
+
+##### 运行时图游走算法伪代码
+
+```text
+Algorithm RuntimeGraphWalkCheck(check_event, G_UST, RuntimeStore, ResolutionRules)
+Input :
+  check_event      = current runtime checkpoint event
+  G_UST            = unexpected state transition graph
+  RuntimeStore     = node runtime-state store
+  ResolutionRules  = pairwise handling policies
+Output:
+  detected_association, selected_policy, updated RuntimeStore
+
+1  cur_rule <- check_event.rule_uid
+2  cur_stage <- check_event.location   // before_condition or after_condition
+3  cur_node <- ResolveCurrentNode(cur_rule, cur_stage)
+4  PredActions <- LocalPred(cur_node)  // only nearest upstream action nodes
+
+5  for each a in PredActions do
+6      LazyRefreshActionNode(a, RuntimeStore)
+7      for each environment node e on local path from a to cur_node do
+8          LazyRefreshEnvironmentNode(e, RuntimeStore)
+9  end for
+
+10 if cur_stage = before_condition then
+11     MarkTriggerNode(cur_rule, RuntimeStore, check_event)
+12     for each local path p: a -> cur_node or a -> e -> cur_node do
+13         if MatchTriggerAssociation(p, check_event, RuntimeStore) then
+14             ActivatePathEvidence(p, RuntimeStore)
+15             goto POLICY_CHECK
+16         end if
+17     end for
+18     for each local path p ending at condition node of cur_rule do
+19         if MatchConditionDisableAssociation(p, check_event, RuntimeStore) then
+20             ActivatePathEvidence(p, RuntimeStore)
+21             goto POLICY_CHECK
+22         end if
+23     end for
+24     return NoUnexpectedAssociation
+25 end if
+
+26 if cur_stage = after_condition then
+27     MarkConditionNode(cur_rule, RuntimeStore, check_event)
+28     for each local path p ending at condition node of cur_rule do
+29         if MatchConditionAllowAssociation(p, check_event, RuntimeStore) then
+30             ActivatePathEvidence(p, RuntimeStore)
+31             goto POLICY_CHECK
+32         end if
+33     end for
+34     for each local path p ending at action node of cur_rule do
+35         if MatchActionAssociation(p, check_event, RuntimeStore) then
+36             ActivatePathEvidence(p, RuntimeStore)
+37             goto POLICY_CHECK
+38         end if
+39     end for
+40     MarkCurrentActionTentativelyActive(cur_rule, RuntimeStore, check_event)
+41     return NoUnexpectedAssociation
+42 end if
+
+43 POLICY_CHECK:
+44 Candidate <- FindResolutionCandidateByLocalPath(cur_rule, activated local path)
+45 if Candidate exists then
+46     Policy <- ResolutionRules[Candidate]
+47     ExecutePolicy(Policy, check_event, RuntimeStore)
+48     UpdateActionAndEnvironmentStatesAfterPolicy(Policy, RuntimeStore)
+49     return AssociationDetected(Candidate, Policy)
+50 else
+51     MarkCurrentActionTentativelyActive(cur_rule, RuntimeStore, check_event)
+52     return AssociationDetectedWithoutPolicy
+53 end if
 ```
+
+##### 关键辅助过程
+
+- `LazyRefreshActionNode(a, RuntimeStore)`
+  - 检查动作节点 `actions` 中记录的设备动作是否仍由真实设备状态支持；
+  - 若全部不再支持，则把该动作节点置 0。
+- `LazyRefreshEnvironmentNode(e, RuntimeStore)`
+  - 检查环境节点 `effects` 中记录的设备动作是否仍有效；
+  - 若全部失效，则把该环境节点置 0。
+- `MatchTriggerAssociation(p, check_event, RuntimeStore)`
+  - 判断当前触发器是否由局部路径上的动作/环境变化直接或间接导致。
+- `MatchConditionDisableAssociation(p, check_event, RuntimeStore)`
+  - 判断当前条件是否由于上游动作而变得不满足。
+- `MatchConditionAllowAssociation(p, check_event, RuntimeStore)`
+  - 判断当前条件是否由于上游动作而从不满足变为满足。
+- `MatchActionAssociation(p, check_event, RuntimeStore)`
+  - 判断当前即将执行的动作是否与上游动作产生直接或间接动作关联。
+- `ExecutePolicy(Policy, check_event, RuntimeStore)`
+  - 执行策略模板对应的干预命令，如阻止当前规则、撤销前一规则动作、改变执行顺序等。
+
+##### 运行时原则总结
+
+1. **只在检查点更新**，避免轮询所有设备；
+2. **只找最近上游动作节点**，避免远端长路径误报；
+3. **路径是否成立取决于真实状态变化**，而不只依赖静态图；
+4. **检测成立后立即执行局部处理策略**，并同步回收或更新动作节点、环境节点、条件节点状态。
 
 #### Agent交互上下文信息
 
@@ -1161,3 +1483,190 @@ Output:
      ```
 
 ##### 非预期状态处理策略生成
+
+### 家居实例
+
+![1780840468524](image/README/1780840468524.png)
+
+#### Zone
+
+| Zone ID | 区域名     | 说明                       |
+| ------- | ---------- | -------------------------- |
+| Z1      | Entry      | 玄关 / 门厅 / 门外过渡区域 |
+| Z2      | LivingRoom | 客厅                       |
+| Z3      | Nursery    | 儿童房                     |
+| Z4      | Bedroom    | 主卧                       |
+| Z5      | Bathroom   | 浴室                       |
+| Z6      | Garage     | 车库                       |
+| Z7      | Greenhouse | 温室                       |
+| Z8      | Kitchen    | 厨房                       |
+| Z9      | Utility    | 杂物间                     |
+
+#### Channel
+
+| Channel     | 含义          |
+| ----------- | ------------- |
+| light       | 光照/亮度     |
+| temperature | 温度          |
+| humidity    | 湿度          |
+| water_flow  | 供水/水流能力 |
+
+#### 设备列表
+
+##### 物理设备
+
+| 实体 ID                       | Zone       | 类型                | 主要作用 / 通道关系                             |
+| ----------------------------- | ---------- | ------------------- | ----------------------------------------------- |
+| `front_door_lock`           | Entry      | actuator+observable | 门锁，状态可观测                                |
+| `porch_light`               | Entry      | actuator            | 开启后提高 Entry 的 `light`                   |
+| `driveway_camera_prerecord` | Entry      | actuator            | 摄像机预录制开关                                |
+| `entry_illuminance_sensor`  | Entry      | sensor              | 观测 Entry 的 `light`                         |
+| `entry_motion_sensor`       | Entry      | sensor              | 运动检测                                        |
+| `accent_light`              | Entry      | actuator            | 开启后提高 Entry 的 `light`                   |
+| `package_pickup_mode`       | Entry      | actuator            | 取件提示灯                                      |
+| `side_gate_lock`            | Entry      | actuator+observable | 侧门门锁，安全敏感                              |
+| `tv_power`                  | LivingRoom | actuator+observable | 电视开关                                        |
+| `livingroom_curtains`       | LivingRoom | actuator+observable | 窗帘开合                                        |
+| `livingroom_ceiling_light`  | LivingRoom | actuator            | 灯光                                            |
+| `livingroom_main_light`     | LivingRoom | actuator            | 主灯                                            |
+| `livingroom_temp_sensor`    | LivingRoom | sensor              | 观测 LivingRoom 的 `temperature`              |
+| `livingroom_heater`         | LivingRoom | actuator            | 开启后提高 LivingRoom 的 `temperature`        |
+| `livingroom_ac`             | LivingRoom | actuator            | 开启后降低 LivingRoom 的 `temperature`        |
+| `projector_power`           | Bedroom    | actuator+observable | 投影仪开关                                      |
+| `projector_screen`          | Bedroom    | actuator            | 投影幕布                                        |
+| `bedroom_curtains`          | Bedroom    | actuator+observable | 主卧窗帘                                        |
+| `bedroom_temp_sensor`       | Bedroom    | sensor              | 观测 Bedroom 的 `temperature`                 |
+| `bedroom_heater`            | Bedroom    | actuator            | 开启后提高 Bedroom 的 `temperature`           |
+| `bedroom_window`            | Bedroom    | actuator+observable | 主卧窗户，安全敏感                              |
+| `nursery_humidity_sensor`   | Nursery    | sensor              | 观测 Nursery 的 `humidity`                    |
+| `nursery_humidifier`        | Nursery    | actuator            | 开启后提高 Nursery 的 `humidity`              |
+| `nursery_exhaust_fan`       | Nursery    | actuator            | 开启后降低 Nursery 的 `humidity`              |
+| `nursery_temp_sensor`       | Nursery    | sensor              | 观测 Nursery 的 `temperature`                 |
+| `nursery_heater`            | Nursery    | actuator            | 开启后提高 Nursery 的 `temperature`           |
+| `nursery_window_latch`      | Nursery    | actuator+ovservable | 是否允许儿童房窗户被开启，儿童房窗锁/窗扣       |
+| `nursery_window`            | Nursery    | actuator+observable | 儿童房窗户，安全敏感                            |
+| `greenhouse_temp_sensor`    | Greenhouse | sensor              | 观测 Greenhouse 的 `temperature`              |
+| `greenhouse_heater`         | Greenhouse | actuator            | 开启后提高 Greenhouse 的 `temperature`        |
+| `nutrient_valve`            | Greenhouse | actuator            | 营养液阀门                                      |
+| `garage_door`               | Garage     | actuator+observable | 车库门，安全敏感                                |
+| `garage_motion_sensor`      | Garage     | sensor              | 车库内运动传感器                                |
+| `kitchen_smoke_sensor`      | Kitchen    | sensor              | 厨房烟雾检测                                    |
+| `stove_runaway_sensor`      | Kitchen    | sensor              | 灶具失控告警                                    |
+| `sprinkler_pump`            | Utility    | actuator            | 开启后提高全屋消防支路 `water_flow`           |
+| `utility_water_flow_sensor` | Utility    | sensor              | 观测 Utility 的 `water_flow`                  |
+| `main_water_valve`          | Utility    | actuator+observable | 主水阀，安全敏感；关闭后降低全屋 `water_flow` |
+| `basement_leak_sensor`      | Utility    | sensor              | 杂物间漏水检测                                  |
+
+##### 逻辑辅助设备
+
+| 实体 ID                       | Zone              | 类型   | 说明               |
+| ----------------------------- | ----------------- | ------ | ------------------ |
+| `movie_mode_button`         | LivingRoom        | helper | 影院模式按钮       |
+| `wake_scene_switch`         | Bedroom           | helper | 起床场景           |
+| `irrigation_timer`          | Greenhouse        | helper | 灌溉定时事件       |
+| `away_mode_switch`          | LivingRoom、Entry | helper | 外出模式           |
+| `cleaning_mode_switch`      | Nursery           | helper | 清洁模式           |
+| `ev_charger_status`         | Garage            | helper | 充电状态           |
+| `garage_auto_close_enabled` | Garage            | helper | 车库自动关门许可位 |
+| `fresh_air_button`          | Nursery           | helper | 儿童房新风按钮     |
+| `security_bedtime_switch`   | Bedroom           | helper | 安防睡眠场景       |
+
+##### 实体常态配置
+
+| 实体                     | 常态       | 安全含义                                   |
+| ------------------------ | ---------- | ------------------------------------------ |
+| `side_gate_lock`       | `locked` | 侧门应默认上锁                             |
+| `main_water_valve`     | `open`   | 主水阀应默认保持供水，尤其不能影响消防供水 |
+| `nursery_window`       | `closed` | 儿童房窗户默认关闭                         |
+| `bedroom_window`       | `closed` | 主卧窗户夜间默认关闭                       |
+| `garage_door`          | `closed` | 车库门默认关闭                             |
+| `nursery_window_latch` | `off`    | 默认不允许儿童房窗户被开启                 |
+
+### 自动化规则列表
+
+| 规则          | Trigger                                  | Condition                                                    | Action                                  | 设计目的                                                                          |
+| ------------- | ---------------------------------------- | ------------------------------------------------------------ | --------------------------------------- | --------------------------------------------------------------------------------- |
+| **R01** | `front_door_lock: locked -> unlocked`  | 夜间                                                         | `porch_light = on`                    | 与 R02 构成**直接触发**                                                     |
+| R02           | `porch_light: off -> on`               | 无                                                           | `driveway_camera_prerecord = on`      | 普通直接触发                                                                      |
+| R03           | `nursery_humidity < 40%`               | `nursery_humidifier = off`                                 | `nursery_humidifier = on`             | 与 R04 构成**间接触发**                                                     |
+| R04           | `nursery_humidity > 60%`               | 无                                                           | `nursery_exhaust_fan = on`            | 普通间接触发                                                                      |
+| R05           | `movie_mode_button pressed`            | 无                                                           | `livingroom_curtains = closed`        | 与 R06 构成**直接条件允许**                                                 |
+| R06           | `tv_power: off -> on`                  | `livingroom_curtains = closed`                             | `livingroom_ceiling_light = dim(20%)` | 普通 direct condition allow                                                       |
+| R07           | `wake_scene_switch = on`               | 无                                                           | `bedroom_curtains = open`             | 与 R08 构成**直接条件禁用**                                                 |
+| R08           | `projector_power: off -> on`           | `bedroom_curtains = closed`                                | `projector_screen = down`             | 普通 direct condition disable                                                     |
+| R09           | `greenhouse_temp < 18°C`              | `greenhouse_heater = off`                                  | `greenhouse_heater = on`              | 与 R10 构成**间接条件允许**                                                 |
+| R10           | `irrigation_timer fired`               | `greenhouse_temp > 18°C`                                  | `nutrient_valve = open`               | 普通 indirect condition allow                                                     |
+| **R11** | `front_door_lock: locked -> unlocked`  | 无                                                           | `porch_light = on`                    | 与 R12 构成**间接条件禁用**                                                 |
+| R12           | `entry_motion_sensor detected`         | `entry_illuminance_sensor < 30 lux`                        | `accent_light = on`                   | 普通 indirect condition disable                                                   |
+| R13           | `away_mode_switch = on`                | 无                                                           | `livingroom_main_light = off`         | 与 R14 构成**直接动作关联**                                                 |
+| R14           | `tv_power: off -> on`                  | 无                                                           | `livingroom_main_light = on`          | 普通 direct action                                                                |
+| R15           | `livingroom_temp < 20°C`              | `livingroom_heater = off`                                  | `livingroom_heater = on`              | 与 R16 构成**间接动作关联**                                                 |
+| R16           | `livingroom_temp > 28°C`              | `livingroom_ac = off`                                      | `livingroom_ac = on`                  | 普通 indirect action                                                              |
+| R17           | `away_mode_switch = on`                | 无                                                           | `package_pickup_mode = off`           | 与 R18 构成**直接触发型安全冲突**                                           |
+| R18           | `package_pickup_mode: on -> off`       | 无                                                           | `side_gate_lock = unlocked`           | 目标非预期：侧门解锁                                                              |
+| R19           | `kitchen_smoke_sensor triggered`       | 无                                                           | `sprinkler_pump = on`                 | 与 R20 构成**间接触发型安全冲突**                                           |
+| R20           | `utility_water_flow_sensor > 20 L/min` | 无                                                           | `main_water_valve = off`              | 目标非预期：消防时主水阀关闭                                                      |
+| R21           | `cleaning_mode_switch = on`            | 无                                                           | `nursery_window_latch = on`           | 清洁时允许临时童锁关闭，可以手动开窗，与 R22 构成**直接条件允许型安全冲突** |
+| R22           | `nursery_temp >= 30°C`                | `nursery_window_latch = on`                                | `nursery_window = open`               | 目标非预期：儿童房窗户打开                                                        |
+| **R23** | `ev_charger_status: off -> on`         | 无                                                           | `garage_auto_close_enabled = off`     | 不希望被意外锁住，与 R24 构成**直接条件禁用型安全冲突**                     |
+| **R24** | `23:00 reached`                        | `garage_auto_close_enabled = on` 且 `garage_door = open` | `garage_door = closed`                | 条件被禁用后，车库门无法自动关上                                                  |
+| R25           | `nursery_temp < 22°C`                 | `nursery_heater = off`                                     | `nursery_heater = on`                 | 与 R26 构成**间接条件允许型安全冲突**                                       |
+| R26           | `fresh_air_button pressed`             | `nursery_temp > 29°C`                                     | `nursery_window = open`               | 目标非预期：儿童房窗户打开                                                        |
+| R27           | `bedroom_temp < 20°C`                 | `bedroom_heater = off`                                     | `bedroom_heater = on`                 | 与 R28 构成**间接条件禁用型安全冲突**                                       |
+| R28           | `22:30 reached`                        | `bedroom_window = open` 且 `bedroom_temp < 26°C`        | `bedroom_window = closed`             | 条件被禁用后，主卧窗户无法自动关闭                                                |
+| R29           | `security_bedtime_switch = on`         | 无                                                           | `nursery_window = closed`             | 与 R30 构成**直接动作型安全冲突**                                           |
+| R30           | `nursery_temp >= 31°C`                | 无                                                           | `nursery_window = open`               | 目标非预期：儿童房窗户打开                                                        |
+| R31           | `basement_leak_sensor triggered`       | 无                                                           | `main_water_valve = off`              | 与 R32 构成**间接动作型安全冲突**                                           |
+| R32           | `stove_runaway_sensor triggered`       | 无                                                           | `sprinkler_pump = on`                 | 目标风险：灭火需要水，但 R31 会切断水流                                           |
+
+#### 规则关联实例
+
+| 类别         | 关联实例             | 关联说明                                                                  | 为什么是普通关联               |
+| ------------ | -------------------- | ------------------------------------------------------------------------- | ------------------------------ |
+| 直接触发     | **R01 -> R02** | `R01` 把 `porch_light` 打开，直接满足 `R02` 的 trigger              | 只是灯光引出摄像机预录制，合理 |
+| 间接触发     | **R03 -> R04** | `R03` 开启加湿器，提高 `Nursery.humidity`，触发 `R04`               | 湿度闭环调节，合理             |
+| 直接条件允许 | **R05 -> R06** | `R05` 关闭窗帘，使 `R06` 的条件“窗帘已关闭”成立                     | 合理的影院联动                 |
+| 直接条件禁用 | **R07 -> R08** | `R07` 打开窗帘，使 `R08` 的条件“窗帘已关闭”失效                     | 只是阻止投影场景，不危险       |
+| 间接条件允许 | **R09 -> R10** | `R09` 升高温室温度，使 `R10` 的条件“温度 > 18°C”成立               | 灌溉与温室保温联动，合理       |
+| 间接条件禁用 | **R11 -> R12** | `R11` 打开门厅灯，提高 `Entry.light`，使 `R12` 的“低照度”条件失效 | 只是减少重复开灯               |
+| 直接动作     | **R13 ↔ R14** | 两条规则对 `livingroom_main_light` 执行相反动作                         | 普通设备竞争，不是安全问题     |
+| 间接动作     | **R15 ↔ R16** | 地暖和空调分别提高/降低 `LivingRoom.temperature`                        | 舒适性上的温控竞争             |
+
+#### 规则关联导致的非预期状态实例
+
+##### 触发类（2个）
+
+| 类别     | 冲突实例             | 路径                                         | 非预期状态                    | 安全影响                                                                |
+| -------- | -------------------- | -------------------------------------------- | ----------------------------- | ----------------------------------------------------------------------- |
+| 直接触发 | **R17 -> R18** | `package_pickup_mode off` 直接触发 `R18` | `side_gate_lock = unlocked` | 外出模式下关闭取件模式，但是快递取件从on变为off被设定为去取快递自动开门 |
+| 间接触发 | **R19 -> R20** | `R19:A -> water_flow↑ -> R20:T`           | `main_water_valve = off`    | 厨房烟雾触发喷淋后，漏水保护误以为异常用水，切断消防供水                |
+
+##### 条件类（4个）
+
+| 类别         | 冲突实例               | 机制                                                                        | 非预期状态                        | 安全影响                                      |
+| ------------ | ---------------------- | --------------------------------------------------------------------------- | --------------------------------- | --------------------------------------------- |
+| 直接条件允许 | **R21 -> R22**   | `R21` 解锁窗扣，使 `R22` 的条件成立                                     | `nursery_window = open`         | 高温时儿童房窗户被自动打开，存在坠落/入侵风险 |
+| 直接条件禁用 | **R23 -/-> R24** | `R23` 将 `garage_auto_close_enabled = off`，使 `R24` 条件失效         | `garage_door` 夜间保持 `open` | 车库门无法在 23:00 自动关闭，存在入侵风险     |
+| 间接条件允许 | **R25 -> R26**   | `R25` 提高 `Nursery.temperature`，使 `R26` 条件 `temp > 29°C` 成立 | `nursery_window = open`         | 儿童房因为加热而被误触发开窗                  |
+| 间接条件禁用 | **R27 -/-> R28** | `R27` 提高 `Bedroom.temperature`，使 `R28` 条件 `temp < 26°C` 失效 | `bedroom_window` 保持 `open`  | 主卧夜间本应自动关窗，却因加热导致规则失效    |
+
+> 注：其中“条件禁用型”本质上是**保护性关闭规则未执行**，从而导致异常状态持续存在。这类实例非常适合作为后续“运行时图游走验证”的重点。
+
+##### 动作类（2个）
+
+| 类别     | 冲突实例             | 路径/关系                                                | 非预期状态                                        | 安全影响                                   |
+| -------- | -------------------- | -------------------------------------------------------- | ------------------------------------------------- | ------------------------------------------ |
+| 直接动作 | **R29 ↔ R30** | 两条规则都直接控制 `nursery_window`，一个关、一个开    | 若 `R30` 最终生效，则 `nursery_window = open` | 安防就寝后儿童房窗户又被打开               |
+| 间接动作 | **R31 ↔ R32** | `R31` 令 `water_flow↓`，`R32` 令 `water_flow↑` | `main_water_valve = off` 且消防水流不足         | 漏水保护与灭火喷淋在同一供水通道上互相对抗 |
+
+### 新问题发现：
+
+1. 无法和解的安全问题：相同的规则关联不一定会导致非预期状态，一些非预期结果仅仅实在特殊情况下发生
+
+- 例如R23与R24，用户如果在22:59回车库，那么R23成功阻止了R24的执行，避免伤害车与人，但是如果实在其他时间，则可能会导致R24未执行，车库门没有关闭（预期之外）
+- 【解决方案】找到非预期状态边界（实例生成），然后进行规则补丁与冲突处理策略迭代
+- Agent主动检查非预期状态转移图，进行非预期状态实例生成
+
+3. 现实情况与虚拟映射不对应是新的问题
+
+- 本工作考虑的情况为现实情况与虚拟映射的情况，为了更好地工作，因此会对情境进行补齐，例如育儿室清洁模式开启后，久久没关闭，那么是否会出现是用户忘记关闭清洁模式

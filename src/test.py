@@ -30,11 +30,8 @@ from __future__ import annotations
 
 import argparse
 import json
-import math
-import threading
 import time
 from collections import Counter, defaultdict
-from concurrent.futures import ThreadPoolExecutor, as_completed
 from typing import Any, Dict, Iterable, List, Optional, Set, Tuple
 
 from common import (
@@ -524,13 +521,6 @@ def add_candidate(
 
 
 def extract_pairwise_candidates(ustg: Dict[str, Any]) -> List[Dict[str, Any]]:
-    """Extract pairwise rule-association candidates from USTG paths.
-
-    Only associations whose target rule is the terminal unexpected-action rule
-    are retained. This prevents generating policies for remote intermediate
-    links such as R12 -> R3 when the actual unexpected post-state is produced by
-    a later rule such as R2.
-    """
     edge_map = {e.get("edge_id"): e for e in ustg.get("edges", []) or [] if isinstance(e, dict) and e.get("edge_id")}
     node_map = {n.get("node_id"): n for n in ustg.get("nodes", []) or [] if isinstance(n, dict) and n.get("node_id")}
     candidates: Dict[str, Dict[str, Any]] = {}
@@ -538,7 +528,6 @@ def extract_pairwise_candidates(ustg: Dict[str, Any]) -> List[Dict[str, Any]]:
     for path in ustg.get("unexpected_paths", []) or []:
         if not isinstance(path, dict):
             continue
-        terminal_rule = rule_uid_from_component_node(path.get("terminal_action_node", ""))
         edge_seq = [edge_map[eid] for eid in path.get("edges", []) if eid in edge_map]
 
         # Direct local associations: A_i -> T/C/A_j
@@ -552,8 +541,6 @@ def extract_pairwise_candidates(ustg: Dict[str, Any]) -> List[Dict[str, Any]]:
                 continue
             source_rule = rule_uid_from_component_node(src)
             target_rule = rule_uid_from_component_node(tgt)
-            if terminal_rule and target_rule != terminal_rule:
-                continue
             add_candidate(
                 candidates,
                 source_rule or "",
@@ -582,8 +569,6 @@ def extract_pairwise_candidates(ustg: Dict[str, Any]) -> List[Dict[str, Any]]:
                 continue
             source_rule = rule_uid_from_component_node(src)
             target_rule = rule_uid_from_component_node(tgt)
-            if terminal_rule and target_rule != terminal_rule:
-                continue
             env_node_data = node_map.get(env, {})
             via = {
                 "node_id": env,
@@ -653,7 +638,7 @@ def normalize_ai_policy(ai_data: Any, fallback_strategy: int = 0) -> Dict[str, A
         "confidence": confidence,
         "reason": str(ai_data.get("reason") or "No AI reason provided."),
         "runtime_notes": str(ai_data.get("runtime_notes") or template.get("runtime_effect") or ""),
-        "needs_human_review": bool(ai_data.get("needs_human_review", False)) or confidence < 0.75,
+        "needs_human_review": bool(ai_data.get("needs_human_review", confidence < 0.75)),
         "template": template,
         "source": "ai",
     }
@@ -695,29 +680,17 @@ def build_ai_payload(
 
 
 class RateLimiter:
-    """Thread-safe token-bucket style limiter for true concurrent workers.
-
-    It enforces a global request spacing of 60/rpm seconds across all threads.
-    Multiple workers may run concurrently, but each actual AI request must first
-    acquire a slot from this limiter.
-    """
-
     def __init__(self, rpm: int) -> None:
         self.rpm = max(1, int(rpm))
         self.interval = 60.0 / self.rpm
-        self._lock = threading.Lock()
-        self._next_allowed_at = 0.0
+        self.last_call_at = 0.0
 
     def wait(self) -> None:
-        while True:
-            with self._lock:
-                now = time.time()
-                if now >= self._next_allowed_at:
-                    self._next_allowed_at = now + self.interval
-                    return
-                sleep_for = self._next_allowed_at - now
-            if sleep_for > 0:
-                time.sleep(sleep_for)
+        now = time.time()
+        elapsed = now - self.last_call_at
+        if self.last_call_at > 0 and elapsed < self.interval:
+            time.sleep(self.interval - elapsed)
+        self.last_call_at = time.time()
 
 
 def generate_policy_for_candidate(
@@ -762,7 +735,6 @@ def build_resolution_rules(
     rpm: int = 10,
     no_ai: bool = False,
     limit: Optional[int] = None,
-    workers: Optional[int] = None,
 ) -> Dict[str, Any]:
     candidates = extract_pairwise_candidates(ustg)
     if limit is not None:
@@ -775,65 +747,33 @@ def build_resolution_rules(
 
     resolution_rules: List[Dict[str, Any]] = []
     total = len(candidates)
-
-    def build_resolution_record(idx: int, cand: Dict[str, Any], policy: Dict[str, Any]) -> Dict[str, Any]:
-        return {
-            "resolution_rule_id": f"rr{idx:05d}",
-            "candidate_id": cand.get("candidate_id"),
-            "candidate_key": cand.get("candidate_key"),
-            "source_rule_uid": cand.get("source_rule_uid"),
-            "target_rule_uid": cand.get("target_rule_uid"),
-            "target_component": cand.get("target_component"),
-            "association_kind": cand.get("association_kind"),
-            "association_mode": cand.get("association_mode"),
-            "via_environment": cand.get("via_environment"),
-            "unexpected_outcomes": cand.get("unexpected_outcomes", []),
-            "path_ids": cand.get("path_ids", []),
-            "edge_ids": cand.get("edge_ids", []),
-            "policy": policy,
-        }
-
-    if no_ai or total == 0:
-        for idx, cand in enumerate(candidates, start=1):
-            print(f"[{idx}/{total}] 生成处理策略: {cand['source_rule_uid']} -> {cand['target_rule_uid']} ({cand['association_kind']})")
-            policy = generate_policy_for_candidate(
-                cand,
-                tcae_rule_map,
-                home_context,
-                prompt,
-                no_ai=True,
-                rate_limiter=None,
-            )
-            resolution_rules.append(build_resolution_record(idx, cand, policy))
-    else:
-        max_workers = workers if workers is not None else min(max(1, rpm), max(1, total))
-        max_workers = max(1, min(max_workers, total))
-        print(f"并发生成策略：workers={max_workers}, rpm={rpm}, candidates={total}")
-
-        def task(idx: int, cand: Dict[str, Any]) -> Tuple[int, Dict[str, Any], Dict[str, Any]]:
-            print(f"[提交 {idx}/{total}] {cand['source_rule_uid']} -> {cand['target_rule_uid']} ({cand['association_kind']})")
-            policy = generate_policy_for_candidate(
-                cand,
-                tcae_rule_map,
-                home_context,
-                prompt,
-                no_ai=False,
-                rate_limiter=rate_limiter,
-            )
-            return idx, cand, policy
-
-        results: Dict[int, Dict[str, Any]] = {}
-        with ThreadPoolExecutor(max_workers=max_workers) as executor:
-            future_map = {
-                executor.submit(task, idx, cand): idx
-                for idx, cand in enumerate(candidates, start=1)
+    for idx, cand in enumerate(candidates, start=1):
+        print(f"[{idx}/{total}] 生成处理策略: {cand['source_rule_uid']} -> {cand['target_rule_uid']} ({cand['association_kind']})")
+        policy = generate_policy_for_candidate(
+            cand,
+            tcae_rule_map,
+            home_context,
+            prompt,
+            no_ai=no_ai,
+            rate_limiter=rate_limiter,
+        )
+        resolution_rules.append(
+            {
+                "resolution_rule_id": f"rr{idx:05d}",
+                "candidate_id": cand.get("candidate_id"),
+                "candidate_key": cand.get("candidate_key"),
+                "source_rule_uid": cand.get("source_rule_uid"),
+                "target_rule_uid": cand.get("target_rule_uid"),
+                "target_component": cand.get("target_component"),
+                "association_kind": cand.get("association_kind"),
+                "association_mode": cand.get("association_mode"),
+                "via_environment": cand.get("via_environment"),
+                "unexpected_outcomes": cand.get("unexpected_outcomes", []),
+                "path_ids": cand.get("path_ids", []),
+                "edge_ids": cand.get("edge_ids", []),
+                "policy": policy,
             }
-            for future in as_completed(future_map):
-                idx, cand, policy = future.result()
-                print(f"[完成 {idx}/{total}] {cand['source_rule_uid']} -> {cand['target_rule_uid']} ({cand['association_kind']})")
-                results[idx] = build_resolution_record(idx, cand, policy)
-
-        resolution_rules = [results[idx] for idx in sorted(results)]
+        )
 
     strategy_counts = Counter(r["policy"]["strategy_name"] for r in resolution_rules)
     review_count = sum(1 for r in resolution_rules if r["policy"].get("needs_human_review"))
@@ -842,13 +782,8 @@ def build_resolution_rules(
     return {
         "schema_version": "1.0",
         "generated_at": utc_now_iso(),
-        "method": "ai_pairwise_terminal_association" if not no_ai else "fallback_no_ai_pairwise_terminal_association",
+        "method": "ai_pairwise_local_association" if not no_ai else "fallback_no_ai_pairwise_local_association",
         "rpm": rpm,
-        "workers": 0 if total == 0 else (workers if workers is not None else min(max(1, rpm), max(1, total))),
-        "candidate_extraction": {
-            "mode": "terminal_only",
-            "description": "Only associations targeting the terminal unexpected-action rule are converted into resolution candidates. Remote intermediate local associations are discarded."
-        },
         "strategy_templates": RESOLUTION_STRATEGY_TEMPLATES,
         "candidate_associations": candidates,
         "resolution_rules": resolution_rules,
@@ -881,7 +816,6 @@ def main() -> None:
     parser.add_argument("--rpm", type=int, default=10, help="Maximum AI requests per minute. Default: 10")
     parser.add_argument("--no-ai", action="store_true", help="Skip AI calls and write fallback default policies requiring human review.")
     parser.add_argument("--limit", type=int, default=None, help="Optional maximum number of candidates to process, useful for debugging.")
-    parser.add_argument("--workers", type=int, default=None, help="Concurrent worker count for AI requests. Default: min(rpm, candidate_count).")
     parser.add_argument("--keep-prompt", action="store_true", help="Do not auto-fill system_prompts.resolution_rules in config.json.")
     parser.add_argument("--print-pseudocode", action="store_true", help="Print the resolution generation pseudocode and exit.")
     args = parser.parse_args()
@@ -925,7 +859,6 @@ def main() -> None:
         rpm=args.rpm,
         no_ai=args.no_ai,
         limit=args.limit,
-        workers=args.workers,
     )
 
     write_json(resolution_rules_path, result)

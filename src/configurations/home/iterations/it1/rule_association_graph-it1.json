@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0",
-  "generated_at": "2026-06-07T20:14:25.217222+00:00",
+  "generated_at": "2026-06-07T20:20:08.491643+00:00",
   "graph_type": "Rule Association Graph",
   "abbreviation": "RAG",
   "nodes": [
@@ -85,6 +85,22 @@
       "component": "T"
     },
     {
+      "node_id": "automation.r25_cleanmode_end_resetlatchandwindow::A",
+      "node_type": "action",
+      "label": "R25_CleanMode_End_ResetLatchAndWindow / Action",
+      "rule_uid": "automation.r25_cleanmode_end_resetlatchandwindow",
+      "rule_alias": "R25_CleanMode_End_ResetLatchAndWindow",
+      "component": "A"
+    },
+    {
+      "node_id": "automation.r25_cleanmode_end_resetlatchandwindow::T",
+      "node_type": "trigger",
+      "label": "R25_CleanMode_End_ResetLatchAndWindow / Trigger",
+      "rule_uid": "automation.r25_cleanmode_end_resetlatchandwindow",
+      "rule_alias": "R25_CleanMode_End_ResetLatchAndWindow",
+      "component": "T"
+    },
+    {
       "node_id": "env::Nursery::temperature",
       "node_type": "environment",
       "label": "Nursery / temperature",
@@ -116,6 +132,24 @@
     },
     {
       "edge_id": "e00002",
+      "source": "automation.r21_cleanmode_disablelatch::A",
+      "target": "automation.r25_cleanmode_end_resetlatchandwindow::A",
+      "edge_group": "assoc",
+      "kind": "direct-action",
+      "polarity": -1,
+      "metadata": {
+        "rule_from": "automation.r21_cleanmode_disablelatch",
+        "rule_to": "automation.r25_cleanmode_end_resetlatchandwindow",
+        "target_entity": "input_boolean.nursery_window_latch",
+        "operation_from": "turn_on",
+        "operation_to": "turn_off",
+        "post_from": "on",
+        "post_to": "off",
+        "target_entity_display": "nursery_window_latch (input_boolean.nursery_window_latch)"
+      }
+    },
+    {
+      "edge_id": "e00003",
       "source": "automation.r21_cleanmode_disablelatch::T",
       "target": "automation.r21_cleanmode_disablelatch::A",
       "edge_group": "intra",
@@ -127,7 +161,25 @@
       }
     },
     {
-      "edge_id": "e00003",
+      "edge_id": "e00004",
+      "source": "automation.r22_temphigh_windowopen::A",
+      "target": "automation.r25_cleanmode_end_resetlatchandwindow::A",
+      "edge_group": "assoc",
+      "kind": "direct-action",
+      "polarity": -1,
+      "metadata": {
+        "rule_from": "automation.r22_temphigh_windowopen",
+        "rule_to": "automation.r25_cleanmode_end_resetlatchandwindow",
+        "target_entity": "input_boolean.nursery_window",
+        "operation_from": "turn_on",
+        "operation_to": "turn_off",
+        "post_from": "on",
+        "post_to": "off",
+        "target_entity_display": "nursery_window (input_boolean.nursery_window)"
+      }
+    },
+    {
+      "edge_id": "e00005",
       "source": "automation.r22_temphigh_windowopen::A",
       "target": "env::Nursery::temperature",
       "edge_group": "assoc",
@@ -149,7 +201,7 @@
       }
     },
     {
-      "edge_id": "e00004",
+      "edge_id": "e00006",
       "source": "automation.r22_temphigh_windowopen::C",
       "target": "automation.r22_temphigh_windowopen::A",
       "edge_group": "intra",
@@ -161,7 +213,7 @@
       }
     },
     {
-      "edge_id": "e00005",
+      "edge_id": "e00007",
       "source": "automation.r22_temphigh_windowopen::T",
       "target": "automation.r22_temphigh_windowopen::C",
       "edge_group": "intra",
@@ -173,7 +225,7 @@
       }
     },
     {
-      "edge_id": "e00006",
+      "edge_id": "e00008",
       "source": "automation.r23_charger_stopautoclose::A",
       "target": "automation.r24_night_closegaragedoor::C",
       "edge_group": "assoc",
@@ -194,7 +246,7 @@
       }
     },
     {
-      "edge_id": "e00007",
+      "edge_id": "e00009",
       "source": "automation.r23_charger_stopautoclose::T",
       "target": "automation.r23_charger_stopautoclose::A",
       "edge_group": "intra",
@@ -206,7 +258,7 @@
       }
     },
     {
-      "edge_id": "e00008",
+      "edge_id": "e00010",
       "source": "automation.r24_night_closegaragedoor::C",
       "target": "automation.r24_night_closegaragedoor::A",
       "edge_group": "intra",
@@ -218,7 +270,7 @@
       }
     },
     {
-      "edge_id": "e00009",
+      "edge_id": "e00011",
       "source": "automation.r24_night_closegaragedoor::T",
       "target": "automation.r24_night_closegaragedoor::C",
       "edge_group": "intra",
@@ -230,7 +282,76 @@
       }
     },
     {
-      "edge_id": "e00010",
+      "edge_id": "e00012",
+      "source": "automation.r25_cleanmode_end_resetlatchandwindow::A",
+      "target": "automation.r21_cleanmode_disablelatch::A",
+      "edge_group": "assoc",
+      "kind": "direct-action",
+      "polarity": -1,
+      "metadata": {
+        "rule_from": "automation.r25_cleanmode_end_resetlatchandwindow",
+        "rule_to": "automation.r21_cleanmode_disablelatch",
+        "target_entity": "input_boolean.nursery_window_latch",
+        "operation_from": "turn_off",
+        "operation_to": "turn_on",
+        "post_from": "off",
+        "post_to": "on",
+        "target_entity_display": "nursery_window_latch (input_boolean.nursery_window_latch)"
+      }
+    },
+    {
+      "edge_id": "e00013",
+      "source": "automation.r25_cleanmode_end_resetlatchandwindow::A",
+      "target": "automation.r22_temphigh_windowopen::A",
+      "edge_group": "assoc",
+      "kind": "direct-action",
+      "polarity": -1,
+      "metadata": {
+        "rule_from": "automation.r25_cleanmode_end_resetlatchandwindow",
+        "rule_to": "automation.r22_temphigh_windowopen",
+        "target_entity": "input_boolean.nursery_window",
+        "operation_from": "turn_off",
+        "operation_to": "turn_on",
+        "post_from": "off",
+        "post_to": "on",
+        "target_entity_display": "nursery_window (input_boolean.nursery_window)"
+      }
+    },
+    {
+      "edge_id": "e00014",
+      "source": "automation.r25_cleanmode_end_resetlatchandwindow::A",
+      "target": "automation.r22_temphigh_windowopen::C",
+      "edge_group": "assoc",
+      "kind": "direct-condition-disable",
+      "polarity": -1,
+      "metadata": {
+        "rule_from": "automation.r25_cleanmode_end_resetlatchandwindow",
+        "rule_to": "automation.r22_temphigh_windowopen",
+        "target_entity": "input_boolean.nursery_window_latch",
+        "operation": "turn_off",
+        "post": "off",
+        "condition": {
+          "type": "state",
+          "entity_id": "input_boolean.nursery_window_latch",
+          "state": "on"
+        },
+        "target_entity_display": "nursery_window_latch (input_boolean.nursery_window_latch)"
+      }
+    },
+    {
+      "edge_id": "e00015",
+      "source": "automation.r25_cleanmode_end_resetlatchandwindow::T",
+      "target": "automation.r25_cleanmode_end_resetlatchandwindow::A",
+      "edge_group": "intra",
+      "kind": "flow",
+      "polarity": 1,
+      "metadata": {
+        "rule_uid": "automation.r25_cleanmode_end_resetlatchandwindow",
+        "description": "trigger-to-action internal flow"
+      }
+    },
+    {
+      "edge_id": "e00016",
       "source": "env::Nursery::temperature",
       "target": "automation.r22_temphigh_windowopen::A",
       "edge_group": "assoc",
@@ -252,7 +373,7 @@
       }
     },
     {
-      "edge_id": "e00011",
+      "edge_id": "e00017",
       "source": "env::Nursery::temperature",
       "target": "automation.r22_temphigh_windowopen::T",
       "edge_group": "assoc",
@@ -271,34 +392,35 @@
     }
   ],
   "summary": {
-    "node_count": 11,
-    "edge_count": 11,
+    "node_count": 13,
+    "edge_count": 17,
     "nodes_by_type": {
-      "action": 4,
+      "action": 5,
       "condition": 2,
       "environment": 1,
-      "trigger": 4
+      "trigger": 5
     },
     "edges_by_kind": {
+      "direct-action": 4,
       "direct-condition-allow": 1,
-      "direct-condition-disable": 1,
+      "direct-condition-disable": 2,
       "env-association": 1,
       "env-trigger": 1,
-      "flow": 6,
+      "flow": 7,
       "indirect-action": 1
     },
     "edges_by_group": {
-      "assoc": 5,
-      "intra": 6
+      "assoc": 10,
+      "intra": 7
     },
-    "rule_count": 4
+    "rule_count": 5
   },
   "pseudocode": "Algorithm BuildRuleAssociationGraph(TCAE)\nInput : TCAE rule set R = {r1, ..., rn}\nOutput: Rule Association Graph G_RA = (V, E, ell)\n\n1  V <- empty set; E <- empty list\n2  for each rule r in R do\n3      add trigger node v_r^T to V\n4      if C_r is not empty then\n5          add condition node v_r^C to V\n6      add action node v_r^A to V\n7      if C_r is not empty then\n8          add flow edge v_r^T -> v_r^C and v_r^C -> v_r^A\n9      else\n10         add flow edge v_r^T -> v_r^A\n11     for each environment reference rho in E_r^T union E_r^C do\n12         add environment node v_(rho.zone,rho.channel)^E to V\n13     for each environment effect eta in E_r^A do\n14         for each z in eta.reachable_zones do\n15             add environment node v_(z,eta.channel)^E to V\n16             add env-association edge v_r^A -> v_(z,eta.channel)^E\n17             add indirect-action edge v_(z,eta.channel)^E -> v_r^A\n18 end for\n\n19 for each ordered rule pair (ri, rj), ri != rj do\n20     for each action a in A_ri and trigger t in T_rj do\n21         if a may make t true then\n22             add direct-trigger edge v_ri^A -> v_rj^T\n23     for each action a in A_ri and condition c in C_rj do\n24         if a may make c true then\n25             add direct-condition-allow edge v_ri^A -> v_rj^C\n26         else if a may make c false then\n27             add direct-condition-disable edge v_ri^A -> v_rj^C\n28     for each action a in A_ri and action b in A_rj do\n29         if target(a) = target(b) then\n30             add direct-action edge v_ri^A -> v_rj^A\n31 end for\n\n32 for each rule r in R do\n33     for each environment trigger reference rho in E_r^T do\n34         add env-trigger edge v_(rho.zone,rho.channel)^E -> v_r^T\n35     for each environment condition reference rho in E_r^C do\n36         if increasing (rho.zone,rho.channel) helps satisfy rho then\n37             add indirect-condition-allow edge v_(rho.zone,rho.channel)^E -> v_r^C\n38         else\n39             add indirect-condition-disable edge v_(rho.zone,rho.channel)^E -> v_r^C\n40 end for\n\n41 remove duplicate edges with identical source, target, kind, polarity and core metadata\n42 assign stable edge identifiers\n43 return G_RA",
   "source": {
     "model": "TCAE",
     "schema_version": "1.0",
-    "generated_at": "2026-06-07T20:14:08.533638+00:00",
-    "rule_count": 4
+    "generated_at": "2026-06-07T20:20:08.488180+00:00",
+    "rule_count": 5
   },
   "entity_display": {
     "input_boolean.cleaning_mode_switch": "cleaning_mode_switch (input_boolean.cleaning_mode_switch)",

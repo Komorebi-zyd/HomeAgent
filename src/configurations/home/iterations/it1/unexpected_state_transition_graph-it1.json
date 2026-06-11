@@ -1,0 +1,2880 @@
+{
+  "schema_version": "1.0",
+  "generated_at": "2026-06-07T20:20:08.493595+00:00",
+  "graph_type": "Unexpected State Transition Graph",
+  "abbreviation": "USTG",
+  "nodes": [
+    {
+      "node_id": "automation.r21_cleanmode_disablelatch::A",
+      "node_type": "action",
+      "label": "R21_CleanMode_DisableLatch / Action",
+      "rule_uid": "automation.r21_cleanmode_disablelatch",
+      "rule_alias": "R21_CleanMode_DisableLatch",
+      "component": "A"
+    },
+    {
+      "node_id": "automation.r21_cleanmode_disablelatch::T",
+      "node_type": "trigger",
+      "label": "R21_CleanMode_DisableLatch / Trigger",
+      "rule_uid": "automation.r21_cleanmode_disablelatch",
+      "rule_alias": "R21_CleanMode_DisableLatch",
+      "component": "T"
+    },
+    {
+      "node_id": "automation.r22_temphigh_windowopen::A",
+      "node_type": "action",
+      "label": "R22_TempHigh_WindowOpen / Action",
+      "rule_uid": "automation.r22_temphigh_windowopen",
+      "rule_alias": "R22_TempHigh_WindowOpen",
+      "component": "A"
+    },
+    {
+      "node_id": "automation.r22_temphigh_windowopen::C",
+      "node_type": "condition",
+      "label": "R22_TempHigh_WindowOpen / Condition",
+      "rule_uid": "automation.r22_temphigh_windowopen",
+      "rule_alias": "R22_TempHigh_WindowOpen",
+      "component": "C"
+    },
+    {
+      "node_id": "automation.r22_temphigh_windowopen::T",
+      "node_type": "trigger",
+      "label": "R22_TempHigh_WindowOpen / Trigger",
+      "rule_uid": "automation.r22_temphigh_windowopen",
+      "rule_alias": "R22_TempHigh_WindowOpen",
+      "component": "T"
+    },
+    {
+      "node_id": "automation.r23_charger_stopautoclose::A",
+      "node_type": "action",
+      "label": "R23_Charger_StopAutoClose / Action",
+      "rule_uid": "automation.r23_charger_stopautoclose",
+      "rule_alias": "R23_Charger_StopAutoClose",
+      "component": "A"
+    },
+    {
+      "node_id": "automation.r23_charger_stopautoclose::T",
+      "node_type": "trigger",
+      "label": "R23_Charger_StopAutoClose / Trigger",
+      "rule_uid": "automation.r23_charger_stopautoclose",
+      "rule_alias": "R23_Charger_StopAutoClose",
+      "component": "T"
+    },
+    {
+      "node_id": "automation.r24_night_closegaragedoor::A",
+      "node_type": "action",
+      "label": "R24_Night_CloseGarageDoor / Action",
+      "rule_uid": "automation.r24_night_closegaragedoor",
+      "rule_alias": "R24_Night_CloseGarageDoor",
+      "component": "A"
+    },
+    {
+      "node_id": "automation.r24_night_closegaragedoor::C",
+      "node_type": "condition",
+      "label": "R24_Night_CloseGarageDoor / Condition",
+      "rule_uid": "automation.r24_night_closegaragedoor",
+      "rule_alias": "R24_Night_CloseGarageDoor",
+      "component": "C"
+    },
+    {
+      "node_id": "automation.r24_night_closegaragedoor::T",
+      "node_type": "trigger",
+      "label": "R24_Night_CloseGarageDoor / Trigger",
+      "rule_uid": "automation.r24_night_closegaragedoor",
+      "rule_alias": "R24_Night_CloseGarageDoor",
+      "component": "T"
+    },
+    {
+      "node_id": "automation.r25_cleanmode_end_resetlatchandwindow::A",
+      "node_type": "action",
+      "label": "R25_CleanMode_End_ResetLatchAndWindow / Action",
+      "rule_uid": "automation.r25_cleanmode_end_resetlatchandwindow",
+      "rule_alias": "R25_CleanMode_End_ResetLatchAndWindow",
+      "component": "A"
+    },
+    {
+      "node_id": "automation.r25_cleanmode_end_resetlatchandwindow::T",
+      "node_type": "trigger",
+      "label": "R25_CleanMode_End_ResetLatchAndWindow / Trigger",
+      "rule_uid": "automation.r25_cleanmode_end_resetlatchandwindow",
+      "rule_alias": "R25_CleanMode_End_ResetLatchAndWindow",
+      "component": "T"
+    },
+    {
+      "node_id": "env::Nursery::temperature",
+      "node_type": "environment",
+      "label": "Nursery / temperature",
+      "zone": "Nursery",
+      "channel": "temperature"
+    }
+  ],
+  "edges": [
+    {
+      "edge_id": "e00001",
+      "source": "automation.r21_cleanmode_disablelatch::A",
+      "target": "automation.r22_temphigh_windowopen::C",
+      "edge_group": "assoc",
+      "kind": "direct-condition-allow",
+      "polarity": 1,
+      "metadata": {
+        "rule_from": "automation.r21_cleanmode_disablelatch",
+        "rule_to": "automation.r22_temphigh_windowopen",
+        "target_entity": "input_boolean.nursery_window_latch",
+        "operation": "turn_on",
+        "post": "on",
+        "condition": {
+          "type": "state",
+          "entity_id": "input_boolean.nursery_window_latch",
+          "state": "on"
+        },
+        "target_entity_display": "nursery_window_latch (input_boolean.nursery_window_latch)"
+      }
+    },
+    {
+      "edge_id": "e00002",
+      "source": "automation.r21_cleanmode_disablelatch::A",
+      "target": "automation.r25_cleanmode_end_resetlatchandwindow::A",
+      "edge_group": "assoc",
+      "kind": "direct-action",
+      "polarity": -1,
+      "metadata": {
+        "rule_from": "automation.r21_cleanmode_disablelatch",
+        "rule_to": "automation.r25_cleanmode_end_resetlatchandwindow",
+        "target_entity": "input_boolean.nursery_window_latch",
+        "operation_from": "turn_on",
+        "operation_to": "turn_off",
+        "post_from": "on",
+        "post_to": "off",
+        "target_entity_display": "nursery_window_latch (input_boolean.nursery_window_latch)"
+      }
+    },
+    {
+      "edge_id": "e00003",
+      "source": "automation.r21_cleanmode_disablelatch::T",
+      "target": "automation.r21_cleanmode_disablelatch::A",
+      "edge_group": "intra",
+      "kind": "flow",
+      "polarity": 1,
+      "metadata": {
+        "rule_uid": "automation.r21_cleanmode_disablelatch",
+        "description": "trigger-to-action internal flow"
+      }
+    },
+    {
+      "edge_id": "e00004",
+      "source": "automation.r22_temphigh_windowopen::A",
+      "target": "automation.r25_cleanmode_end_resetlatchandwindow::A",
+      "edge_group": "assoc",
+      "kind": "direct-action",
+      "polarity": -1,
+      "metadata": {
+        "rule_from": "automation.r22_temphigh_windowopen",
+        "rule_to": "automation.r25_cleanmode_end_resetlatchandwindow",
+        "target_entity": "input_boolean.nursery_window",
+        "operation_from": "turn_on",
+        "operation_to": "turn_off",
+        "post_from": "on",
+        "post_to": "off",
+        "target_entity_display": "nursery_window (input_boolean.nursery_window)"
+      }
+    },
+    {
+      "edge_id": "e00006",
+      "source": "automation.r22_temphigh_windowopen::C",
+      "target": "automation.r22_temphigh_windowopen::A",
+      "edge_group": "intra",
+      "kind": "flow",
+      "polarity": 1,
+      "metadata": {
+        "rule_uid": "automation.r22_temphigh_windowopen",
+        "description": "condition-to-action internal flow"
+      }
+    },
+    {
+      "edge_id": "e00007",
+      "source": "automation.r22_temphigh_windowopen::T",
+      "target": "automation.r22_temphigh_windowopen::C",
+      "edge_group": "intra",
+      "kind": "flow",
+      "polarity": 1,
+      "metadata": {
+        "rule_uid": "automation.r22_temphigh_windowopen",
+        "description": "trigger-to-condition internal flow"
+      }
+    },
+    {
+      "edge_id": "e00008",
+      "source": "automation.r23_charger_stopautoclose::A",
+      "target": "automation.r24_night_closegaragedoor::C",
+      "edge_group": "assoc",
+      "kind": "direct-condition-disable",
+      "polarity": -1,
+      "metadata": {
+        "rule_from": "automation.r23_charger_stopautoclose",
+        "rule_to": "automation.r24_night_closegaragedoor",
+        "target_entity": "input_boolean.garage_auto_close_enabled",
+        "operation": "turn_off",
+        "post": "off",
+        "condition": {
+          "type": "state",
+          "entity_id": "input_boolean.garage_auto_close_enabled",
+          "state": "on"
+        },
+        "target_entity_display": "garage_auto_close_enabled (input_boolean.garage_auto_close_enabled)"
+      }
+    },
+    {
+      "edge_id": "e00009",
+      "source": "automation.r23_charger_stopautoclose::T",
+      "target": "automation.r23_charger_stopautoclose::A",
+      "edge_group": "intra",
+      "kind": "flow",
+      "polarity": 1,
+      "metadata": {
+        "rule_uid": "automation.r23_charger_stopautoclose",
+        "description": "trigger-to-action internal flow"
+      }
+    },
+    {
+      "edge_id": "e00010",
+      "source": "automation.r24_night_closegaragedoor::C",
+      "target": "automation.r24_night_closegaragedoor::A",
+      "edge_group": "intra",
+      "kind": "flow",
+      "polarity": 1,
+      "metadata": {
+        "rule_uid": "automation.r24_night_closegaragedoor",
+        "description": "condition-to-action internal flow"
+      }
+    },
+    {
+      "edge_id": "e00011",
+      "source": "automation.r24_night_closegaragedoor::T",
+      "target": "automation.r24_night_closegaragedoor::C",
+      "edge_group": "intra",
+      "kind": "flow",
+      "polarity": 1,
+      "metadata": {
+        "rule_uid": "automation.r24_night_closegaragedoor",
+        "description": "trigger-to-condition internal flow"
+      }
+    },
+    {
+      "edge_id": "e00012",
+      "source": "automation.r25_cleanmode_end_resetlatchandwindow::A",
+      "target": "automation.r21_cleanmode_disablelatch::A",
+      "edge_group": "assoc",
+      "kind": "direct-action",
+      "polarity": -1,
+      "metadata": {
+        "rule_from": "automation.r25_cleanmode_end_resetlatchandwindow",
+        "rule_to": "automation.r21_cleanmode_disablelatch",
+        "target_entity": "input_boolean.nursery_window_latch",
+        "operation_from": "turn_off",
+        "operation_to": "turn_on",
+        "post_from": "off",
+        "post_to": "on",
+        "target_entity_display": "nursery_window_latch (input_boolean.nursery_window_latch)"
+      }
+    },
+    {
+      "edge_id": "e00013",
+      "source": "automation.r25_cleanmode_end_resetlatchandwindow::A",
+      "target": "automation.r22_temphigh_windowopen::A",
+      "edge_group": "assoc",
+      "kind": "direct-action",
+      "polarity": -1,
+      "metadata": {
+        "rule_from": "automation.r25_cleanmode_end_resetlatchandwindow",
+        "rule_to": "automation.r22_temphigh_windowopen",
+        "target_entity": "input_boolean.nursery_window",
+        "operation_from": "turn_off",
+        "operation_to": "turn_on",
+        "post_from": "off",
+        "post_to": "on",
+        "target_entity_display": "nursery_window (input_boolean.nursery_window)"
+      }
+    },
+    {
+      "edge_id": "e00014",
+      "source": "automation.r25_cleanmode_end_resetlatchandwindow::A",
+      "target": "automation.r22_temphigh_windowopen::C",
+      "edge_group": "assoc",
+      "kind": "direct-condition-disable",
+      "polarity": -1,
+      "metadata": {
+        "rule_from": "automation.r25_cleanmode_end_resetlatchandwindow",
+        "rule_to": "automation.r22_temphigh_windowopen",
+        "target_entity": "input_boolean.nursery_window_latch",
+        "operation": "turn_off",
+        "post": "off",
+        "condition": {
+          "type": "state",
+          "entity_id": "input_boolean.nursery_window_latch",
+          "state": "on"
+        },
+        "target_entity_display": "nursery_window_latch (input_boolean.nursery_window_latch)"
+      }
+    },
+    {
+      "edge_id": "e00015",
+      "source": "automation.r25_cleanmode_end_resetlatchandwindow::T",
+      "target": "automation.r25_cleanmode_end_resetlatchandwindow::A",
+      "edge_group": "intra",
+      "kind": "flow",
+      "polarity": 1,
+      "metadata": {
+        "rule_uid": "automation.r25_cleanmode_end_resetlatchandwindow",
+        "description": "trigger-to-action internal flow"
+      }
+    },
+    {
+      "edge_id": "e00016",
+      "source": "env::Nursery::temperature",
+      "target": "automation.r22_temphigh_windowopen::A",
+      "edge_group": "assoc",
+      "kind": "indirect-action",
+      "polarity": -1,
+      "metadata": {
+        "rule_from": "automation.r22_temphigh_windowopen",
+        "effect_entity_id": "input_boolean.nursery_window",
+        "effect_operation": "turn_on",
+        "zone": "Nursery",
+        "channel": "temperature",
+        "direction": "-1",
+        "mu": 1,
+        "lambda": 0,
+        "duration": "inf",
+        "confidence": 0.86,
+        "reason": "Turning on the window switch corresponds to opening the window, which tends to lower temperature.",
+        "effect_entity_id_display": "nursery_window (input_boolean.nursery_window)"
+      }
+    },
+    {
+      "edge_id": "e00017",
+      "source": "env::Nursery::temperature",
+      "target": "automation.r22_temphigh_windowopen::T",
+      "edge_group": "assoc",
+      "kind": "env-trigger",
+      "polarity": 1,
+      "metadata": {
+        "rule_to": "automation.r22_temphigh_windowopen",
+        "entity_id": "input_number.nursery_temp_sensor",
+        "zone": "Nursery",
+        "channel": "temperature",
+        "relation": "↑",
+        "threshold": 30,
+        "confidence": 0.98,
+        "entity_id_display": "nursery_temp_sensor (input_number.nursery_temp_sensor)"
+      }
+    }
+  ],
+  "unexpected_paths": [
+    {
+      "path_id": "p00001",
+      "nodes": [
+        "automation.r25_cleanmode_end_resetlatchandwindow::A",
+        "automation.r21_cleanmode_disablelatch::A"
+      ],
+      "edges": [
+        "e00012"
+      ],
+      "edge_kinds": [
+        "direct-action"
+      ],
+      "path_polarity": -1,
+      "start_node": "automation.r25_cleanmode_end_resetlatchandwindow::A",
+      "terminal_action_node": "automation.r21_cleanmode_disablelatch::A",
+      "length": 1,
+      "out_U": [
+        {
+          "entity_id": "input_boolean.nursery_window_latch",
+          "post": "on",
+          "post_normalized": "on",
+          "operation": "turn_on",
+          "service": "input_boolean.turn_on",
+          "rule_uid": "automation.r21_cleanmode_disablelatch",
+          "rule_alias": "R21_CleanMode_DisableLatch",
+          "action_index": 0,
+          "raw_action": {
+            "type": "service",
+            "service": "input_boolean.turn_on",
+            "operation": "turn_on",
+            "target_entity": "input_boolean.nursery_window_latch",
+            "post": "on",
+            "data": {}
+          },
+          "normal_values": [
+            "off"
+          ],
+          "normal_value_keys": [
+            "str:off"
+          ],
+          "post_key": "str:on",
+          "relationship_to_normal": "away_from_normal",
+          "weak_unexpected": true,
+          "safety_level": "high",
+          "normal_reason": "The clean-mode rule turns it on to disable the latch, and the window-open rule requires the on state; off is the safer enabled-latch default."
+        }
+      ]
+    },
+    {
+      "path_id": "p00002",
+      "nodes": [
+        "automation.r22_temphigh_windowopen::A",
+        "automation.r25_cleanmode_end_resetlatchandwindow::A",
+        "automation.r21_cleanmode_disablelatch::A"
+      ],
+      "edges": [
+        "e00004",
+        "e00012"
+      ],
+      "edge_kinds": [
+        "direct-action",
+        "direct-action"
+      ],
+      "path_polarity": 1,
+      "start_node": "automation.r22_temphigh_windowopen::A",
+      "terminal_action_node": "automation.r21_cleanmode_disablelatch::A",
+      "length": 2,
+      "out_U": [
+        {
+          "entity_id": "input_boolean.nursery_window_latch",
+          "post": "on",
+          "post_normalized": "on",
+          "operation": "turn_on",
+          "service": "input_boolean.turn_on",
+          "rule_uid": "automation.r21_cleanmode_disablelatch",
+          "rule_alias": "R21_CleanMode_DisableLatch",
+          "action_index": 0,
+          "raw_action": {
+            "type": "service",
+            "service": "input_boolean.turn_on",
+            "operation": "turn_on",
+            "target_entity": "input_boolean.nursery_window_latch",
+            "post": "on",
+            "data": {}
+          },
+          "normal_values": [
+            "off"
+          ],
+          "normal_value_keys": [
+            "str:off"
+          ],
+          "post_key": "str:on",
+          "relationship_to_normal": "away_from_normal",
+          "weak_unexpected": true,
+          "safety_level": "high",
+          "normal_reason": "The clean-mode rule turns it on to disable the latch, and the window-open rule requires the on state; off is the safer enabled-latch default."
+        }
+      ]
+    },
+    {
+      "path_id": "p00003",
+      "nodes": [
+        "automation.r25_cleanmode_end_resetlatchandwindow::T",
+        "automation.r25_cleanmode_end_resetlatchandwindow::A",
+        "automation.r21_cleanmode_disablelatch::A"
+      ],
+      "edges": [
+        "e00015",
+        "e00012"
+      ],
+      "edge_kinds": [
+        "flow",
+        "direct-action"
+      ],
+      "path_polarity": -1,
+      "start_node": "automation.r25_cleanmode_end_resetlatchandwindow::T",
+      "terminal_action_node": "automation.r21_cleanmode_disablelatch::A",
+      "length": 2,
+      "out_U": [
+        {
+          "entity_id": "input_boolean.nursery_window_latch",
+          "post": "on",
+          "post_normalized": "on",
+          "operation": "turn_on",
+          "service": "input_boolean.turn_on",
+          "rule_uid": "automation.r21_cleanmode_disablelatch",
+          "rule_alias": "R21_CleanMode_DisableLatch",
+          "action_index": 0,
+          "raw_action": {
+            "type": "service",
+            "service": "input_boolean.turn_on",
+            "operation": "turn_on",
+            "target_entity": "input_boolean.nursery_window_latch",
+            "post": "on",
+            "data": {}
+          },
+          "normal_values": [
+            "off"
+          ],
+          "normal_value_keys": [
+            "str:off"
+          ],
+          "post_key": "str:on",
+          "relationship_to_normal": "away_from_normal",
+          "weak_unexpected": true,
+          "safety_level": "high",
+          "normal_reason": "The clean-mode rule turns it on to disable the latch, and the window-open rule requires the on state; off is the safer enabled-latch default."
+        }
+      ]
+    },
+    {
+      "path_id": "p00004",
+      "nodes": [
+        "automation.r22_temphigh_windowopen::C",
+        "automation.r22_temphigh_windowopen::A",
+        "automation.r25_cleanmode_end_resetlatchandwindow::A",
+        "automation.r21_cleanmode_disablelatch::A"
+      ],
+      "edges": [
+        "e00006",
+        "e00004",
+        "e00012"
+      ],
+      "edge_kinds": [
+        "flow",
+        "direct-action",
+        "direct-action"
+      ],
+      "path_polarity": 1,
+      "start_node": "automation.r22_temphigh_windowopen::C",
+      "terminal_action_node": "automation.r21_cleanmode_disablelatch::A",
+      "length": 3,
+      "out_U": [
+        {
+          "entity_id": "input_boolean.nursery_window_latch",
+          "post": "on",
+          "post_normalized": "on",
+          "operation": "turn_on",
+          "service": "input_boolean.turn_on",
+          "rule_uid": "automation.r21_cleanmode_disablelatch",
+          "rule_alias": "R21_CleanMode_DisableLatch",
+          "action_index": 0,
+          "raw_action": {
+            "type": "service",
+            "service": "input_boolean.turn_on",
+            "operation": "turn_on",
+            "target_entity": "input_boolean.nursery_window_latch",
+            "post": "on",
+            "data": {}
+          },
+          "normal_values": [
+            "off"
+          ],
+          "normal_value_keys": [
+            "str:off"
+          ],
+          "post_key": "str:on",
+          "relationship_to_normal": "away_from_normal",
+          "weak_unexpected": true,
+          "safety_level": "high",
+          "normal_reason": "The clean-mode rule turns it on to disable the latch, and the window-open rule requires the on state; off is the safer enabled-latch default."
+        }
+      ]
+    },
+    {
+      "path_id": "p00005",
+      "nodes": [
+        "env::Nursery::temperature",
+        "automation.r22_temphigh_windowopen::A",
+        "automation.r25_cleanmode_end_resetlatchandwindow::A",
+        "automation.r21_cleanmode_disablelatch::A"
+      ],
+      "edges": [
+        "e00016",
+        "e00004",
+        "e00012"
+      ],
+      "edge_kinds": [
+        "indirect-action",
+        "direct-action",
+        "direct-action"
+      ],
+      "path_polarity": -1,
+      "start_node": "env::Nursery::temperature",
+      "terminal_action_node": "automation.r21_cleanmode_disablelatch::A",
+      "length": 3,
+      "out_U": [
+        {
+          "entity_id": "input_boolean.nursery_window_latch",
+          "post": "on",
+          "post_normalized": "on",
+          "operation": "turn_on",
+          "service": "input_boolean.turn_on",
+          "rule_uid": "automation.r21_cleanmode_disablelatch",
+          "rule_alias": "R21_CleanMode_DisableLatch",
+          "action_index": 0,
+          "raw_action": {
+            "type": "service",
+            "service": "input_boolean.turn_on",
+            "operation": "turn_on",
+            "target_entity": "input_boolean.nursery_window_latch",
+            "post": "on",
+            "data": {}
+          },
+          "normal_values": [
+            "off"
+          ],
+          "normal_value_keys": [
+            "str:off"
+          ],
+          "post_key": "str:on",
+          "relationship_to_normal": "away_from_normal",
+          "weak_unexpected": true,
+          "safety_level": "high",
+          "normal_reason": "The clean-mode rule turns it on to disable the latch, and the window-open rule requires the on state; off is the safer enabled-latch default."
+        }
+      ]
+    },
+    {
+      "path_id": "p00006",
+      "nodes": [
+        "automation.r22_temphigh_windowopen::T",
+        "automation.r22_temphigh_windowopen::C",
+        "automation.r22_temphigh_windowopen::A",
+        "automation.r25_cleanmode_end_resetlatchandwindow::A",
+        "automation.r21_cleanmode_disablelatch::A"
+      ],
+      "edges": [
+        "e00007",
+        "e00006",
+        "e00004",
+        "e00012"
+      ],
+      "edge_kinds": [
+        "flow",
+        "flow",
+        "direct-action",
+        "direct-action"
+      ],
+      "path_polarity": 1,
+      "start_node": "automation.r22_temphigh_windowopen::T",
+      "terminal_action_node": "automation.r21_cleanmode_disablelatch::A",
+      "length": 4,
+      "out_U": [
+        {
+          "entity_id": "input_boolean.nursery_window_latch",
+          "post": "on",
+          "post_normalized": "on",
+          "operation": "turn_on",
+          "service": "input_boolean.turn_on",
+          "rule_uid": "automation.r21_cleanmode_disablelatch",
+          "rule_alias": "R21_CleanMode_DisableLatch",
+          "action_index": 0,
+          "raw_action": {
+            "type": "service",
+            "service": "input_boolean.turn_on",
+            "operation": "turn_on",
+            "target_entity": "input_boolean.nursery_window_latch",
+            "post": "on",
+            "data": {}
+          },
+          "normal_values": [
+            "off"
+          ],
+          "normal_value_keys": [
+            "str:off"
+          ],
+          "post_key": "str:on",
+          "relationship_to_normal": "away_from_normal",
+          "weak_unexpected": true,
+          "safety_level": "high",
+          "normal_reason": "The clean-mode rule turns it on to disable the latch, and the window-open rule requires the on state; off is the safer enabled-latch default."
+        }
+      ]
+    },
+    {
+      "path_id": "p00007",
+      "nodes": [
+        "env::Nursery::temperature",
+        "automation.r22_temphigh_windowopen::T",
+        "automation.r22_temphigh_windowopen::C",
+        "automation.r22_temphigh_windowopen::A",
+        "automation.r25_cleanmode_end_resetlatchandwindow::A",
+        "automation.r21_cleanmode_disablelatch::A"
+      ],
+      "edges": [
+        "e00017",
+        "e00007",
+        "e00006",
+        "e00004",
+        "e00012"
+      ],
+      "edge_kinds": [
+        "env-trigger",
+        "flow",
+        "flow",
+        "direct-action",
+        "direct-action"
+      ],
+      "path_polarity": 1,
+      "start_node": "env::Nursery::temperature",
+      "terminal_action_node": "automation.r21_cleanmode_disablelatch::A",
+      "length": 5,
+      "out_U": [
+        {
+          "entity_id": "input_boolean.nursery_window_latch",
+          "post": "on",
+          "post_normalized": "on",
+          "operation": "turn_on",
+          "service": "input_boolean.turn_on",
+          "rule_uid": "automation.r21_cleanmode_disablelatch",
+          "rule_alias": "R21_CleanMode_DisableLatch",
+          "action_index": 0,
+          "raw_action": {
+            "type": "service",
+            "service": "input_boolean.turn_on",
+            "operation": "turn_on",
+            "target_entity": "input_boolean.nursery_window_latch",
+            "post": "on",
+            "data": {}
+          },
+          "normal_values": [
+            "off"
+          ],
+          "normal_value_keys": [
+            "str:off"
+          ],
+          "post_key": "str:on",
+          "relationship_to_normal": "away_from_normal",
+          "weak_unexpected": true,
+          "safety_level": "high",
+          "normal_reason": "The clean-mode rule turns it on to disable the latch, and the window-open rule requires the on state; off is the safer enabled-latch default."
+        }
+      ]
+    },
+    {
+      "path_id": "p00008",
+      "nodes": [
+        "automation.r25_cleanmode_end_resetlatchandwindow::A",
+        "automation.r22_temphigh_windowopen::A"
+      ],
+      "edges": [
+        "e00013"
+      ],
+      "edge_kinds": [
+        "direct-action"
+      ],
+      "path_polarity": -1,
+      "start_node": "automation.r25_cleanmode_end_resetlatchandwindow::A",
+      "terminal_action_node": "automation.r22_temphigh_windowopen::A",
+      "length": 1,
+      "out_U": [
+        {
+          "entity_id": "input_boolean.nursery_window",
+          "post": "on",
+          "post_normalized": "on",
+          "operation": "turn_on",
+          "service": "input_boolean.turn_on",
+          "rule_uid": "automation.r22_temphigh_windowopen",
+          "rule_alias": "R22_TempHigh_WindowOpen",
+          "action_index": 0,
+          "raw_action": {
+            "type": "service",
+            "service": "input_boolean.turn_on",
+            "operation": "turn_on",
+            "target_entity": "input_boolean.nursery_window",
+            "post": "on",
+            "data": {}
+          },
+          "normal_values": [
+            "off"
+          ],
+          "normal_value_keys": [
+            "str:off"
+          ],
+          "post_key": "str:on",
+          "relationship_to_normal": "away_from_normal",
+          "weak_unexpected": true,
+          "safety_level": "high",
+          "normal_reason": "A temperature-driven rule turns this on to open the window, so off is the default closed state to preserve unless ventilation is intentionally requested."
+        }
+      ]
+    },
+    {
+      "path_id": "p00009",
+      "nodes": [
+        "env::Nursery::temperature",
+        "automation.r22_temphigh_windowopen::A"
+      ],
+      "edges": [
+        "e00016"
+      ],
+      "edge_kinds": [
+        "indirect-action"
+      ],
+      "path_polarity": -1,
+      "start_node": "env::Nursery::temperature",
+      "terminal_action_node": "automation.r22_temphigh_windowopen::A",
+      "length": 1,
+      "out_U": [
+        {
+          "entity_id": "input_boolean.nursery_window",
+          "post": "on",
+          "post_normalized": "on",
+          "operation": "turn_on",
+          "service": "input_boolean.turn_on",
+          "rule_uid": "automation.r22_temphigh_windowopen",
+          "rule_alias": "R22_TempHigh_WindowOpen",
+          "action_index": 0,
+          "raw_action": {
+            "type": "service",
+            "service": "input_boolean.turn_on",
+            "operation": "turn_on",
+            "target_entity": "input_boolean.nursery_window",
+            "post": "on",
+            "data": {}
+          },
+          "normal_values": [
+            "off"
+          ],
+          "normal_value_keys": [
+            "str:off"
+          ],
+          "post_key": "str:on",
+          "relationship_to_normal": "away_from_normal",
+          "weak_unexpected": true,
+          "safety_level": "high",
+          "normal_reason": "A temperature-driven rule turns this on to open the window, so off is the default closed state to preserve unless ventilation is intentionally requested."
+        }
+      ]
+    },
+    {
+      "path_id": "p00010",
+      "nodes": [
+        "automation.r21_cleanmode_disablelatch::A",
+        "automation.r22_temphigh_windowopen::C",
+        "automation.r22_temphigh_windowopen::A"
+      ],
+      "edges": [
+        "e00001",
+        "e00006"
+      ],
+      "edge_kinds": [
+        "direct-condition-allow",
+        "flow"
+      ],
+      "path_polarity": 1,
+      "start_node": "automation.r21_cleanmode_disablelatch::A",
+      "terminal_action_node": "automation.r22_temphigh_windowopen::A",
+      "length": 2,
+      "out_U": [
+        {
+          "entity_id": "input_boolean.nursery_window",
+          "post": "on",
+          "post_normalized": "on",
+          "operation": "turn_on",
+          "service": "input_boolean.turn_on",
+          "rule_uid": "automation.r22_temphigh_windowopen",
+          "rule_alias": "R22_TempHigh_WindowOpen",
+          "action_index": 0,
+          "raw_action": {
+            "type": "service",
+            "service": "input_boolean.turn_on",
+            "operation": "turn_on",
+            "target_entity": "input_boolean.nursery_window",
+            "post": "on",
+            "data": {}
+          },
+          "normal_values": [
+            "off"
+          ],
+          "normal_value_keys": [
+            "str:off"
+          ],
+          "post_key": "str:on",
+          "relationship_to_normal": "away_from_normal",
+          "weak_unexpected": true,
+          "safety_level": "high",
+          "normal_reason": "A temperature-driven rule turns this on to open the window, so off is the default closed state to preserve unless ventilation is intentionally requested."
+        }
+      ]
+    },
+    {
+      "path_id": "p00011",
+      "nodes": [
+        "automation.r21_cleanmode_disablelatch::A",
+        "automation.r25_cleanmode_end_resetlatchandwindow::A",
+        "automation.r22_temphigh_windowopen::A"
+      ],
+      "edges": [
+        "e00002",
+        "e00013"
+      ],
+      "edge_kinds": [
+        "direct-action",
+        "direct-action"
+      ],
+      "path_polarity": 1,
+      "start_node": "automation.r21_cleanmode_disablelatch::A",
+      "terminal_action_node": "automation.r22_temphigh_windowopen::A",
+      "length": 2,
+      "out_U": [
+        {
+          "entity_id": "input_boolean.nursery_window",
+          "post": "on",
+          "post_normalized": "on",
+          "operation": "turn_on",
+          "service": "input_boolean.turn_on",
+          "rule_uid": "automation.r22_temphigh_windowopen",
+          "rule_alias": "R22_TempHigh_WindowOpen",
+          "action_index": 0,
+          "raw_action": {
+            "type": "service",
+            "service": "input_boolean.turn_on",
+            "operation": "turn_on",
+            "target_entity": "input_boolean.nursery_window",
+            "post": "on",
+            "data": {}
+          },
+          "normal_values": [
+            "off"
+          ],
+          "normal_value_keys": [
+            "str:off"
+          ],
+          "post_key": "str:on",
+          "relationship_to_normal": "away_from_normal",
+          "weak_unexpected": true,
+          "safety_level": "high",
+          "normal_reason": "A temperature-driven rule turns this on to open the window, so off is the default closed state to preserve unless ventilation is intentionally requested."
+        }
+      ]
+    },
+    {
+      "path_id": "p00012",
+      "nodes": [
+        "automation.r25_cleanmode_end_resetlatchandwindow::A",
+        "automation.r22_temphigh_windowopen::C",
+        "automation.r22_temphigh_windowopen::A"
+      ],
+      "edges": [
+        "e00014",
+        "e00006"
+      ],
+      "edge_kinds": [
+        "direct-condition-disable",
+        "flow"
+      ],
+      "path_polarity": -1,
+      "start_node": "automation.r25_cleanmode_end_resetlatchandwindow::A",
+      "terminal_action_node": "automation.r22_temphigh_windowopen::A",
+      "length": 2,
+      "out_U": [
+        {
+          "entity_id": "input_boolean.nursery_window",
+          "post": "on",
+          "post_normalized": "on",
+          "operation": "turn_on",
+          "service": "input_boolean.turn_on",
+          "rule_uid": "automation.r22_temphigh_windowopen",
+          "rule_alias": "R22_TempHigh_WindowOpen",
+          "action_index": 0,
+          "raw_action": {
+            "type": "service",
+            "service": "input_boolean.turn_on",
+            "operation": "turn_on",
+            "target_entity": "input_boolean.nursery_window",
+            "post": "on",
+            "data": {}
+          },
+          "normal_values": [
+            "off"
+          ],
+          "normal_value_keys": [
+            "str:off"
+          ],
+          "post_key": "str:on",
+          "relationship_to_normal": "away_from_normal",
+          "weak_unexpected": true,
+          "safety_level": "high",
+          "normal_reason": "A temperature-driven rule turns this on to open the window, so off is the default closed state to preserve unless ventilation is intentionally requested."
+        }
+      ]
+    },
+    {
+      "path_id": "p00013",
+      "nodes": [
+        "automation.r25_cleanmode_end_resetlatchandwindow::T",
+        "automation.r25_cleanmode_end_resetlatchandwindow::A",
+        "automation.r22_temphigh_windowopen::A"
+      ],
+      "edges": [
+        "e00015",
+        "e00013"
+      ],
+      "edge_kinds": [
+        "flow",
+        "direct-action"
+      ],
+      "path_polarity": -1,
+      "start_node": "automation.r25_cleanmode_end_resetlatchandwindow::T",
+      "terminal_action_node": "automation.r22_temphigh_windowopen::A",
+      "length": 2,
+      "out_U": [
+        {
+          "entity_id": "input_boolean.nursery_window",
+          "post": "on",
+          "post_normalized": "on",
+          "operation": "turn_on",
+          "service": "input_boolean.turn_on",
+          "rule_uid": "automation.r22_temphigh_windowopen",
+          "rule_alias": "R22_TempHigh_WindowOpen",
+          "action_index": 0,
+          "raw_action": {
+            "type": "service",
+            "service": "input_boolean.turn_on",
+            "operation": "turn_on",
+            "target_entity": "input_boolean.nursery_window",
+            "post": "on",
+            "data": {}
+          },
+          "normal_values": [
+            "off"
+          ],
+          "normal_value_keys": [
+            "str:off"
+          ],
+          "post_key": "str:on",
+          "relationship_to_normal": "away_from_normal",
+          "weak_unexpected": true,
+          "safety_level": "high",
+          "normal_reason": "A temperature-driven rule turns this on to open the window, so off is the default closed state to preserve unless ventilation is intentionally requested."
+        }
+      ]
+    },
+    {
+      "path_id": "p00014",
+      "nodes": [
+        "automation.r21_cleanmode_disablelatch::A",
+        "automation.r25_cleanmode_end_resetlatchandwindow::A",
+        "automation.r22_temphigh_windowopen::C",
+        "automation.r22_temphigh_windowopen::A"
+      ],
+      "edges": [
+        "e00002",
+        "e00014",
+        "e00006"
+      ],
+      "edge_kinds": [
+        "direct-action",
+        "direct-condition-disable",
+        "flow"
+      ],
+      "path_polarity": 1,
+      "start_node": "automation.r21_cleanmode_disablelatch::A",
+      "terminal_action_node": "automation.r22_temphigh_windowopen::A",
+      "length": 3,
+      "out_U": [
+        {
+          "entity_id": "input_boolean.nursery_window",
+          "post": "on",
+          "post_normalized": "on",
+          "operation": "turn_on",
+          "service": "input_boolean.turn_on",
+          "rule_uid": "automation.r22_temphigh_windowopen",
+          "rule_alias": "R22_TempHigh_WindowOpen",
+          "action_index": 0,
+          "raw_action": {
+            "type": "service",
+            "service": "input_boolean.turn_on",
+            "operation": "turn_on",
+            "target_entity": "input_boolean.nursery_window",
+            "post": "on",
+            "data": {}
+          },
+          "normal_values": [
+            "off"
+          ],
+          "normal_value_keys": [
+            "str:off"
+          ],
+          "post_key": "str:on",
+          "relationship_to_normal": "away_from_normal",
+          "weak_unexpected": true,
+          "safety_level": "high",
+          "normal_reason": "A temperature-driven rule turns this on to open the window, so off is the default closed state to preserve unless ventilation is intentionally requested."
+        }
+      ]
+    },
+    {
+      "path_id": "p00015",
+      "nodes": [
+        "automation.r21_cleanmode_disablelatch::T",
+        "automation.r21_cleanmode_disablelatch::A",
+        "automation.r22_temphigh_windowopen::C",
+        "automation.r22_temphigh_windowopen::A"
+      ],
+      "edges": [
+        "e00003",
+        "e00001",
+        "e00006"
+      ],
+      "edge_kinds": [
+        "flow",
+        "direct-condition-allow",
+        "flow"
+      ],
+      "path_polarity": 1,
+      "start_node": "automation.r21_cleanmode_disablelatch::T",
+      "terminal_action_node": "automation.r22_temphigh_windowopen::A",
+      "length": 3,
+      "out_U": [
+        {
+          "entity_id": "input_boolean.nursery_window",
+          "post": "on",
+          "post_normalized": "on",
+          "operation": "turn_on",
+          "service": "input_boolean.turn_on",
+          "rule_uid": "automation.r22_temphigh_windowopen",
+          "rule_alias": "R22_TempHigh_WindowOpen",
+          "action_index": 0,
+          "raw_action": {
+            "type": "service",
+            "service": "input_boolean.turn_on",
+            "operation": "turn_on",
+            "target_entity": "input_boolean.nursery_window",
+            "post": "on",
+            "data": {}
+          },
+          "normal_values": [
+            "off"
+          ],
+          "normal_value_keys": [
+            "str:off"
+          ],
+          "post_key": "str:on",
+          "relationship_to_normal": "away_from_normal",
+          "weak_unexpected": true,
+          "safety_level": "high",
+          "normal_reason": "A temperature-driven rule turns this on to open the window, so off is the default closed state to preserve unless ventilation is intentionally requested."
+        }
+      ]
+    },
+    {
+      "path_id": "p00016",
+      "nodes": [
+        "automation.r21_cleanmode_disablelatch::T",
+        "automation.r21_cleanmode_disablelatch::A",
+        "automation.r25_cleanmode_end_resetlatchandwindow::A",
+        "automation.r22_temphigh_windowopen::A"
+      ],
+      "edges": [
+        "e00003",
+        "e00002",
+        "e00013"
+      ],
+      "edge_kinds": [
+        "flow",
+        "direct-action",
+        "direct-action"
+      ],
+      "path_polarity": 1,
+      "start_node": "automation.r21_cleanmode_disablelatch::T",
+      "terminal_action_node": "automation.r22_temphigh_windowopen::A",
+      "length": 3,
+      "out_U": [
+        {
+          "entity_id": "input_boolean.nursery_window",
+          "post": "on",
+          "post_normalized": "on",
+          "operation": "turn_on",
+          "service": "input_boolean.turn_on",
+          "rule_uid": "automation.r22_temphigh_windowopen",
+          "rule_alias": "R22_TempHigh_WindowOpen",
+          "action_index": 0,
+          "raw_action": {
+            "type": "service",
+            "service": "input_boolean.turn_on",
+            "operation": "turn_on",
+            "target_entity": "input_boolean.nursery_window",
+            "post": "on",
+            "data": {}
+          },
+          "normal_values": [
+            "off"
+          ],
+          "normal_value_keys": [
+            "str:off"
+          ],
+          "post_key": "str:on",
+          "relationship_to_normal": "away_from_normal",
+          "weak_unexpected": true,
+          "safety_level": "high",
+          "normal_reason": "A temperature-driven rule turns this on to open the window, so off is the default closed state to preserve unless ventilation is intentionally requested."
+        }
+      ]
+    },
+    {
+      "path_id": "p00017",
+      "nodes": [
+        "automation.r25_cleanmode_end_resetlatchandwindow::A",
+        "automation.r21_cleanmode_disablelatch::A",
+        "automation.r22_temphigh_windowopen::C",
+        "automation.r22_temphigh_windowopen::A"
+      ],
+      "edges": [
+        "e00012",
+        "e00001",
+        "e00006"
+      ],
+      "edge_kinds": [
+        "direct-action",
+        "direct-condition-allow",
+        "flow"
+      ],
+      "path_polarity": -1,
+      "start_node": "automation.r25_cleanmode_end_resetlatchandwindow::A",
+      "terminal_action_node": "automation.r22_temphigh_windowopen::A",
+      "length": 3,
+      "out_U": [
+        {
+          "entity_id": "input_boolean.nursery_window",
+          "post": "on",
+          "post_normalized": "on",
+          "operation": "turn_on",
+          "service": "input_boolean.turn_on",
+          "rule_uid": "automation.r22_temphigh_windowopen",
+          "rule_alias": "R22_TempHigh_WindowOpen",
+          "action_index": 0,
+          "raw_action": {
+            "type": "service",
+            "service": "input_boolean.turn_on",
+            "operation": "turn_on",
+            "target_entity": "input_boolean.nursery_window",
+            "post": "on",
+            "data": {}
+          },
+          "normal_values": [
+            "off"
+          ],
+          "normal_value_keys": [
+            "str:off"
+          ],
+          "post_key": "str:on",
+          "relationship_to_normal": "away_from_normal",
+          "weak_unexpected": true,
+          "safety_level": "high",
+          "normal_reason": "A temperature-driven rule turns this on to open the window, so off is the default closed state to preserve unless ventilation is intentionally requested."
+        }
+      ]
+    },
+    {
+      "path_id": "p00018",
+      "nodes": [
+        "automation.r25_cleanmode_end_resetlatchandwindow::T",
+        "automation.r25_cleanmode_end_resetlatchandwindow::A",
+        "automation.r22_temphigh_windowopen::C",
+        "automation.r22_temphigh_windowopen::A"
+      ],
+      "edges": [
+        "e00015",
+        "e00014",
+        "e00006"
+      ],
+      "edge_kinds": [
+        "flow",
+        "direct-condition-disable",
+        "flow"
+      ],
+      "path_polarity": -1,
+      "start_node": "automation.r25_cleanmode_end_resetlatchandwindow::T",
+      "terminal_action_node": "automation.r22_temphigh_windowopen::A",
+      "length": 3,
+      "out_U": [
+        {
+          "entity_id": "input_boolean.nursery_window",
+          "post": "on",
+          "post_normalized": "on",
+          "operation": "turn_on",
+          "service": "input_boolean.turn_on",
+          "rule_uid": "automation.r22_temphigh_windowopen",
+          "rule_alias": "R22_TempHigh_WindowOpen",
+          "action_index": 0,
+          "raw_action": {
+            "type": "service",
+            "service": "input_boolean.turn_on",
+            "operation": "turn_on",
+            "target_entity": "input_boolean.nursery_window",
+            "post": "on",
+            "data": {}
+          },
+          "normal_values": [
+            "off"
+          ],
+          "normal_value_keys": [
+            "str:off"
+          ],
+          "post_key": "str:on",
+          "relationship_to_normal": "away_from_normal",
+          "weak_unexpected": true,
+          "safety_level": "high",
+          "normal_reason": "A temperature-driven rule turns this on to open the window, so off is the default closed state to preserve unless ventilation is intentionally requested."
+        }
+      ]
+    },
+    {
+      "path_id": "p00019",
+      "nodes": [
+        "env::Nursery::temperature",
+        "automation.r22_temphigh_windowopen::T",
+        "automation.r22_temphigh_windowopen::C",
+        "automation.r22_temphigh_windowopen::A"
+      ],
+      "edges": [
+        "e00017",
+        "e00007",
+        "e00006"
+      ],
+      "edge_kinds": [
+        "env-trigger",
+        "flow",
+        "flow"
+      ],
+      "path_polarity": 1,
+      "start_node": "env::Nursery::temperature",
+      "terminal_action_node": "automation.r22_temphigh_windowopen::A",
+      "length": 3,
+      "out_U": [
+        {
+          "entity_id": "input_boolean.nursery_window",
+          "post": "on",
+          "post_normalized": "on",
+          "operation": "turn_on",
+          "service": "input_boolean.turn_on",
+          "rule_uid": "automation.r22_temphigh_windowopen",
+          "rule_alias": "R22_TempHigh_WindowOpen",
+          "action_index": 0,
+          "raw_action": {
+            "type": "service",
+            "service": "input_boolean.turn_on",
+            "operation": "turn_on",
+            "target_entity": "input_boolean.nursery_window",
+            "post": "on",
+            "data": {}
+          },
+          "normal_values": [
+            "off"
+          ],
+          "normal_value_keys": [
+            "str:off"
+          ],
+          "post_key": "str:on",
+          "relationship_to_normal": "away_from_normal",
+          "weak_unexpected": true,
+          "safety_level": "high",
+          "normal_reason": "A temperature-driven rule turns this on to open the window, so off is the default closed state to preserve unless ventilation is intentionally requested."
+        }
+      ]
+    },
+    {
+      "path_id": "p00020",
+      "nodes": [
+        "automation.r21_cleanmode_disablelatch::T",
+        "automation.r21_cleanmode_disablelatch::A",
+        "automation.r25_cleanmode_end_resetlatchandwindow::A",
+        "automation.r22_temphigh_windowopen::C",
+        "automation.r22_temphigh_windowopen::A"
+      ],
+      "edges": [
+        "e00003",
+        "e00002",
+        "e00014",
+        "e00006"
+      ],
+      "edge_kinds": [
+        "flow",
+        "direct-action",
+        "direct-condition-disable",
+        "flow"
+      ],
+      "path_polarity": 1,
+      "start_node": "automation.r21_cleanmode_disablelatch::T",
+      "terminal_action_node": "automation.r22_temphigh_windowopen::A",
+      "length": 4,
+      "out_U": [
+        {
+          "entity_id": "input_boolean.nursery_window",
+          "post": "on",
+          "post_normalized": "on",
+          "operation": "turn_on",
+          "service": "input_boolean.turn_on",
+          "rule_uid": "automation.r22_temphigh_windowopen",
+          "rule_alias": "R22_TempHigh_WindowOpen",
+          "action_index": 0,
+          "raw_action": {
+            "type": "service",
+            "service": "input_boolean.turn_on",
+            "operation": "turn_on",
+            "target_entity": "input_boolean.nursery_window",
+            "post": "on",
+            "data": {}
+          },
+          "normal_values": [
+            "off"
+          ],
+          "normal_value_keys": [
+            "str:off"
+          ],
+          "post_key": "str:on",
+          "relationship_to_normal": "away_from_normal",
+          "weak_unexpected": true,
+          "safety_level": "high",
+          "normal_reason": "A temperature-driven rule turns this on to open the window, so off is the default closed state to preserve unless ventilation is intentionally requested."
+        }
+      ]
+    },
+    {
+      "path_id": "p00021",
+      "nodes": [
+        "automation.r25_cleanmode_end_resetlatchandwindow::T",
+        "automation.r25_cleanmode_end_resetlatchandwindow::A",
+        "automation.r21_cleanmode_disablelatch::A",
+        "automation.r22_temphigh_windowopen::C",
+        "automation.r22_temphigh_windowopen::A"
+      ],
+      "edges": [
+        "e00015",
+        "e00012",
+        "e00001",
+        "e00006"
+      ],
+      "edge_kinds": [
+        "flow",
+        "direct-action",
+        "direct-condition-allow",
+        "flow"
+      ],
+      "path_polarity": -1,
+      "start_node": "automation.r25_cleanmode_end_resetlatchandwindow::T",
+      "terminal_action_node": "automation.r22_temphigh_windowopen::A",
+      "length": 4,
+      "out_U": [
+        {
+          "entity_id": "input_boolean.nursery_window",
+          "post": "on",
+          "post_normalized": "on",
+          "operation": "turn_on",
+          "service": "input_boolean.turn_on",
+          "rule_uid": "automation.r22_temphigh_windowopen",
+          "rule_alias": "R22_TempHigh_WindowOpen",
+          "action_index": 0,
+          "raw_action": {
+            "type": "service",
+            "service": "input_boolean.turn_on",
+            "operation": "turn_on",
+            "target_entity": "input_boolean.nursery_window",
+            "post": "on",
+            "data": {}
+          },
+          "normal_values": [
+            "off"
+          ],
+          "normal_value_keys": [
+            "str:off"
+          ],
+          "post_key": "str:on",
+          "relationship_to_normal": "away_from_normal",
+          "weak_unexpected": true,
+          "safety_level": "high",
+          "normal_reason": "A temperature-driven rule turns this on to open the window, so off is the default closed state to preserve unless ventilation is intentionally requested."
+        }
+      ]
+    },
+    {
+      "path_id": "p00022",
+      "nodes": [
+        "automation.r23_charger_stopautoclose::A",
+        "automation.r24_night_closegaragedoor::C",
+        "automation.r24_night_closegaragedoor::A"
+      ],
+      "edges": [
+        "e00008",
+        "e00010"
+      ],
+      "edge_kinds": [
+        "direct-condition-disable",
+        "flow"
+      ],
+      "path_polarity": -1,
+      "start_node": "automation.r23_charger_stopautoclose::A",
+      "terminal_action_node": "automation.r24_night_closegaragedoor::A",
+      "length": 2,
+      "out_U": [
+        {
+          "entity_id": "input_boolean.garage_door",
+          "post": "off",
+          "post_normalized": "off",
+          "operation": "turn_off",
+          "service": "input_boolean.turn_off",
+          "rule_uid": "automation.r24_night_closegaragedoor",
+          "rule_alias": "R24_Night_CloseGarageDoor",
+          "action_index": 0,
+          "raw_action": {
+            "type": "service",
+            "service": "input_boolean.turn_off",
+            "operation": "turn_off",
+            "target_entity": "input_boolean.garage_door",
+            "post": "off",
+            "data": {}
+          },
+          "normal_values": [
+            "off"
+          ],
+          "normal_value_keys": [
+            "str:off"
+          ],
+          "post_key": "str:off",
+          "relationship_to_normal": "toward_normal",
+          "weak_unexpected": false,
+          "safety_level": "critical",
+          "normal_reason": "The night-close rule checks for the on state and then turns it off, indicating off is the secured/closed post-state to preserve."
+        }
+      ]
+    },
+    {
+      "path_id": "p00023",
+      "nodes": [
+        "automation.r23_charger_stopautoclose::T",
+        "automation.r23_charger_stopautoclose::A",
+        "automation.r24_night_closegaragedoor::C",
+        "automation.r24_night_closegaragedoor::A"
+      ],
+      "edges": [
+        "e00009",
+        "e00008",
+        "e00010"
+      ],
+      "edge_kinds": [
+        "flow",
+        "direct-condition-disable",
+        "flow"
+      ],
+      "path_polarity": -1,
+      "start_node": "automation.r23_charger_stopautoclose::T",
+      "terminal_action_node": "automation.r24_night_closegaragedoor::A",
+      "length": 3,
+      "out_U": [
+        {
+          "entity_id": "input_boolean.garage_door",
+          "post": "off",
+          "post_normalized": "off",
+          "operation": "turn_off",
+          "service": "input_boolean.turn_off",
+          "rule_uid": "automation.r24_night_closegaragedoor",
+          "rule_alias": "R24_Night_CloseGarageDoor",
+          "action_index": 0,
+          "raw_action": {
+            "type": "service",
+            "service": "input_boolean.turn_off",
+            "operation": "turn_off",
+            "target_entity": "input_boolean.garage_door",
+            "post": "off",
+            "data": {}
+          },
+          "normal_values": [
+            "off"
+          ],
+          "normal_value_keys": [
+            "str:off"
+          ],
+          "post_key": "str:off",
+          "relationship_to_normal": "toward_normal",
+          "weak_unexpected": false,
+          "safety_level": "critical",
+          "normal_reason": "The night-close rule checks for the on state and then turns it off, indicating off is the secured/closed post-state to preserve."
+        }
+      ]
+    },
+    {
+      "path_id": "p00024",
+      "nodes": [
+        "automation.r21_cleanmode_disablelatch::A",
+        "automation.r25_cleanmode_end_resetlatchandwindow::A"
+      ],
+      "edges": [
+        "e00002"
+      ],
+      "edge_kinds": [
+        "direct-action"
+      ],
+      "path_polarity": -1,
+      "start_node": "automation.r21_cleanmode_disablelatch::A",
+      "terminal_action_node": "automation.r25_cleanmode_end_resetlatchandwindow::A",
+      "length": 1,
+      "out_U": [
+        {
+          "entity_id": "input_boolean.nursery_window_latch",
+          "post": "off",
+          "post_normalized": "off",
+          "operation": "turn_off",
+          "service": "input_boolean.turn_off",
+          "rule_uid": "automation.r25_cleanmode_end_resetlatchandwindow",
+          "rule_alias": "R25_CleanMode_End_ResetLatchAndWindow",
+          "action_index": 0,
+          "raw_action": {
+            "type": "service",
+            "service": "input_boolean.turn_off",
+            "operation": "turn_off",
+            "target_entity": "input_boolean.nursery_window_latch",
+            "post": "off",
+            "data": {}
+          },
+          "normal_values": [
+            "off"
+          ],
+          "normal_value_keys": [
+            "str:off"
+          ],
+          "post_key": "str:off",
+          "relationship_to_normal": "toward_normal",
+          "weak_unexpected": false,
+          "safety_level": "high",
+          "normal_reason": "The clean-mode rule turns it on to disable the latch, and the window-open rule requires the on state; off is the safer enabled-latch default."
+        },
+        {
+          "entity_id": "input_boolean.nursery_window",
+          "post": "off",
+          "post_normalized": "off",
+          "operation": "turn_off",
+          "service": "input_boolean.turn_off",
+          "rule_uid": "automation.r25_cleanmode_end_resetlatchandwindow",
+          "rule_alias": "R25_CleanMode_End_ResetLatchAndWindow",
+          "action_index": 1,
+          "raw_action": {
+            "type": "service",
+            "service": "input_boolean.turn_off",
+            "operation": "turn_off",
+            "target_entity": "input_boolean.nursery_window",
+            "post": "off",
+            "data": {}
+          },
+          "normal_values": [
+            "off"
+          ],
+          "normal_value_keys": [
+            "str:off"
+          ],
+          "post_key": "str:off",
+          "relationship_to_normal": "toward_normal",
+          "weak_unexpected": false,
+          "safety_level": "high",
+          "normal_reason": "A temperature-driven rule turns this on to open the window, so off is the default closed state to preserve unless ventilation is intentionally requested."
+        }
+      ]
+    },
+    {
+      "path_id": "p00025",
+      "nodes": [
+        "automation.r22_temphigh_windowopen::A",
+        "automation.r25_cleanmode_end_resetlatchandwindow::A"
+      ],
+      "edges": [
+        "e00004"
+      ],
+      "edge_kinds": [
+        "direct-action"
+      ],
+      "path_polarity": -1,
+      "start_node": "automation.r22_temphigh_windowopen::A",
+      "terminal_action_node": "automation.r25_cleanmode_end_resetlatchandwindow::A",
+      "length": 1,
+      "out_U": [
+        {
+          "entity_id": "input_boolean.nursery_window_latch",
+          "post": "off",
+          "post_normalized": "off",
+          "operation": "turn_off",
+          "service": "input_boolean.turn_off",
+          "rule_uid": "automation.r25_cleanmode_end_resetlatchandwindow",
+          "rule_alias": "R25_CleanMode_End_ResetLatchAndWindow",
+          "action_index": 0,
+          "raw_action": {
+            "type": "service",
+            "service": "input_boolean.turn_off",
+            "operation": "turn_off",
+            "target_entity": "input_boolean.nursery_window_latch",
+            "post": "off",
+            "data": {}
+          },
+          "normal_values": [
+            "off"
+          ],
+          "normal_value_keys": [
+            "str:off"
+          ],
+          "post_key": "str:off",
+          "relationship_to_normal": "toward_normal",
+          "weak_unexpected": false,
+          "safety_level": "high",
+          "normal_reason": "The clean-mode rule turns it on to disable the latch, and the window-open rule requires the on state; off is the safer enabled-latch default."
+        },
+        {
+          "entity_id": "input_boolean.nursery_window",
+          "post": "off",
+          "post_normalized": "off",
+          "operation": "turn_off",
+          "service": "input_boolean.turn_off",
+          "rule_uid": "automation.r25_cleanmode_end_resetlatchandwindow",
+          "rule_alias": "R25_CleanMode_End_ResetLatchAndWindow",
+          "action_index": 1,
+          "raw_action": {
+            "type": "service",
+            "service": "input_boolean.turn_off",
+            "operation": "turn_off",
+            "target_entity": "input_boolean.nursery_window",
+            "post": "off",
+            "data": {}
+          },
+          "normal_values": [
+            "off"
+          ],
+          "normal_value_keys": [
+            "str:off"
+          ],
+          "post_key": "str:off",
+          "relationship_to_normal": "toward_normal",
+          "weak_unexpected": false,
+          "safety_level": "high",
+          "normal_reason": "A temperature-driven rule turns this on to open the window, so off is the default closed state to preserve unless ventilation is intentionally requested."
+        }
+      ]
+    },
+    {
+      "path_id": "p00026",
+      "nodes": [
+        "automation.r21_cleanmode_disablelatch::T",
+        "automation.r21_cleanmode_disablelatch::A",
+        "automation.r25_cleanmode_end_resetlatchandwindow::A"
+      ],
+      "edges": [
+        "e00003",
+        "e00002"
+      ],
+      "edge_kinds": [
+        "flow",
+        "direct-action"
+      ],
+      "path_polarity": -1,
+      "start_node": "automation.r21_cleanmode_disablelatch::T",
+      "terminal_action_node": "automation.r25_cleanmode_end_resetlatchandwindow::A",
+      "length": 2,
+      "out_U": [
+        {
+          "entity_id": "input_boolean.nursery_window_latch",
+          "post": "off",
+          "post_normalized": "off",
+          "operation": "turn_off",
+          "service": "input_boolean.turn_off",
+          "rule_uid": "automation.r25_cleanmode_end_resetlatchandwindow",
+          "rule_alias": "R25_CleanMode_End_ResetLatchAndWindow",
+          "action_index": 0,
+          "raw_action": {
+            "type": "service",
+            "service": "input_boolean.turn_off",
+            "operation": "turn_off",
+            "target_entity": "input_boolean.nursery_window_latch",
+            "post": "off",
+            "data": {}
+          },
+          "normal_values": [
+            "off"
+          ],
+          "normal_value_keys": [
+            "str:off"
+          ],
+          "post_key": "str:off",
+          "relationship_to_normal": "toward_normal",
+          "weak_unexpected": false,
+          "safety_level": "high",
+          "normal_reason": "The clean-mode rule turns it on to disable the latch, and the window-open rule requires the on state; off is the safer enabled-latch default."
+        },
+        {
+          "entity_id": "input_boolean.nursery_window",
+          "post": "off",
+          "post_normalized": "off",
+          "operation": "turn_off",
+          "service": "input_boolean.turn_off",
+          "rule_uid": "automation.r25_cleanmode_end_resetlatchandwindow",
+          "rule_alias": "R25_CleanMode_End_ResetLatchAndWindow",
+          "action_index": 1,
+          "raw_action": {
+            "type": "service",
+            "service": "input_boolean.turn_off",
+            "operation": "turn_off",
+            "target_entity": "input_boolean.nursery_window",
+            "post": "off",
+            "data": {}
+          },
+          "normal_values": [
+            "off"
+          ],
+          "normal_value_keys": [
+            "str:off"
+          ],
+          "post_key": "str:off",
+          "relationship_to_normal": "toward_normal",
+          "weak_unexpected": false,
+          "safety_level": "high",
+          "normal_reason": "A temperature-driven rule turns this on to open the window, so off is the default closed state to preserve unless ventilation is intentionally requested."
+        }
+      ]
+    },
+    {
+      "path_id": "p00027",
+      "nodes": [
+        "automation.r22_temphigh_windowopen::C",
+        "automation.r22_temphigh_windowopen::A",
+        "automation.r25_cleanmode_end_resetlatchandwindow::A"
+      ],
+      "edges": [
+        "e00006",
+        "e00004"
+      ],
+      "edge_kinds": [
+        "flow",
+        "direct-action"
+      ],
+      "path_polarity": -1,
+      "start_node": "automation.r22_temphigh_windowopen::C",
+      "terminal_action_node": "automation.r25_cleanmode_end_resetlatchandwindow::A",
+      "length": 2,
+      "out_U": [
+        {
+          "entity_id": "input_boolean.nursery_window_latch",
+          "post": "off",
+          "post_normalized": "off",
+          "operation": "turn_off",
+          "service": "input_boolean.turn_off",
+          "rule_uid": "automation.r25_cleanmode_end_resetlatchandwindow",
+          "rule_alias": "R25_CleanMode_End_ResetLatchAndWindow",
+          "action_index": 0,
+          "raw_action": {
+            "type": "service",
+            "service": "input_boolean.turn_off",
+            "operation": "turn_off",
+            "target_entity": "input_boolean.nursery_window_latch",
+            "post": "off",
+            "data": {}
+          },
+          "normal_values": [
+            "off"
+          ],
+          "normal_value_keys": [
+            "str:off"
+          ],
+          "post_key": "str:off",
+          "relationship_to_normal": "toward_normal",
+          "weak_unexpected": false,
+          "safety_level": "high",
+          "normal_reason": "The clean-mode rule turns it on to disable the latch, and the window-open rule requires the on state; off is the safer enabled-latch default."
+        },
+        {
+          "entity_id": "input_boolean.nursery_window",
+          "post": "off",
+          "post_normalized": "off",
+          "operation": "turn_off",
+          "service": "input_boolean.turn_off",
+          "rule_uid": "automation.r25_cleanmode_end_resetlatchandwindow",
+          "rule_alias": "R25_CleanMode_End_ResetLatchAndWindow",
+          "action_index": 1,
+          "raw_action": {
+            "type": "service",
+            "service": "input_boolean.turn_off",
+            "operation": "turn_off",
+            "target_entity": "input_boolean.nursery_window",
+            "post": "off",
+            "data": {}
+          },
+          "normal_values": [
+            "off"
+          ],
+          "normal_value_keys": [
+            "str:off"
+          ],
+          "post_key": "str:off",
+          "relationship_to_normal": "toward_normal",
+          "weak_unexpected": false,
+          "safety_level": "high",
+          "normal_reason": "A temperature-driven rule turns this on to open the window, so off is the default closed state to preserve unless ventilation is intentionally requested."
+        }
+      ]
+    },
+    {
+      "path_id": "p00028",
+      "nodes": [
+        "env::Nursery::temperature",
+        "automation.r22_temphigh_windowopen::A",
+        "automation.r25_cleanmode_end_resetlatchandwindow::A"
+      ],
+      "edges": [
+        "e00016",
+        "e00004"
+      ],
+      "edge_kinds": [
+        "indirect-action",
+        "direct-action"
+      ],
+      "path_polarity": 1,
+      "start_node": "env::Nursery::temperature",
+      "terminal_action_node": "automation.r25_cleanmode_end_resetlatchandwindow::A",
+      "length": 2,
+      "out_U": [
+        {
+          "entity_id": "input_boolean.nursery_window_latch",
+          "post": "off",
+          "post_normalized": "off",
+          "operation": "turn_off",
+          "service": "input_boolean.turn_off",
+          "rule_uid": "automation.r25_cleanmode_end_resetlatchandwindow",
+          "rule_alias": "R25_CleanMode_End_ResetLatchAndWindow",
+          "action_index": 0,
+          "raw_action": {
+            "type": "service",
+            "service": "input_boolean.turn_off",
+            "operation": "turn_off",
+            "target_entity": "input_boolean.nursery_window_latch",
+            "post": "off",
+            "data": {}
+          },
+          "normal_values": [
+            "off"
+          ],
+          "normal_value_keys": [
+            "str:off"
+          ],
+          "post_key": "str:off",
+          "relationship_to_normal": "toward_normal",
+          "weak_unexpected": false,
+          "safety_level": "high",
+          "normal_reason": "The clean-mode rule turns it on to disable the latch, and the window-open rule requires the on state; off is the safer enabled-latch default."
+        },
+        {
+          "entity_id": "input_boolean.nursery_window",
+          "post": "off",
+          "post_normalized": "off",
+          "operation": "turn_off",
+          "service": "input_boolean.turn_off",
+          "rule_uid": "automation.r25_cleanmode_end_resetlatchandwindow",
+          "rule_alias": "R25_CleanMode_End_ResetLatchAndWindow",
+          "action_index": 1,
+          "raw_action": {
+            "type": "service",
+            "service": "input_boolean.turn_off",
+            "operation": "turn_off",
+            "target_entity": "input_boolean.nursery_window",
+            "post": "off",
+            "data": {}
+          },
+          "normal_values": [
+            "off"
+          ],
+          "normal_value_keys": [
+            "str:off"
+          ],
+          "post_key": "str:off",
+          "relationship_to_normal": "toward_normal",
+          "weak_unexpected": false,
+          "safety_level": "high",
+          "normal_reason": "A temperature-driven rule turns this on to open the window, so off is the default closed state to preserve unless ventilation is intentionally requested."
+        }
+      ]
+    },
+    {
+      "path_id": "p00029",
+      "nodes": [
+        "automation.r21_cleanmode_disablelatch::A",
+        "automation.r22_temphigh_windowopen::C",
+        "automation.r22_temphigh_windowopen::A",
+        "automation.r25_cleanmode_end_resetlatchandwindow::A"
+      ],
+      "edges": [
+        "e00001",
+        "e00006",
+        "e00004"
+      ],
+      "edge_kinds": [
+        "direct-condition-allow",
+        "flow",
+        "direct-action"
+      ],
+      "path_polarity": -1,
+      "start_node": "automation.r21_cleanmode_disablelatch::A",
+      "terminal_action_node": "automation.r25_cleanmode_end_resetlatchandwindow::A",
+      "length": 3,
+      "out_U": [
+        {
+          "entity_id": "input_boolean.nursery_window_latch",
+          "post": "off",
+          "post_normalized": "off",
+          "operation": "turn_off",
+          "service": "input_boolean.turn_off",
+          "rule_uid": "automation.r25_cleanmode_end_resetlatchandwindow",
+          "rule_alias": "R25_CleanMode_End_ResetLatchAndWindow",
+          "action_index": 0,
+          "raw_action": {
+            "type": "service",
+            "service": "input_boolean.turn_off",
+            "operation": "turn_off",
+            "target_entity": "input_boolean.nursery_window_latch",
+            "post": "off",
+            "data": {}
+          },
+          "normal_values": [
+            "off"
+          ],
+          "normal_value_keys": [
+            "str:off"
+          ],
+          "post_key": "str:off",
+          "relationship_to_normal": "toward_normal",
+          "weak_unexpected": false,
+          "safety_level": "high",
+          "normal_reason": "The clean-mode rule turns it on to disable the latch, and the window-open rule requires the on state; off is the safer enabled-latch default."
+        },
+        {
+          "entity_id": "input_boolean.nursery_window",
+          "post": "off",
+          "post_normalized": "off",
+          "operation": "turn_off",
+          "service": "input_boolean.turn_off",
+          "rule_uid": "automation.r25_cleanmode_end_resetlatchandwindow",
+          "rule_alias": "R25_CleanMode_End_ResetLatchAndWindow",
+          "action_index": 1,
+          "raw_action": {
+            "type": "service",
+            "service": "input_boolean.turn_off",
+            "operation": "turn_off",
+            "target_entity": "input_boolean.nursery_window",
+            "post": "off",
+            "data": {}
+          },
+          "normal_values": [
+            "off"
+          ],
+          "normal_value_keys": [
+            "str:off"
+          ],
+          "post_key": "str:off",
+          "relationship_to_normal": "toward_normal",
+          "weak_unexpected": false,
+          "safety_level": "high",
+          "normal_reason": "A temperature-driven rule turns this on to open the window, so off is the default closed state to preserve unless ventilation is intentionally requested."
+        }
+      ]
+    },
+    {
+      "path_id": "p00030",
+      "nodes": [
+        "automation.r22_temphigh_windowopen::T",
+        "automation.r22_temphigh_windowopen::C",
+        "automation.r22_temphigh_windowopen::A",
+        "automation.r25_cleanmode_end_resetlatchandwindow::A"
+      ],
+      "edges": [
+        "e00007",
+        "e00006",
+        "e00004"
+      ],
+      "edge_kinds": [
+        "flow",
+        "flow",
+        "direct-action"
+      ],
+      "path_polarity": -1,
+      "start_node": "automation.r22_temphigh_windowopen::T",
+      "terminal_action_node": "automation.r25_cleanmode_end_resetlatchandwindow::A",
+      "length": 3,
+      "out_U": [
+        {
+          "entity_id": "input_boolean.nursery_window_latch",
+          "post": "off",
+          "post_normalized": "off",
+          "operation": "turn_off",
+          "service": "input_boolean.turn_off",
+          "rule_uid": "automation.r25_cleanmode_end_resetlatchandwindow",
+          "rule_alias": "R25_CleanMode_End_ResetLatchAndWindow",
+          "action_index": 0,
+          "raw_action": {
+            "type": "service",
+            "service": "input_boolean.turn_off",
+            "operation": "turn_off",
+            "target_entity": "input_boolean.nursery_window_latch",
+            "post": "off",
+            "data": {}
+          },
+          "normal_values": [
+            "off"
+          ],
+          "normal_value_keys": [
+            "str:off"
+          ],
+          "post_key": "str:off",
+          "relationship_to_normal": "toward_normal",
+          "weak_unexpected": false,
+          "safety_level": "high",
+          "normal_reason": "The clean-mode rule turns it on to disable the latch, and the window-open rule requires the on state; off is the safer enabled-latch default."
+        },
+        {
+          "entity_id": "input_boolean.nursery_window",
+          "post": "off",
+          "post_normalized": "off",
+          "operation": "turn_off",
+          "service": "input_boolean.turn_off",
+          "rule_uid": "automation.r25_cleanmode_end_resetlatchandwindow",
+          "rule_alias": "R25_CleanMode_End_ResetLatchAndWindow",
+          "action_index": 1,
+          "raw_action": {
+            "type": "service",
+            "service": "input_boolean.turn_off",
+            "operation": "turn_off",
+            "target_entity": "input_boolean.nursery_window",
+            "post": "off",
+            "data": {}
+          },
+          "normal_values": [
+            "off"
+          ],
+          "normal_value_keys": [
+            "str:off"
+          ],
+          "post_key": "str:off",
+          "relationship_to_normal": "toward_normal",
+          "weak_unexpected": false,
+          "safety_level": "high",
+          "normal_reason": "A temperature-driven rule turns this on to open the window, so off is the default closed state to preserve unless ventilation is intentionally requested."
+        }
+      ]
+    },
+    {
+      "path_id": "p00031",
+      "nodes": [
+        "automation.r21_cleanmode_disablelatch::T",
+        "automation.r21_cleanmode_disablelatch::A",
+        "automation.r22_temphigh_windowopen::C",
+        "automation.r22_temphigh_windowopen::A",
+        "automation.r25_cleanmode_end_resetlatchandwindow::A"
+      ],
+      "edges": [
+        "e00003",
+        "e00001",
+        "e00006",
+        "e00004"
+      ],
+      "edge_kinds": [
+        "flow",
+        "direct-condition-allow",
+        "flow",
+        "direct-action"
+      ],
+      "path_polarity": -1,
+      "start_node": "automation.r21_cleanmode_disablelatch::T",
+      "terminal_action_node": "automation.r25_cleanmode_end_resetlatchandwindow::A",
+      "length": 4,
+      "out_U": [
+        {
+          "entity_id": "input_boolean.nursery_window_latch",
+          "post": "off",
+          "post_normalized": "off",
+          "operation": "turn_off",
+          "service": "input_boolean.turn_off",
+          "rule_uid": "automation.r25_cleanmode_end_resetlatchandwindow",
+          "rule_alias": "R25_CleanMode_End_ResetLatchAndWindow",
+          "action_index": 0,
+          "raw_action": {
+            "type": "service",
+            "service": "input_boolean.turn_off",
+            "operation": "turn_off",
+            "target_entity": "input_boolean.nursery_window_latch",
+            "post": "off",
+            "data": {}
+          },
+          "normal_values": [
+            "off"
+          ],
+          "normal_value_keys": [
+            "str:off"
+          ],
+          "post_key": "str:off",
+          "relationship_to_normal": "toward_normal",
+          "weak_unexpected": false,
+          "safety_level": "high",
+          "normal_reason": "The clean-mode rule turns it on to disable the latch, and the window-open rule requires the on state; off is the safer enabled-latch default."
+        },
+        {
+          "entity_id": "input_boolean.nursery_window",
+          "post": "off",
+          "post_normalized": "off",
+          "operation": "turn_off",
+          "service": "input_boolean.turn_off",
+          "rule_uid": "automation.r25_cleanmode_end_resetlatchandwindow",
+          "rule_alias": "R25_CleanMode_End_ResetLatchAndWindow",
+          "action_index": 1,
+          "raw_action": {
+            "type": "service",
+            "service": "input_boolean.turn_off",
+            "operation": "turn_off",
+            "target_entity": "input_boolean.nursery_window",
+            "post": "off",
+            "data": {}
+          },
+          "normal_values": [
+            "off"
+          ],
+          "normal_value_keys": [
+            "str:off"
+          ],
+          "post_key": "str:off",
+          "relationship_to_normal": "toward_normal",
+          "weak_unexpected": false,
+          "safety_level": "high",
+          "normal_reason": "A temperature-driven rule turns this on to open the window, so off is the default closed state to preserve unless ventilation is intentionally requested."
+        }
+      ]
+    },
+    {
+      "path_id": "p00032",
+      "nodes": [
+        "env::Nursery::temperature",
+        "automation.r22_temphigh_windowopen::T",
+        "automation.r22_temphigh_windowopen::C",
+        "automation.r22_temphigh_windowopen::A",
+        "automation.r25_cleanmode_end_resetlatchandwindow::A"
+      ],
+      "edges": [
+        "e00017",
+        "e00007",
+        "e00006",
+        "e00004"
+      ],
+      "edge_kinds": [
+        "env-trigger",
+        "flow",
+        "flow",
+        "direct-action"
+      ],
+      "path_polarity": -1,
+      "start_node": "env::Nursery::temperature",
+      "terminal_action_node": "automation.r25_cleanmode_end_resetlatchandwindow::A",
+      "length": 4,
+      "out_U": [
+        {
+          "entity_id": "input_boolean.nursery_window_latch",
+          "post": "off",
+          "post_normalized": "off",
+          "operation": "turn_off",
+          "service": "input_boolean.turn_off",
+          "rule_uid": "automation.r25_cleanmode_end_resetlatchandwindow",
+          "rule_alias": "R25_CleanMode_End_ResetLatchAndWindow",
+          "action_index": 0,
+          "raw_action": {
+            "type": "service",
+            "service": "input_boolean.turn_off",
+            "operation": "turn_off",
+            "target_entity": "input_boolean.nursery_window_latch",
+            "post": "off",
+            "data": {}
+          },
+          "normal_values": [
+            "off"
+          ],
+          "normal_value_keys": [
+            "str:off"
+          ],
+          "post_key": "str:off",
+          "relationship_to_normal": "toward_normal",
+          "weak_unexpected": false,
+          "safety_level": "high",
+          "normal_reason": "The clean-mode rule turns it on to disable the latch, and the window-open rule requires the on state; off is the safer enabled-latch default."
+        },
+        {
+          "entity_id": "input_boolean.nursery_window",
+          "post": "off",
+          "post_normalized": "off",
+          "operation": "turn_off",
+          "service": "input_boolean.turn_off",
+          "rule_uid": "automation.r25_cleanmode_end_resetlatchandwindow",
+          "rule_alias": "R25_CleanMode_End_ResetLatchAndWindow",
+          "action_index": 1,
+          "raw_action": {
+            "type": "service",
+            "service": "input_boolean.turn_off",
+            "operation": "turn_off",
+            "target_entity": "input_boolean.nursery_window",
+            "post": "off",
+            "data": {}
+          },
+          "normal_values": [
+            "off"
+          ],
+          "normal_value_keys": [
+            "str:off"
+          ],
+          "post_key": "str:off",
+          "relationship_to_normal": "toward_normal",
+          "weak_unexpected": false,
+          "safety_level": "high",
+          "normal_reason": "A temperature-driven rule turns this on to open the window, so off is the default closed state to preserve unless ventilation is intentionally requested."
+        }
+      ]
+    }
+  ],
+  "action_posts": {
+    "automation.r21_cleanmode_disablelatch::A": [
+      {
+        "entity_id": "input_boolean.nursery_window_latch",
+        "post": "on",
+        "post_normalized": "on",
+        "operation": "turn_on",
+        "service": "input_boolean.turn_on",
+        "rule_uid": "automation.r21_cleanmode_disablelatch",
+        "rule_alias": "R21_CleanMode_DisableLatch",
+        "action_index": 0,
+        "raw_action": {
+          "type": "service",
+          "service": "input_boolean.turn_on",
+          "operation": "turn_on",
+          "target_entity": "input_boolean.nursery_window_latch",
+          "post": "on",
+          "data": {}
+        }
+      }
+    ],
+    "automation.r22_temphigh_windowopen::A": [
+      {
+        "entity_id": "input_boolean.nursery_window",
+        "post": "on",
+        "post_normalized": "on",
+        "operation": "turn_on",
+        "service": "input_boolean.turn_on",
+        "rule_uid": "automation.r22_temphigh_windowopen",
+        "rule_alias": "R22_TempHigh_WindowOpen",
+        "action_index": 0,
+        "raw_action": {
+          "type": "service",
+          "service": "input_boolean.turn_on",
+          "operation": "turn_on",
+          "target_entity": "input_boolean.nursery_window",
+          "post": "on",
+          "data": {}
+        }
+      }
+    ],
+    "automation.r23_charger_stopautoclose::A": [
+      {
+        "entity_id": "input_boolean.garage_auto_close_enabled",
+        "post": "off",
+        "post_normalized": "off",
+        "operation": "turn_off",
+        "service": "input_boolean.turn_off",
+        "rule_uid": "automation.r23_charger_stopautoclose",
+        "rule_alias": "R23_Charger_StopAutoClose",
+        "action_index": 0,
+        "raw_action": {
+          "type": "service",
+          "service": "input_boolean.turn_off",
+          "operation": "turn_off",
+          "target_entity": "input_boolean.garage_auto_close_enabled",
+          "post": "off",
+          "data": {}
+        }
+      }
+    ],
+    "automation.r24_night_closegaragedoor::A": [
+      {
+        "entity_id": "input_boolean.garage_door",
+        "post": "off",
+        "post_normalized": "off",
+        "operation": "turn_off",
+        "service": "input_boolean.turn_off",
+        "rule_uid": "automation.r24_night_closegaragedoor",
+        "rule_alias": "R24_Night_CloseGarageDoor",
+        "action_index": 0,
+        "raw_action": {
+          "type": "service",
+          "service": "input_boolean.turn_off",
+          "operation": "turn_off",
+          "target_entity": "input_boolean.garage_door",
+          "post": "off",
+          "data": {}
+        }
+      }
+    ],
+    "automation.r25_cleanmode_end_resetlatchandwindow::A": [
+      {
+        "entity_id": "input_boolean.nursery_window_latch",
+        "post": "off",
+        "post_normalized": "off",
+        "operation": "turn_off",
+        "service": "input_boolean.turn_off",
+        "rule_uid": "automation.r25_cleanmode_end_resetlatchandwindow",
+        "rule_alias": "R25_CleanMode_End_ResetLatchAndWindow",
+        "action_index": 0,
+        "raw_action": {
+          "type": "service",
+          "service": "input_boolean.turn_off",
+          "operation": "turn_off",
+          "target_entity": "input_boolean.nursery_window_latch",
+          "post": "off",
+          "data": {}
+        }
+      },
+      {
+        "entity_id": "input_boolean.nursery_window",
+        "post": "off",
+        "post_normalized": "off",
+        "operation": "turn_off",
+        "service": "input_boolean.turn_off",
+        "rule_uid": "automation.r25_cleanmode_end_resetlatchandwindow",
+        "rule_alias": "R25_CleanMode_End_ResetLatchAndWindow",
+        "action_index": 1,
+        "raw_action": {
+          "type": "service",
+          "service": "input_boolean.turn_off",
+          "operation": "turn_off",
+          "target_entity": "input_boolean.nursery_window",
+          "post": "off",
+          "data": {}
+        }
+      }
+    ]
+  },
+  "normal_related_actions": {
+    "automation.r21_cleanmode_disablelatch::A": [
+      {
+        "entity_id": "input_boolean.nursery_window_latch",
+        "post": "on",
+        "post_normalized": "on",
+        "operation": "turn_on",
+        "service": "input_boolean.turn_on",
+        "rule_uid": "automation.r21_cleanmode_disablelatch",
+        "rule_alias": "R21_CleanMode_DisableLatch",
+        "action_index": 0,
+        "raw_action": {
+          "type": "service",
+          "service": "input_boolean.turn_on",
+          "operation": "turn_on",
+          "target_entity": "input_boolean.nursery_window_latch",
+          "post": "on",
+          "data": {}
+        },
+        "normal_values": [
+          "off"
+        ],
+        "normal_value_keys": [
+          "str:off"
+        ],
+        "post_key": "str:on",
+        "relationship_to_normal": "away_from_normal",
+        "weak_unexpected": true,
+        "safety_level": "high",
+        "normal_reason": "The clean-mode rule turns it on to disable the latch, and the window-open rule requires the on state; off is the safer enabled-latch default."
+      }
+    ],
+    "automation.r22_temphigh_windowopen::A": [
+      {
+        "entity_id": "input_boolean.nursery_window",
+        "post": "on",
+        "post_normalized": "on",
+        "operation": "turn_on",
+        "service": "input_boolean.turn_on",
+        "rule_uid": "automation.r22_temphigh_windowopen",
+        "rule_alias": "R22_TempHigh_WindowOpen",
+        "action_index": 0,
+        "raw_action": {
+          "type": "service",
+          "service": "input_boolean.turn_on",
+          "operation": "turn_on",
+          "target_entity": "input_boolean.nursery_window",
+          "post": "on",
+          "data": {}
+        },
+        "normal_values": [
+          "off"
+        ],
+        "normal_value_keys": [
+          "str:off"
+        ],
+        "post_key": "str:on",
+        "relationship_to_normal": "away_from_normal",
+        "weak_unexpected": true,
+        "safety_level": "high",
+        "normal_reason": "A temperature-driven rule turns this on to open the window, so off is the default closed state to preserve unless ventilation is intentionally requested."
+      }
+    ],
+    "automation.r23_charger_stopautoclose::A": [
+      {
+        "entity_id": "input_boolean.garage_auto_close_enabled",
+        "post": "off",
+        "post_normalized": "off",
+        "operation": "turn_off",
+        "service": "input_boolean.turn_off",
+        "rule_uid": "automation.r23_charger_stopautoclose",
+        "rule_alias": "R23_Charger_StopAutoClose",
+        "action_index": 0,
+        "raw_action": {
+          "type": "service",
+          "service": "input_boolean.turn_off",
+          "operation": "turn_off",
+          "target_entity": "input_boolean.garage_auto_close_enabled",
+          "post": "off",
+          "data": {}
+        },
+        "normal_values": [
+          "on"
+        ],
+        "normal_value_keys": [
+          "str:on"
+        ],
+        "post_key": "str:off",
+        "relationship_to_normal": "away_from_normal",
+        "weak_unexpected": true,
+        "safety_level": "high",
+        "normal_reason": "Used as a condition for the night close rule, and another rule explicitly turns it off when charging starts; keeping it on preserves the intended automatic closure behavior."
+      }
+    ],
+    "automation.r24_night_closegaragedoor::A": [
+      {
+        "entity_id": "input_boolean.garage_door",
+        "post": "off",
+        "post_normalized": "off",
+        "operation": "turn_off",
+        "service": "input_boolean.turn_off",
+        "rule_uid": "automation.r24_night_closegaragedoor",
+        "rule_alias": "R24_Night_CloseGarageDoor",
+        "action_index": 0,
+        "raw_action": {
+          "type": "service",
+          "service": "input_boolean.turn_off",
+          "operation": "turn_off",
+          "target_entity": "input_boolean.garage_door",
+          "post": "off",
+          "data": {}
+        },
+        "normal_values": [
+          "off"
+        ],
+        "normal_value_keys": [
+          "str:off"
+        ],
+        "post_key": "str:off",
+        "relationship_to_normal": "toward_normal",
+        "weak_unexpected": false,
+        "safety_level": "critical",
+        "normal_reason": "The night-close rule checks for the on state and then turns it off, indicating off is the secured/closed post-state to preserve."
+      }
+    ],
+    "automation.r25_cleanmode_end_resetlatchandwindow::A": [
+      {
+        "entity_id": "input_boolean.nursery_window_latch",
+        "post": "off",
+        "post_normalized": "off",
+        "operation": "turn_off",
+        "service": "input_boolean.turn_off",
+        "rule_uid": "automation.r25_cleanmode_end_resetlatchandwindow",
+        "rule_alias": "R25_CleanMode_End_ResetLatchAndWindow",
+        "action_index": 0,
+        "raw_action": {
+          "type": "service",
+          "service": "input_boolean.turn_off",
+          "operation": "turn_off",
+          "target_entity": "input_boolean.nursery_window_latch",
+          "post": "off",
+          "data": {}
+        },
+        "normal_values": [
+          "off"
+        ],
+        "normal_value_keys": [
+          "str:off"
+        ],
+        "post_key": "str:off",
+        "relationship_to_normal": "toward_normal",
+        "weak_unexpected": false,
+        "safety_level": "high",
+        "normal_reason": "The clean-mode rule turns it on to disable the latch, and the window-open rule requires the on state; off is the safer enabled-latch default."
+      },
+      {
+        "entity_id": "input_boolean.nursery_window",
+        "post": "off",
+        "post_normalized": "off",
+        "operation": "turn_off",
+        "service": "input_boolean.turn_off",
+        "rule_uid": "automation.r25_cleanmode_end_resetlatchandwindow",
+        "rule_alias": "R25_CleanMode_End_ResetLatchAndWindow",
+        "action_index": 1,
+        "raw_action": {
+          "type": "service",
+          "service": "input_boolean.turn_off",
+          "operation": "turn_off",
+          "target_entity": "input_boolean.nursery_window",
+          "post": "off",
+          "data": {}
+        },
+        "normal_values": [
+          "off"
+        ],
+        "normal_value_keys": [
+          "str:off"
+        ],
+        "post_key": "str:off",
+        "relationship_to_normal": "toward_normal",
+        "weak_unexpected": false,
+        "safety_level": "high",
+        "normal_reason": "A temperature-driven rule turns this on to open the window, so off is the default closed state to preserve unless ventilation is intentionally requested."
+      }
+    ]
+  },
+  "weak_unexpected_actions": {
+    "automation.r21_cleanmode_disablelatch::A": [
+      {
+        "entity_id": "input_boolean.nursery_window_latch",
+        "post": "on",
+        "post_normalized": "on",
+        "operation": "turn_on",
+        "service": "input_boolean.turn_on",
+        "rule_uid": "automation.r21_cleanmode_disablelatch",
+        "rule_alias": "R21_CleanMode_DisableLatch",
+        "action_index": 0,
+        "raw_action": {
+          "type": "service",
+          "service": "input_boolean.turn_on",
+          "operation": "turn_on",
+          "target_entity": "input_boolean.nursery_window_latch",
+          "post": "on",
+          "data": {}
+        },
+        "normal_values": [
+          "off"
+        ],
+        "normal_value_keys": [
+          "str:off"
+        ],
+        "post_key": "str:on",
+        "relationship_to_normal": "away_from_normal",
+        "weak_unexpected": true,
+        "safety_level": "high",
+        "normal_reason": "The clean-mode rule turns it on to disable the latch, and the window-open rule requires the on state; off is the safer enabled-latch default."
+      }
+    ],
+    "automation.r22_temphigh_windowopen::A": [
+      {
+        "entity_id": "input_boolean.nursery_window",
+        "post": "on",
+        "post_normalized": "on",
+        "operation": "turn_on",
+        "service": "input_boolean.turn_on",
+        "rule_uid": "automation.r22_temphigh_windowopen",
+        "rule_alias": "R22_TempHigh_WindowOpen",
+        "action_index": 0,
+        "raw_action": {
+          "type": "service",
+          "service": "input_boolean.turn_on",
+          "operation": "turn_on",
+          "target_entity": "input_boolean.nursery_window",
+          "post": "on",
+          "data": {}
+        },
+        "normal_values": [
+          "off"
+        ],
+        "normal_value_keys": [
+          "str:off"
+        ],
+        "post_key": "str:on",
+        "relationship_to_normal": "away_from_normal",
+        "weak_unexpected": true,
+        "safety_level": "high",
+        "normal_reason": "A temperature-driven rule turns this on to open the window, so off is the default closed state to preserve unless ventilation is intentionally requested."
+      }
+    ],
+    "automation.r23_charger_stopautoclose::A": [
+      {
+        "entity_id": "input_boolean.garage_auto_close_enabled",
+        "post": "off",
+        "post_normalized": "off",
+        "operation": "turn_off",
+        "service": "input_boolean.turn_off",
+        "rule_uid": "automation.r23_charger_stopautoclose",
+        "rule_alias": "R23_Charger_StopAutoClose",
+        "action_index": 0,
+        "raw_action": {
+          "type": "service",
+          "service": "input_boolean.turn_off",
+          "operation": "turn_off",
+          "target_entity": "input_boolean.garage_auto_close_enabled",
+          "post": "off",
+          "data": {}
+        },
+        "normal_values": [
+          "on"
+        ],
+        "normal_value_keys": [
+          "str:on"
+        ],
+        "post_key": "str:off",
+        "relationship_to_normal": "away_from_normal",
+        "weak_unexpected": true,
+        "safety_level": "high",
+        "normal_reason": "Used as a condition for the night close rule, and another rule explicitly turns it off when charging starts; keeping it on preserves the intended automatic closure behavior."
+      }
+    ]
+  },
+  "normal_entities": {
+    "input_boolean.garage_auto_close_enabled": {
+      "entity_id": "input_boolean.garage_auto_close_enabled",
+      "normal_values": [
+        "on"
+      ],
+      "normal_value_keys": [
+        "str:on"
+      ],
+      "safety_level": "high",
+      "reason": "Used as a condition for the night close rule, and another rule explicitly turns it off when charging starts; keeping it on preserves the intended automatic closure behavior.",
+      "raw": {
+        "entity_id": "input_boolean.garage_auto_close_enabled",
+        "normal_values": [
+          "on"
+        ],
+        "abnormal_values": [
+          "off"
+        ],
+        "category": "security",
+        "safety_level": "high",
+        "confidence": 0.93,
+        "reason": "Used as a condition for the night close rule, and another rule explicitly turns it off when charging starts; keeping it on preserves the intended automatic closure behavior.",
+        "needs_human_review": false,
+        "source": "ai"
+      }
+    },
+    "input_boolean.garage_door": {
+      "entity_id": "input_boolean.garage_door",
+      "normal_values": [
+        "off"
+      ],
+      "normal_value_keys": [
+        "str:off"
+      ],
+      "safety_level": "critical",
+      "reason": "The night-close rule checks for the on state and then turns it off, indicating off is the secured/closed post-state to preserve.",
+      "raw": {
+        "entity_id": "input_boolean.garage_door",
+        "normal_values": [
+          "off"
+        ],
+        "abnormal_values": [
+          "on"
+        ],
+        "category": "security",
+        "safety_level": "critical",
+        "confidence": 0.97,
+        "reason": "The night-close rule checks for the on state and then turns it off, indicating off is the secured/closed post-state to preserve.",
+        "needs_human_review": false,
+        "source": "ai"
+      }
+    },
+    "input_boolean.nursery_window": {
+      "entity_id": "input_boolean.nursery_window",
+      "normal_values": [
+        "off"
+      ],
+      "normal_value_keys": [
+        "str:off"
+      ],
+      "safety_level": "high",
+      "reason": "A temperature-driven rule turns this on to open the window, so off is the default closed state to preserve unless ventilation is intentionally requested.",
+      "raw": {
+        "entity_id": "input_boolean.nursery_window",
+        "normal_values": [
+          "off"
+        ],
+        "abnormal_values": [
+          "on"
+        ],
+        "category": "safety",
+        "safety_level": "high",
+        "confidence": 0.89,
+        "reason": "A temperature-driven rule turns this on to open the window, so off is the default closed state to preserve unless ventilation is intentionally requested.",
+        "needs_human_review": false,
+        "source": "ai"
+      }
+    },
+    "input_boolean.nursery_window_latch": {
+      "entity_id": "input_boolean.nursery_window_latch",
+      "normal_values": [
+        "off"
+      ],
+      "normal_value_keys": [
+        "str:off"
+      ],
+      "safety_level": "high",
+      "reason": "The clean-mode rule turns it on to disable the latch, and the window-open rule requires the on state; off is the safer enabled-latch default.",
+      "raw": {
+        "entity_id": "input_boolean.nursery_window_latch",
+        "normal_values": [
+          "off"
+        ],
+        "abnormal_values": [
+          "on"
+        ],
+        "category": "safety",
+        "safety_level": "high",
+        "confidence": 0.91,
+        "reason": "The clean-mode rule turns it on to disable the latch, and the window-open rule requires the on state; off is the safer enabled-latch default.",
+        "needs_human_review": false,
+        "source": "ai"
+      }
+    }
+  },
+  "skipped_uncertain_posts": [],
+  "parameters": {
+    "max_depth": 6,
+    "max_paths_per_outcome": 500,
+    "positive_only": false
+  },
+  "source": {
+    "tcae_schema_version": "1.0",
+    "tcae_generated_at": "2026-06-07T20:20:08.488180+00:00",
+    "rule_association_graph_schema_version": "1.0",
+    "rule_association_graph_generated_at": "2026-06-07T20:20:08.491643+00:00",
+    "normal_config_schema_version": "1.0",
+    "normal_config_generated_at": "2026-06-07T20:15:52.284734+00:00"
+  },
+  "summary": {
+    "normal_entity_count": 4,
+    "action_node_count": 5,
+    "normal_related_action_node_count": 5,
+    "weak_unexpected_action_node_count": 3,
+    "unexpected_path_count": 32,
+    "node_count": 13,
+    "edge_count": 16,
+    "nodes_by_type": {
+      "action": 5,
+      "condition": 2,
+      "environment": 1,
+      "trigger": 5
+    },
+    "edges_by_kind": {
+      "direct-action": 4,
+      "direct-condition-allow": 1,
+      "direct-condition-disable": 2,
+      "env-trigger": 1,
+      "flow": 7,
+      "indirect-action": 1
+    },
+    "paths_by_terminal_action": {
+      "automation.r21_cleanmode_disablelatch::A": 7,
+      "automation.r22_temphigh_windowopen::A": 14,
+      "automation.r24_night_closegaragedoor::A": 2,
+      "automation.r25_cleanmode_end_resetlatchandwindow::A": 9
+    },
+    "paths_by_polarity": {
+      "-1": 20,
+      "1": 12
+    },
+    "skipped_uncertain_post_count": 0
+  },
+  "pseudocode": "Algorithm BuildUnexpectedStateTransitionGraph(G_RA, TCAE, NormalConfig)\nInput :\n  G_RA = (V, E, ell), the Rule Association Graph\n  TCAE rule set R = {r1, ..., rn}\n  NormalConfig N, entity normal-state predicates\nOutput:\n  G_UST = (V_U, E_U, ell_U), Unexpected State Transition Graph\n  P_U, unexpected association paths\n  Out_U, path-to-unexpected-post-state annotations\n\n1  ActionPost <- empty map from action node id to post-state set\n2  AbnormalActions <- empty map from action node id to unexpected post-states\n3  for each rule r in TCAE.rules do\n4      a_node <- node id of v_r^A\n5      for each action a in A_r do\n6          e <- target entity of action a\n7          Posts <- abstract post-state set of a\n8          for each v' in Posts do\n9              add (e, v') to ActionPost[a_node]\n10             if e is configured in NormalConfig and N_e(v') = 0 then\n11                 add (e, v') to AbnormalActions[a_node]\n12 end for\n\n13 P_U <- empty list\n14 for each terminal action node vA in AbnormalActions.keys do\n15     perform bounded reverse DFS in G_RA from vA\n16     during DFS, keep node sequence p and edge sequence ep\n17     if p contains at least one association edge and last(p)=vA then\n18         if PositiveOnly is false or path_polarity(p) = +1 then\n19             add p to P_U\n20             Out_U[p] <- AbnormalActions[vA]\n21 end for\n\n22 V_U <- all nodes appearing in paths P_U\n23 E_U <- all edges appearing in paths P_U\n24 ell_U <- restriction of ell to E_U\n25 return G_UST = (V_U, E_U, ell_U), P_U, Out_U"
+}

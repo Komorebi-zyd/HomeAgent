@@ -1,10 +1,25 @@
 {
   "schema_version": "1.0",
-  "generated_at": "2026-05-31T18:16:32.698693+00:00",
+  "generated_at": "2026-06-07T20:15:52.284734+00:00",
   "method": "ai_with_human_review",
   "normal_entities": {
-    "input_boolean.wen_shi_chuang_hu": {
-      "entity_id": "input_boolean.wen_shi_chuang_hu",
+    "input_boolean.garage_auto_close_enabled": {
+      "entity_id": "input_boolean.garage_auto_close_enabled",
+      "normal_values": [
+        "on"
+      ],
+      "abnormal_values": [
+        "off"
+      ],
+      "category": "security",
+      "safety_level": "high",
+      "confidence": 0.93,
+      "reason": "Used as a condition for the night close rule, and another rule explicitly turns it off when charging starts; keeping it on preserves the intended automatic closure behavior.",
+      "needs_human_review": false,
+      "source": "ai"
+    },
+    "input_boolean.garage_door": {
+      "entity_id": "input_boolean.garage_door",
       "normal_values": [
         "off"
       ],
@@ -12,29 +27,14 @@
         "on"
       ],
       "category": "security",
-      "safety_level": "high",
-      "confidence": 0.8,
-      "reason": "The greenhouse window opens to cool the room (R17), but physically opening a window reduces security. It should remain closed unless actively cooling.",
+      "safety_level": "critical",
+      "confidence": 0.97,
+      "reason": "The night-close rule checks for the on state and then turns it off, indicating off is the secured/closed post-state to preserve.",
       "needs_human_review": false,
       "source": "ai"
     },
-    "input_boolean.wo_shi_chuang_hu": {
-      "entity_id": "input_boolean.wo_shi_chuang_hu",
-      "normal_values": [
-        "off"
-      ],
-      "abnormal_values": [
-        "on"
-      ],
-      "category": "security",
-      "safety_level": "high",
-      "confidence": 0.8,
-      "reason": "The bedroom window opens to cool the room (R14), but physically opening a window reduces security. It should remain closed unless actively cooling.",
-      "needs_human_review": false,
-      "source": "ai"
-    },
-    "input_boolean.xiao_fang_pen_lin_tou": {
-      "entity_id": "input_boolean.xiao_fang_pen_lin_tou",
+    "input_boolean.nursery_window": {
+      "entity_id": "input_boolean.nursery_window",
       "normal_values": [
         "off"
       ],
@@ -42,47 +42,32 @@
         "on"
       ],
       "category": "safety",
-      "safety_level": "critical",
-      "confidence": 0.95,
-      "reason": "The fire sprinkler is only activated in response to a smoke alarm (R11). Its normal state is 'off' to prevent water damage. Activation indicates an emergency.",
-      "needs_human_review": false,
-      "source": "ai"
-    },
-    "input_boolean.zhi_neng_men_suo": {
-      "entity_id": "input_boolean.zhi_neng_men_suo",
-      "normal_values": [
-        "off"
-      ],
-      "abnormal_values": [
-        "on"
-      ],
-      "category": "security",
       "safety_level": "high",
-      "confidence": 0.7,
-      "reason": "Context implies 'on' corresponds to opening the lock (R1) and 'off' to closing/locking (R15). The locked state (off) is the normal security state.",
+      "confidence": 0.89,
+      "reason": "A temperature-driven rule turns this on to open the window, so off is the default closed state to preserve unless ventilation is intentionally requested.",
       "needs_human_review": false,
       "source": "ai"
     },
-    "input_boolean.zhong_yang_shui_fa": {
-      "entity_id": "input_boolean.zhong_yang_shui_fa",
+    "input_boolean.nursery_window_latch": {
+      "entity_id": "input_boolean.nursery_window_latch",
       "normal_values": [
-        "on"
+        "off"
       ],
       "abnormal_values": [
-        "off"
+        "on"
       ],
       "category": "safety",
-      "safety_level": "critical",
-      "confidence": 0.95,
-      "reason": "The central water valve is only turned off to prevent damage when a leak is detected (R10). The normal state is 'on' to ensure water availability.",
+      "safety_level": "high",
+      "confidence": 0.91,
+      "reason": "The clean-mode rule turns it on to disable the latch, and the window-open rule requires the on state; off is the safer enabled-latch default.",
       "needs_human_review": false,
       "source": "ai"
     }
   },
   "summary": {
-    "normal_entity_count": 5,
+    "normal_entity_count": 4,
     "levels": {
-      "critical": 2,
+      "critical": 1,
       "high": 3,
       "low": 0,
       "medium": 0

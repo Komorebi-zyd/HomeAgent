@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0",
-  "generated_at": "2026-06-07T20:14:25.217222+00:00",
+  "generated_at": "2026-06-07T20:16:30.825642+00:00",
   "graph_type": "Rule Association Graph",
   "abbreviation": "RAG",
   "nodes": [
@@ -297,7 +297,7 @@
   "source": {
     "model": "TCAE",
     "schema_version": "1.0",
-    "generated_at": "2026-06-07T20:14:08.533638+00:00",
+    "generated_at": "2026-06-07T20:16:30.823685+00:00",
     "rule_count": 4
   },
   "entity_display": {
