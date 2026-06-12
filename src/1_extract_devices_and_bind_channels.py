@@ -51,34 +51,99 @@ from common import (
 
 
 DEFAULT_CHANNEL_BINDING_PROMPT = r"""
-You are the channel binding and channel discovery module of HomeAgent. Your task is to infer physical-channel bindings for Home Assistant entities from automation context and propose missing channels when the current channel ontology is insufficient.
+You are the channel binding and channel discovery module of HomeAgent. Your task is to infer bindings between Home Assistant entities and physical/environmental channels for TCAE modeling.
+
+Core ontology clarification:
+1. In HomeAgent, a channel is a physical or environmental process dimension in a zone, i.e. something like y(zone, channel) in the environment state model. A channel is NOT the device's own on/off/open/closed/locked/unlocked/status value.
+2. Valid channel examples include temperature, humidity, pressure, light, sound, motion, smoke, water_flow, air_quality, CO2, gas_concentration, or other measurable/propagating environmental/resource-flow dimensions.
+3. Invalid channel examples include openness, lock_state, door_state, window_state, access, security, privacy, permission, mode, scene, status, charging_status, auto_close_enabled, child_lock, normality, or any other value that mainly describes an entity's discrete internal state or automation helper state.
+4. Door/window/lock/latch entities have important entity states, but those states belong to entity-state modeling x(t), not to environmental channel modeling y(t). Do NOT propose channels such as openness, lock_state, access, or security for them.
+5. A door/window may affect an environmental channel only when the supplied context supports a real physical effect on a candidate channel, e.g. opening a window may affect temperature/humidity/air_flow. If the physical effect is not clearly supported or the appropriate environmental channel is absent, leave effects empty rather than inventing a device-state channel.
+6. Logical helpers, mode switches, permission flags, buttons, timers, status flags, and scene switches usually have no observes/effects because they model automation context, not physical environmental channels.
 
 Important principles:
-1. Do NOT rely on any specific human language or hard-coded words. Entity object names may be Chinese pinyin, Japanese romanization, Spanish, English, abbreviations, or arbitrary user text. Treat names/descriptions/aliases only as semantic hints.
-2. The only platform/system variables you may rely on are Home Assistant domains, service names, trigger/condition/action positions, and structured YAML fields.
-3. For entity bindings, use ONLY the candidate channel list supplied by the user. If a useful channel is not in the candidate list, do NOT put it into observes/effects. Instead, add it to proposed_channels.
-4. Distinguish sensors from actuators:
-   - A sensor/observable entity observes environmental channels.
-   - An actuator/action target may affect environmental channels.
-   - A hybrid entity may have both.
-5. Multi-channel effects are allowed. For example, an air conditioner may decrease temperature and humidity; a heater may increase temperature; a humidifier may increase humidity; a sprinkler may affect humidity/water_flow. Use context to decide.
-6. Effects must be action-specific when possible. For an actuator, fill effects_by_operation for operations such as turn_on, turn_off, set_value, open, close, lock, unlock. Direction must be +1, -1, 0, or unknown.
-7. If an entity is security/logical/resource related and the candidate channel list lacks a suitable channel, leave observes/effects empty for that missing relation and propose a new channel. For example, locks/windows may suggest security or access; valves/sprinklers may suggest water_supply if water_flow is insufficient.
-8. proposed_channels are suggestions only. They will be manually reviewed and added to config.json by the user before rerunning this script.
-9. Return strict JSON only. Do not include markdown or commentary.
+1. Do NOT rely on any specific human language or hard-coded words. Entity object names may be Chinese pinyin, Japanese romanization, Spanish, English, abbreviations, or arbitrary user text. Treat names/descriptions/aliases/display names only as semantic hints.
+2. The only platform/system variables you may rely on directly are Home Assistant domains, service names, service operations, trigger/condition/action positions, structured YAML fields, entity registry metadata, and the supplied rule contexts.
+3. For entity bindings, use ONLY the candidate channel list supplied by the user. If a useful environmental channel is not in the candidate list, do NOT put it into observes/effects/effects_by_operation. Instead, add it to proposed_channels only if it satisfies the channel ontology above.
+4. proposed_channels must also be physical/environmental channels. Never propose device-state/control-state channels such as openness, lock_state, door_state, window_state, access, security, permission, mode, status, charging_status, or auto_close_enabled.
+5. Multi-channel effects are allowed when physically meaningful. For example, an air conditioner may decrease temperature and humidity; a heater may increase temperature; a humidifier may increase humidity; a sprinkler may affect humidity or water_flow. Use the supplied contexts to decide.
+6. Effects must be operation-specific when possible. For an actuator, fill effects_by_operation for operations such as turn_on, turn_off, set_value, open, close, lock, unlock, press, start, stop, or other Home Assistant service operations appearing in the context.
+7. If no physical/environmental channel is clear, return empty observes/effects/effects_by_operation for that relation and set needs_human_review=true if uncertainty matters.
+8. Return strict JSON only. Do not include markdown or commentary.
+
+Parameter definitions:
+1. entity_id:
+   - Must be exactly one entity_id from the supplied devices list.
+   - Do not invent entities and do not output entities that are absent from the supplied context.
+2. role:
+   - sensor: The entity observes, measures, detects, reports, or represents a physical/environmental condition used by triggers/conditions. Example: a temperature sensor observing temperature, a smoke sensor observing smoke, a water-flow sensor observing water_flow.
+   - actuator: The entity is a target of Home Assistant service actions and can change a device state, a physical process, or an automation-relevant control state. It should have effects only if its action changes a physical/environmental channel; otherwise effects should be empty.
+   - hybrid: The entity is both observable and controllable in the supplied context, or it appears on both observation side (trigger/condition) and action target side.
+   - logical: The entity mainly represents a virtual mode, helper, button, timer, permission flag, status flag, scene selector, or automation context rather than directly observing/affecting a physical/environmental channel. Logical entities usually have empty observes/effects.
+   - unknown: Use only when the supplied context is insufficient to infer a reliable role.
+3. channel:
+   - Must be exactly one item from candidate_channels when used inside observes, effects, or effects_by_operation.
+   - A channel is a physical/environmental dimension of a zone or resource-flow process, such as temperature, humidity, pressure, light, sound, motion, smoke, or water_flow.
+   - A channel is not an entity's own state. Do not use or propose channels for open/closed, locked/unlocked, enabled/disabled, on/off status, mode, scene, permission, or automation state.
+   - If the desired physical/environmental dimension is absent from candidate_channels, use proposed_channels only if the missing dimension is truly environmental/resource-flow, not device-state.
+4. value_type for observes:
+   - numeric: The observed channel value is numeric or threshold-comparable, e.g., temperature value, humidity percentage, illuminance, water flow rate, pressure, sound level, smoke concentration.
+   - state: The observed channel value is a finite environmental state, e.g., smoke detected/clear, motion detected/clear. Do NOT use state merely to encode a device's own open/closed/locked/unlocked status as a channel.
+   - event: The entity represents an instantaneous or discrete event related to an environmental channel, e.g., smoke alarm triggered or motion event. Use only when event semantics are clear.
+   - datetime: The entity represents a date, time, timestamp, schedule point, or time helper. Datetime entities are usually logical and often have no channel observes/effects.
+   - select: The entity represents a choice from a finite option set, e.g., mode selector or input_select option. Select entities are usually logical and often have no channel observes/effects.
+   - unknown: Use only when the supplied context does not support a reliable value type.
+5. direction for effects and effects_by_operation:
+   - +1: The operation tends to increase, intensify, produce, activate, or make more likely the corresponding physical/environmental channel value. Examples: heater turn_on -> temperature +1; light turn_on -> light +1; humidifier turn_on -> humidity +1; sprinkler/pump turn_on -> water_flow +1; fan reducing smoke would NOT be +1 for smoke.
+   - -1: The operation tends to decrease, reduce, suppress, remove, or make less likely the corresponding physical/environmental channel value. Examples: air conditioner turn_on -> temperature -1; light turn_off -> light -1; dehumidifier turn_on -> humidity -1; exhaust fan turn_on -> smoke -1 or humidity -1 when supported; valve close -> water_flow -1.
+   - 0: The operation is known to have no meaningful physical effect on that channel, or it keeps the channel effectively unchanged. Use 0 sparingly; if there is no relation, omit the effect instead of outputting direction 0.
+   - unknown: There is a plausible physical/environmental relation to the channel, but the direction cannot be inferred from the supplied context. Use unknown for uncertain physical effects rather than guessing +1 or -1.
+6. operation:
+   - The Home Assistant service operation associated with the effect, such as turn_on, turn_off, set_value, open, close, lock, unlock, press, start, stop, or another operation found in the supplied action context.
+   - Use default only when the effect is operation-insensitive or the operation is not known.
+7. observes:
+   - Use only when an entity reports or detects a physical/environmental candidate channel.
+   - Do not add observes for a helper/mode/status/permission entity unless it genuinely observes a candidate physical/environmental channel.
+   - Do not add observes just because an entity has an observable device state such as open/closed, locked/unlocked, enabled/disabled, on/off, or charging/not_charging.
+8. effects:
+   - Use for operation-agnostic or legacy aggregate actuator effects on physical/environmental candidate channels.
+   - Prefer effects_by_operation when the effect direction depends on the operation.
+   - If both effects and effects_by_operation are provided, they must not contradict each other.
+9. effects_by_operation:
+   - Maps each operation to physical/environmental channel effects caused by that operation.
+   - For example, turn_on may have temperature +1 and turn_off may have temperature -1 for a heater.
+   - Omit operations with no clear physical/environmental channel effect.
+10. confidence:
+   - A number from 0.0 to 1.0.
+   - 0.9-1.0: strongly supported by structured context.
+   - 0.7-0.89: likely but with minor ambiguity.
+   - 0.4-0.69: plausible but needs human review.
+   - below 0.4: weak inference; usually prefer empty binding or proposed_channels with needs_human_review=true.
+11. needs_human_review:
+   - true when the role, channel, value_type, direction, or proposed channel is uncertain, ambiguous, safety/security relevant, or inferred mainly from semantic hints.
+   - false only when the supplied structured context strongly supports the binding.
+12. notes/reason:
+   - Keep concise, concrete, and grounded in the supplied rule contexts.
+   - Mention the trigger/condition/action evidence when useful.
+13. proposed_channels:
+   - Use only for missing physical/environmental or resource-flow dimensions not covered by candidate_channels.
+   - The proposed channel name should be lower_snake_case.
+   - proposed_channels must not be used directly in observes/effects/effects_by_operation in the same response.
+   - Do not propose channels that represent entity state, device state, security state, access state, lock state, door/window openness, helper status, permission flags, or automation modes.
+   - Energy/electricity channels may be proposed only if the context contains explicit measurement or physical load/flow semantics. Do not propose electric_power merely because an entity is an on/off charger status helper.
 
 Output schema:
 {
   "bindings": [
     {
-      "entity_id": "string",
+      "entity_id": "string; must be one supplied entity_id",
       "role": "sensor|actuator|hybrid|logical|unknown",
       "observes": [
         {
           "channel": "one candidate channel only",
           "value_type": "numeric|state|event|datetime|select|unknown",
           "confidence": 0.0,
-          "reason": "brief reason"
+          "reason": "brief reason grounded in supplied context"
         }
       ],
       "effects": [
@@ -87,7 +152,7 @@ Output schema:
           "direction": "+1|-1|0|unknown",
           "operation": "default or Home Assistant service operation",
           "confidence": 0.0,
-          "reason": "brief reason"
+          "reason": "brief reason grounded in supplied context"
         }
       ],
       "effects_by_operation": {
@@ -96,7 +161,7 @@ Output schema:
             "channel": "one candidate channel only",
             "direction": "+1|-1|0|unknown",
             "confidence": 0.0,
-            "reason": "brief reason"
+            "reason": "brief reason grounded in supplied context"
           }
         ]
       },
@@ -106,9 +171,9 @@ Output schema:
   ],
   "proposed_channels": [
     {
-      "channel": "lower_snake_case_new_channel_name",
-      "description": "what this channel represents",
-      "reason": "why candidate_channels cannot express this relation well",
+      "channel": "lower_snake_case_new_environmental_channel_name",
+      "description": "what physical/environmental or resource-flow dimension this channel represents",
+      "reason": "why candidate_channels cannot express this environmental relation well",
       "related_entities": ["entity_id_1", "entity_id_2"],
       "suggested_value_type": "numeric|state|event|unknown",
       "confidence": 0.0

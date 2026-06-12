@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0",
-  "generated_at": "2026-06-07T20:13:55.192995+00:00",
+  "generated_at": "2026-06-12T16:00:19.403301+00:00",
   "method": "ai_with_validation",
   "candidate_channels": [
     "temperature",
@@ -65,83 +65,75 @@
   "bindings": [
     {
       "entity_id": "input_boolean.cleaning_mode_switch",
-      "role": "sensor",
+      "role": "logical",
       "observes": [],
       "effects": [],
       "effects_by_operation": {},
       "needs_human_review": false,
-      "notes": "Logical mode flag; no clear physical channel in the candidate list."
+      "notes": "Virtual helper switch representing cleaning mode."
     },
     {
       "entity_id": "input_boolean.ev_charger_status",
-      "role": "sensor",
+      "role": "logical",
       "observes": [],
       "effects": [],
       "effects_by_operation": {},
       "needs_human_review": false,
-      "notes": "Charging status is logical/stateful; no direct physical channel among candidates."
+      "notes": "Virtual helper representing EV charger status."
     },
     {
       "entity_id": "input_boolean.garage_auto_close_enabled",
-      "role": "hybrid",
+      "role": "logical",
       "observes": [],
       "effects": [],
       "effects_by_operation": {},
       "needs_human_review": false,
-      "notes": "Automation enable/disable flag; purely logical in the provided context."
+      "notes": "Automation helper flag for enabling/disabling auto-close."
     },
     {
       "entity_id": "input_boolean.garage_door",
-      "role": "hybrid",
+      "role": "actuator",
       "observes": [],
       "effects": [],
       "effects_by_operation": {},
       "needs_human_review": false,
-      "notes": "Represents door state, but no suitable physical channel is clear from the candidate list."
+      "notes": "Garage door actuator. No clear environmental channel effects are supported by the context."
     },
     {
       "entity_id": "input_boolean.nursery_window",
       "role": "actuator",
       "observes": [],
-      "effects": [
-        {
-          "channel": "temperature",
-          "direction": "-1",
-          "operation": "turn_on",
-          "confidence": 0.86,
-          "reason": "Opening a window can reduce indoor temperature via ventilation."
-        }
-      ],
+      "effects": [],
       "effects_by_operation": {
         "turn_on": [
           {
             "channel": "temperature",
-            "direction": "-1",
-            "confidence": 0.86,
-            "reason": "Turning on the window switch corresponds to opening the window, which tends to lower temperature."
+            "direction": "unknown",
+            "confidence": 0.8,
+            "reason": "Opening the window (turn_on) allows outdoor air exchange, which physically affects the nursery temperature depending on outdoor conditions."
           }
         ]
       },
-      "needs_human_review": false,
-      "notes": "Window open action inferred from the automation context."
+      "needs_human_review": true,
+      "notes": "Nursery window actuator. Opening it affects temperature via outdoor air exchange."
     },
     {
       "entity_id": "input_boolean.nursery_window_latch",
-      "role": "hybrid",
+      "role": "logical",
       "observes": [],
       "effects": [],
       "effects_by_operation": {},
       "needs_human_review": false,
-      "notes": "Child-lock/latch is a logical safety control; no direct physical channel in the candidate list."
+      "notes": "Child lock/latch helper for the nursery window."
     },
     {
       "entity_id": "input_datetime.systemtime",
-      "role": "sensor",
+      "role": "logical",
       "observes": [],
       "effects": [],
       "effects_by_operation": {},
       "needs_human_review": false,
-      "notes": "Time trigger is temporal, but datetime is not one of the candidate physical channels."
+      "notes": "System time helper used for scheduling."
     },
     {
       "entity_id": "input_number.nursery_temp_sensor",
@@ -150,16 +142,28 @@
         {
           "channel": "temperature",
           "value_type": "numeric",
-          "confidence": 0.98,
-          "reason": "Numeric state trigger above 30 indicates a temperature reading."
+          "confidence": 1.0,
+          "reason": "Explicitly named nursery temperature sensor measuring temperature."
         }
       ],
       "effects": [],
       "effects_by_operation": {},
       "needs_human_review": false,
-      "notes": "Direct temperature sensor proxy."
+      "notes": "Temperature sensor in the nursery."
     }
   ],
-  "proposed_channels": [],
+  "proposed_channels": [
+    {
+      "channel": "air_flow",
+      "description": "The rate or presence of air exchange/ventilation between indoor and outdoor environments.",
+      "reason": "Opening a window directly affects ventilation/air flow, which is not fully captured by temperature alone.",
+      "related_entities": [
+        "input_boolean.nursery_window"
+      ],
+      "suggested_value_type": "numeric",
+      "confidence": 0.9,
+      "status": "proposed_only_not_in_config"
+    }
+  ],
   "invalid_channel_mentions": []
 }
