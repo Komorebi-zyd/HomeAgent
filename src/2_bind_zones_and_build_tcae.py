@@ -58,6 +58,8 @@ def binding_has_physical_channel(binding: Dict[str, Any]) -> bool:
         return True
     if binding.get("effects_by_operation"):
         return any(binding.get("effects_by_operation", {}).values())
+    if binding.get("effects_by_rule"):
+        return any(binding.get("effects_by_rule", {}).values())
     return False
 
 
@@ -116,6 +118,7 @@ def zh_position(position: Optional[str]) -> str:
         "trigger": "触发器中使用：该实体状态变化可能触发规则",
         "condition": "条件中使用：该实体状态用于判断规则是否允许执行",
         "action": "动作中使用：该实体会被规则控制或设置",
+        "action_reference": "动作中被引用：该实体出现在动作上下文中，但未必是动作目标",
     }
     return mapping.get(str(position or ""), str(position or ""))
 
@@ -132,7 +135,10 @@ def zh_channel(channel: Optional[str]) -> str:
         "smoke": "烟雾",
         "water_flow": "水流/供水",
         "water_supply": "供水能力",
-        "security": "安全/通行",
+        "air_flow": "空气流动/通风",
+        "air_quality": "空气质量",
+        "co2": "二氧化碳浓度",
+        "gas_concentration": "气体浓度",
     }
     c = str(channel or "unknown")
     return mapping.get(c, c)
@@ -165,6 +171,7 @@ def zh_operation(operation: Optional[str]) -> str:
         "close": "关闭时",
         "lock": "锁定时",
         "unlock": "解锁时",
+        "press": "按下时",
         "start": "启动时",
         "stop": "停止时",
         "unknown": "未知动作时",
@@ -203,25 +210,50 @@ def zh_confidence(confidence: Any) -> str:
 
 
 
-def unique_effect_items(binding: Dict[str, Any]) -> List[Tuple[str, Dict[str, Any]]]:
-    """Return display-oriented effect items without duplicated lines."""
-    items: List[Tuple[str, Dict[str, Any]]] = []
+def unique_effect_items(binding: Dict[str, Any]) -> List[Dict[str, Any]]:
+    """Return display-oriented effect items without duplicated lines.
+
+    Step 1 now prefers rule-scoped effects_by_rule. This helper normalizes rule-
+    scoped and legacy effect formats into one display list.
+    """
+    items: List[Dict[str, Any]] = []
     seen = set()
 
-    def add(op: str, eff: Dict[str, Any]) -> None:
-        key = (op, eff.get("channel"), eff.get("direction"), eff.get("reason"))
+    def add(scope_type: str, scope_value: str, op: str, eff: Dict[str, Any]) -> None:
+        key = (
+            scope_type,
+            scope_value,
+            op,
+            eff.get("channel"),
+            eff.get("direction"),
+            eff.get("service"),
+            eff.get("post_value"),
+            eff.get("reason"),
+        )
         if key in seen:
             return
         seen.add(key)
-        items.append((op, eff))
+        items.append(
+            {
+                "scope_type": scope_type,
+                "scope_value": scope_value,
+                "operation": op,
+                "effect": eff,
+            }
+        )
 
+    for rule_uid, effs in (binding.get("effects_by_rule") or {}).items():
+        for e in effs or []:
+            if isinstance(e, dict):
+                add("rule", str(rule_uid), str(e.get("operation", "default")), e)
     for e in binding.get("effects", []) or []:
-        add(str(e.get("operation", "default")), e)
+        if isinstance(e, dict):
+            add("legacy_effect", "global", str(e.get("operation", "default")), e)
     for op, effs in (binding.get("effects_by_operation", {}) or {}).items():
         for e in effs or []:
-            add(str(op), e)
+            if isinstance(e, dict):
+                add("legacy_operation", str(op), str(op), e)
     return items
-
 
 
 def get_display_name(entity_id: str, device: Optional[Dict[str, Any]] = None, registry_map: Optional[Dict[str, Dict[str, Any]]] = None) -> str:
@@ -235,10 +267,13 @@ def print_entity_zone_context(entity_id: str, device: Dict[str, Any], binding: D
     print("\n" + "=" * 88)
     print(f"实体：{get_display_name(entity_id, device, registry_map)}")
     domain = device.get("domain")
-    role = binding.get("role")
+    semantic_role = binding.get("semantic_role", binding.get("role"))
+    structural_role = binding.get("structural_role")
     positions = device.get("positions") or []
     print(f"实体类型：{zh_domain(domain)}")
-    print(f"AI 初步判断角色：{zh_role(role)}")
+    print(f"AI 语义角色：{zh_role(semantic_role)}")
+    if structural_role and structural_role != semantic_role:
+        print(f"结构角色：{zh_role(structural_role)}")
     if positions:
         print("在自动化规则中的用途：")
         for p in positions:
@@ -254,9 +289,23 @@ def print_entity_zone_context(entity_id: str, device: Dict[str, Any], binding: D
             if o.get("reason"):
                 print(f"     判断依据：{o.get('reason')}")
     if effects_for_display:
-        print("\n该实体被识别为可能【影响】以下物理通道：")
-        for idx, (op, e) in enumerate(effects_for_display, start=1):
-            print(f"  {idx}. {zh_operation(op)}：{zh_direction(e.get('direction'), e.get('channel'))}（{zh_confidence(e.get('confidence'))}）")
+        print("\n该实体被识别为可能【影响】以下物理通道（规则级优先展示）：")
+        for idx, item in enumerate(effects_for_display, start=1):
+            op = item.get("operation")
+            e = item.get("effect", {})
+            scope_type = item.get("scope_type")
+            scope_value = item.get("scope_value")
+            if scope_type == "rule":
+                scope_text = f"规则 {scope_value}"
+            elif scope_type == "legacy_operation":
+                scope_text = f"旧版 operation 级别（{op}）"
+            else:
+                scope_text = "旧版全局 effect"
+            print(f"  {idx}. {scope_text} -> {zh_operation(op)}：{zh_direction(e.get('direction'), e.get('channel'))}（{zh_confidence(e.get('confidence'))}）")
+            if e.get("service"):
+                print(f"     服务：{e.get('service')}")
+            if e.get("post_value") is not None:
+                print(f"     动作后态：{e.get('post_value')}")
             if e.get("reason"):
                 print(f"     判断依据：{e.get('reason')}")
     if not observes and not effects_for_display:
@@ -330,7 +379,7 @@ def interactive_zone_binding(
         source_zones = [name_by_id[i] for i in zone_ids]
 
         reachable_default = zone_ids
-        if binding.get("effects") or binding.get("effects_by_operation"):
+        if binding.get("effects") or binding.get("effects_by_operation") or binding.get("effects_by_rule"):
             print("如果该执行器会跨区域影响环境，请选择所有可达 zone；例如开放式厨房可同时选择 Kitchen 和 LivingRoom。")
             reachable_ids = prompt_index_list("请选择 reachable zone id（可多选）:", valid_indices, default=reachable_default)
         else:
@@ -450,6 +499,28 @@ def select_effects_for_operation(binding: Optional[Dict[str, Any]], operation: s
     return effects
 
 
+def select_effects_for_rule(binding: Optional[Dict[str, Any]], rule_uid: Optional[str], operation: str) -> List[Dict[str, Any]]:
+    """Select action effects with rule-scoped semantics first.
+
+    Step 1 now outputs effects_by_rule. If a specific rule_uid has dedicated
+    effects, they override legacy effects_by_operation/effects. Legacy fields are
+    kept as fallback for backward compatibility.
+    """
+    if not binding:
+        return []
+    effects: List[Dict[str, Any]] = []
+    ebr = binding.get("effects_by_rule") or {}
+    if rule_uid and rule_uid in ebr:
+        for eff in ebr.get(rule_uid) or []:
+            if isinstance(eff, dict):
+                eff_op = str(eff.get("operation", operation or "default"))
+                if eff_op in {operation, "default", "unknown"}:
+                    effects.append(eff)
+        if effects:
+            return effects
+    return select_effects_for_operation(binding, operation)
+
+
 def build_env_refs_from_numeric(
     node: Dict[str, Any],
     trigger: bool,
@@ -487,6 +558,7 @@ def build_env_effects_from_action(
     binding_map: Dict[str, Dict[str, Any]],
     zones_data: Dict[str, Any],
     defaults: Optional[Dict[str, Any]] = None,
+    rule_uid: Optional[str] = None,
 ) -> List[Dict[str, Any]]:
     defaults = defaults or {}
     effects: List[Dict[str, Any]] = []
@@ -498,14 +570,18 @@ def build_env_effects_from_action(
     zone_binding = get_zone_binding(zones_data, target)
     if not binding or not zone_binding:
         return effects
-    for eff in select_effects_for_operation(binding, operation):
+    selected_effects = select_effects_for_rule(binding, rule_uid, operation)
+    for eff in selected_effects:
         direction = eff.get("direction", "unknown")
         if direction == "unknown" or direction == "0":
             continue
         effects.append(
             {
                 "entity_id": target,
+                "rule_uid": rule_uid,
                 "operation": operation,
+                "service": action.get("service"),
+                "post": action.get("post"),
                 "source_zones": zone_binding.get("source_zones", []),
                 "reachable_zones": zone_binding.get("reachable_zones", zone_binding.get("source_zones", [])),
                 "channel": eff.get("channel"),
@@ -515,6 +591,7 @@ def build_env_effects_from_action(
                 "duration": defaults.get("duration", "inf"),
                 "confidence": eff.get("confidence", 0),
                 "reason": eff.get("reason", ""),
+                "binding_scope": "rule" if rule_uid and (binding.get("effects_by_rule") or {}).get(rule_uid) else "legacy",
             }
         )
     return effects
@@ -554,7 +631,7 @@ def build_tcae(automations: List[Dict[str, Any]], devices_data: Dict[str, Any], 
             normalized_actions = normalize_action_node(node)
             actions.extend(normalized_actions)
             for action in normalized_actions:
-                e_a.extend(build_env_effects_from_action(action, binding_map, zones_data))
+                e_a.extend(build_env_effects_from_action(action, binding_map, zones_data, rule_uid=rule_uid))
 
         rules.append(
             {

@@ -55,82 +55,92 @@ You are the channel binding and channel discovery module of HomeAgent. Your task
 
 Core ontology clarification:
 1. In HomeAgent, a channel is a physical or environmental process dimension in a zone, i.e. something like y(zone, channel) in the environment state model. A channel is NOT the device's own on/off/open/closed/locked/unlocked/status value.
-2. Valid channel examples include temperature, humidity, pressure, light, sound, motion, smoke, water_flow, air_quality, CO2, gas_concentration, or other measurable/propagating environmental/resource-flow dimensions.
+2. Valid channel examples include temperature, humidity, pressure, light, sound, motion, smoke, water_flow, air_quality, CO2, gas_concentration, air_flow, or other measurable/propagating environmental/resource-flow dimensions.
 3. Invalid channel examples include openness, lock_state, door_state, window_state, access, security, privacy, permission, mode, scene, status, charging_status, auto_close_enabled, child_lock, normality, or any other value that mainly describes an entity's discrete internal state or automation helper state.
 4. Door/window/lock/latch entities have important entity states, but those states belong to entity-state modeling x(t), not to environmental channel modeling y(t). Do NOT propose channels such as openness, lock_state, access, or security for them.
-5. A door/window may affect an environmental channel only when the supplied context supports a real physical effect on a candidate channel, e.g. opening a window may affect temperature/humidity/air_flow. If the physical effect is not clearly supported or the appropriate environmental channel is absent, leave effects empty rather than inventing a device-state channel.
+5. A door/window may affect an environmental channel only when a specific supplied rule context supports a real physical/environmental effect on a candidate channel, e.g. a high-temperature rule opening a window may be modeled as reducing temperature. If the physical effect and direction are not supported by a specific rule context, leave effects empty rather than inventing a generic side effect.
 6. Logical helpers, mode switches, permission flags, buttons, timers, status flags, and scene switches usually have no observes/effects because they model automation context, not physical environmental channels.
 
 Important principles:
-1. Do NOT rely on any specific human language or hard-coded words. Entity object names may be Chinese pinyin, Japanese romanization, Spanish, English, abbreviations, or arbitrary user text. Treat names/descriptions/aliases/display names only as semantic hints.
-2. The only platform/system variables you may rely on directly are Home Assistant domains, service names, service operations, trigger/condition/action positions, structured YAML fields, entity registry metadata, and the supplied rule contexts.
-3. For entity bindings, use ONLY the candidate channel list supplied by the user. If a useful environmental channel is not in the candidate list, do NOT put it into observes/effects/effects_by_operation. Instead, add it to proposed_channels only if it satisfies the channel ontology above.
+1. Do NOT rely on any specific human language or hard-coded words. Entity object names may be Chinese pinyin, Japanese romanization, Spanish, English, abbreviations, or arbitrary user text. Treat names/descriptions/aliases/display names as useful semantic hints, but ground decisions in the supplied structured rule contexts whenever possible.
+2. The platform/system variables you may rely on directly are Home Assistant domains, service names, service operations, trigger/condition/action positions, structured YAML fields, entity registry metadata, entity rule contexts, and the supplied related rule skeletons.
+3. For entity bindings, use ONLY the candidate channel list supplied by the user. If a useful environmental channel is not in the candidate list, do NOT put it into observes/effects/effects_by_rule/effects_by_operation. Instead, add it to proposed_channels only if it satisfies the channel ontology and explicit-context requirement below.
 4. proposed_channels must also be physical/environmental channels. Never propose device-state/control-state channels such as openness, lock_state, door_state, window_state, access, security, permission, mode, status, charging_status, or auto_close_enabled.
-5. Multi-channel effects are allowed when physically meaningful. For example, an air conditioner may decrease temperature and humidity; a heater may increase temperature; a humidifier may increase humidity; a sprinkler may affect humidity or water_flow. Use the supplied contexts to decide.
-6. Effects must be operation-specific when possible. For an actuator, fill effects_by_operation for operations such as turn_on, turn_off, set_value, open, close, lock, unlock, press, start, stop, or other Home Assistant service operations appearing in the context.
-7. If no physical/environmental channel is clear, return empty observes/effects/effects_by_operation for that relation and set needs_human_review=true if uncertainty matters.
-8. Return strict JSON only. Do not include markdown or commentary.
+5. Do NOT propose a new channel merely because a device may have a generic physical side effect. Propose a new channel only when the supplied rule trigger/condition/action semantics explicitly depend on that missing physical/environmental dimension and none of the candidate_channels can express it.
+6. Multi-channel effects are allowed when physically meaningful and rule-supported. For example, an air conditioner may decrease temperature in a cooling rule but increase temperature in a heating rule if the supplied rule context shows that behavior.
+7. Action effects are rule-scoped. The direction of an actuator's channel effect must be determined under the specific rule where the action appears, not globally by device type or operation alone. The same entity and even the same operation may have different directions in different rules if the rule context shows different intended physical effects.
+8. For actuator effects, prefer effects_by_rule. Legacy effects/effects_by_operation may be left empty unless the effect is genuinely rule-independent and direction is stable across rules.
+9. If no physical/environmental channel or no rule-supported direction is clear, return empty effects/effects_by_rule/effects_by_operation for that relation and set needs_human_review=true only if the channel binding uncertainty matters.
+10. Return strict JSON only. Do not include markdown or commentary.
 
 Parameter definitions:
 1. entity_id:
    - Must be exactly one entity_id from the supplied devices list.
    - Do not invent entities and do not output entities that are absent from the supplied context.
 2. role:
+   - Backward-compatible semantic role for this channel-binding task.
    - sensor: The entity observes, measures, detects, reports, or represents a physical/environmental condition used by triggers/conditions. Example: a temperature sensor observing temperature, a smoke sensor observing smoke, a water-flow sensor observing water_flow.
-   - actuator: The entity is a target of Home Assistant service actions and can change a device state, a physical process, or an automation-relevant control state. It should have effects only if its action changes a physical/environmental channel; otherwise effects should be empty.
-   - hybrid: The entity is both observable and controllable in the supplied context, or it appears on both observation side (trigger/condition) and action target side.
+   - actuator: The entity is a target of Home Assistant service actions and can change a device state, a physical process, or an automation-relevant control state. It should have effects only if its action changes a physical/environmental channel in a specific rule context; otherwise effects should be empty.
+   - hybrid: The entity is both observable and controllable in the supplied context, or it appears on both observation side and action target side.
    - logical: The entity mainly represents a virtual mode, helper, button, timer, permission flag, status flag, scene selector, or automation context rather than directly observing/affecting a physical/environmental channel. Logical entities usually have empty observes/effects.
    - unknown: Use only when the supplied context is insufficient to infer a reliable role.
-3. channel:
-   - Must be exactly one item from candidate_channels when used inside observes, effects, or effects_by_operation.
+3. structural_role and semantic_role:
+   - structural_role is supplied/validated by the program from trigger/condition/action positions and does not need to be invented.
+   - semantic_role may be returned if useful; it uses the same values as role and should describe whether the entity is physical-channel-related or logical in this binding step.
+   - needs_human_review in this script is about channel-binding uncertainty, not about whether an entity is safety-critical. Safety/normal-state review is handled by later steps.
+4. channel:
+   - Must be exactly one item from candidate_channels when used inside observes, effects, effects_by_rule, or effects_by_operation.
    - A channel is a physical/environmental dimension of a zone or resource-flow process, such as temperature, humidity, pressure, light, sound, motion, smoke, or water_flow.
    - A channel is not an entity's own state. Do not use or propose channels for open/closed, locked/unlocked, enabled/disabled, on/off status, mode, scene, permission, or automation state.
-   - If the desired physical/environmental dimension is absent from candidate_channels, use proposed_channels only if the missing dimension is truly environmental/resource-flow, not device-state.
-4. value_type for observes:
+   - If the desired physical/environmental dimension is absent from candidate_channels, use proposed_channels only if the missing dimension is explicitly required by the supplied rule semantics and is truly environmental/resource-flow, not device-state.
+5. value_type for observes:
    - numeric: The observed channel value is numeric or threshold-comparable, e.g., temperature value, humidity percentage, illuminance, water flow rate, pressure, sound level, smoke concentration.
    - state: The observed channel value is a finite environmental state, e.g., smoke detected/clear, motion detected/clear. Do NOT use state merely to encode a device's own open/closed/locked/unlocked status as a channel.
    - event: The entity represents an instantaneous or discrete event related to an environmental channel, e.g., smoke alarm triggered or motion event. Use only when event semantics are clear.
    - datetime: The entity represents a date, time, timestamp, schedule point, or time helper. Datetime entities are usually logical and often have no channel observes/effects.
    - select: The entity represents a choice from a finite option set, e.g., mode selector or input_select option. Select entities are usually logical and often have no channel observes/effects.
    - unknown: Use only when the supplied context does not support a reliable value type.
-5. direction for effects and effects_by_operation:
-   - +1: The operation tends to increase, intensify, produce, activate, or make more likely the corresponding physical/environmental channel value. Examples: heater turn_on -> temperature +1; light turn_on -> light +1; humidifier turn_on -> humidity +1; sprinkler/pump turn_on -> water_flow +1; fan reducing smoke would NOT be +1 for smoke.
-   - -1: The operation tends to decrease, reduce, suppress, remove, or make less likely the corresponding physical/environmental channel value. Examples: air conditioner turn_on -> temperature -1; light turn_off -> light -1; dehumidifier turn_on -> humidity -1; exhaust fan turn_on -> smoke -1 or humidity -1 when supported; valve close -> water_flow -1.
+6. direction for effects_by_rule / effects / effects_by_operation:
+   - +1: In this specific rule context, the action tends to increase, intensify, produce, activate, or make more likely the corresponding physical/environmental channel value. Examples: heater turn_on in a heating rule -> temperature +1; light turn_on -> light +1; humidifier turn_on -> humidity +1; sprinkler/pump turn_on -> water_flow +1.
+   - -1: In this specific rule context, the action tends to decrease, reduce, suppress, remove, or make less likely the corresponding physical/environmental channel value. Examples: air conditioner turn_on in a cooling rule -> temperature -1; light turn_off -> light -1; dehumidifier turn_on -> humidity -1; exhaust fan turn_on -> smoke -1 or humidity -1 when supported; valve close -> water_flow -1.
    - 0: The operation is known to have no meaningful physical effect on that channel, or it keeps the channel effectively unchanged. Use 0 sparingly; if there is no relation, omit the effect instead of outputting direction 0.
-   - unknown: There is a plausible physical/environmental relation to the channel, but the direction cannot be inferred from the supplied context. Use unknown for uncertain physical effects rather than guessing +1 or -1.
-6. operation:
-   - The Home Assistant service operation associated with the effect, such as turn_on, turn_off, set_value, open, close, lock, unlock, press, start, stop, or another operation found in the supplied action context.
+   - unknown: There is a plausible physical/environmental relation to the channel, but the direction cannot be inferred from the supplied rule context. Prefer omitting that effect instead of outputting unknown. Use unknown only when the relation is explicitly present in the rule context and must be preserved for human review.
+7. operation:
+   - The Home Assistant service operation associated with the rule action, such as turn_on, turn_off, set_value, open, close, lock, unlock, press, start, stop, or another operation found in the supplied action context.
    - Use default only when the effect is operation-insensitive or the operation is not known.
-7. observes:
+8. observes:
    - Use only when an entity reports or detects a physical/environmental candidate channel.
    - Do not add observes for a helper/mode/status/permission entity unless it genuinely observes a candidate physical/environmental channel.
    - Do not add observes just because an entity has an observable device state such as open/closed, locked/unlocked, enabled/disabled, on/off, or charging/not_charging.
-8. effects:
-   - Use for operation-agnostic or legacy aggregate actuator effects on physical/environmental candidate channels.
-   - Prefer effects_by_operation when the effect direction depends on the operation.
-   - If both effects and effects_by_operation are provided, they must not contradict each other.
-9. effects_by_operation:
-   - Maps each operation to physical/environmental channel effects caused by that operation.
-   - For example, turn_on may have temperature +1 and turn_off may have temperature -1 for a heater.
-   - Omit operations with no clear physical/environmental channel effect.
-10. confidence:
+9. effects_by_rule:
+   - Preferred structure for actuator effects.
+   - It maps each related rule_uid to the physical/environmental channel effects caused by this entity's action in that specific rule.
+   - The key must be a rule_uid from the supplied related rules for the entity.
+   - Each effect should include channel, direction, operation, service, post_value if available, confidence, and reason.
+   - The reason should explain why the rule context implies that direction. Example: a rule triggered by high temperature and opening a window may justify temperature -1 as the intended effect.
+10. effects and effects_by_operation:
+   - Legacy/global structures. Use only for stable rule-independent effects. Prefer leaving them empty when direction depends on rule context.
+   - If these are provided together with effects_by_rule, they must not contradict effects_by_rule.
+11. confidence:
    - A number from 0.0 to 1.0.
-   - 0.9-1.0: strongly supported by structured context.
+   - 0.9-1.0: strongly supported by structured rule context.
    - 0.7-0.89: likely but with minor ambiguity.
    - 0.4-0.69: plausible but needs human review.
    - below 0.4: weak inference; usually prefer empty binding or proposed_channels with needs_human_review=true.
-11. needs_human_review:
-   - true when the role, channel, value_type, direction, or proposed channel is uncertain, ambiguous, safety/security relevant, or inferred mainly from semantic hints.
+12. needs_human_review:
+   - true when the role, channel, value_type, rule-specific direction, or proposed channel is uncertain or ambiguous for this channel-binding step.
    - false only when the supplied structured context strongly supports the binding.
-12. notes/reason:
-   - Keep concise, concrete, and grounded in the supplied rule contexts.
-   - Mention the trigger/condition/action evidence when useful.
-13. proposed_channels:
+   - Do not set true merely because a device is safety/security sensitive; safety-sensitive normal-state review belongs to later steps.
+13. notes/reason:
+   - Keep concise, concrete, and grounded in supplied rule contexts.
+   - Entity names and aliases may be used as semantic hints, but for effects_by_rule the reason should mention the relevant rule trigger/condition/action semantics whenever possible.
+14. proposed_channels:
    - Use only for missing physical/environmental or resource-flow dimensions not covered by candidate_channels.
    - The proposed channel name should be lower_snake_case.
-   - proposed_channels must not be used directly in observes/effects/effects_by_operation in the same response.
+   - proposed_channels must not be used directly in observes/effects/effects_by_rule/effects_by_operation in the same response.
    - Do not propose channels that represent entity state, device state, security state, access state, lock state, door/window openness, helper status, permission flags, or automation modes.
    - Energy/electricity channels may be proposed only if the context contains explicit measurement or physical load/flow semantics. Do not propose electric_power merely because an entity is an on/off charger status helper.
+   - Do not propose more fine-grained channels such as air_flow merely because of generic physical common sense. Propose them only if the supplied rule semantics explicitly require that missing dimension and existing candidate_channels cannot express the rule relation.
 
 Output schema:
 {
@@ -138,6 +148,7 @@ Output schema:
     {
       "entity_id": "string; must be one supplied entity_id",
       "role": "sensor|actuator|hybrid|logical|unknown",
+      "semantic_role": "sensor|actuator|hybrid|logical|unknown",
       "observes": [
         {
           "channel": "one candidate channel only",
@@ -146,25 +157,21 @@ Output schema:
           "reason": "brief reason grounded in supplied context"
         }
       ],
-      "effects": [
-        {
-          "channel": "one candidate channel only",
-          "direction": "+1|-1|0|unknown",
-          "operation": "default or Home Assistant service operation",
-          "confidence": 0.0,
-          "reason": "brief reason grounded in supplied context"
-        }
-      ],
-      "effects_by_operation": {
-        "turn_on": [
+      "effects_by_rule": {
+        "automation.example_rule_uid": [
           {
             "channel": "one candidate channel only",
             "direction": "+1|-1|0|unknown",
+            "operation": "Home Assistant service operation for that rule action",
+            "service": "full Home Assistant service name if available",
+            "post_value": "action post-state if available",
             "confidence": 0.0,
-            "reason": "brief reason grounded in supplied context"
+            "reason": "brief reason grounded in that rule's trigger/condition/action context"
           }
         ]
       },
+      "effects": [],
+      "effects_by_operation": {},
       "needs_human_review": true,
       "notes": "brief notes"
     }
@@ -173,7 +180,7 @@ Output schema:
     {
       "channel": "lower_snake_case_new_environmental_channel_name",
       "description": "what physical/environmental or resource-flow dimension this channel represents",
-      "reason": "why candidate_channels cannot express this environmental relation well",
+      "reason": "which supplied rule semantics explicitly require this missing environmental dimension and why candidate_channels cannot express it",
       "related_entities": ["entity_id_1", "entity_id_2"],
       "suggested_value_type": "numeric|state|event|unknown",
       "confidence": 0.0
@@ -390,16 +397,19 @@ def extract_devices(automations: List[Dict[str, Any]], registry_map: Optional[Di
     }
 
 
-def compact_devices_for_ai(devices: Dict[str, Any]) -> List[Dict[str, Any]]:
+def compact_devices_for_ai(devices: Dict[str, Any], rules_by_uid: Optional[Dict[str, Dict[str, Any]]] = None) -> List[Dict[str, Any]]:
     compact: List[Dict[str, Any]] = []
+    rules_by_uid = rules_by_uid or {}
     for e in devices.get("entities", []):
         contexts = []
-        for ctx in e.get("raw_contexts", [])[:8]:
+        for ctx in e.get("raw_contexts", [])[:12]:
             contexts.append(
                 {
+                    "rule_uid": ctx.get("rule_uid"),
                     "rule_alias": ctx.get("rule_alias"),
                     "rule_description": ctx.get("rule_description"),
                     "section": ctx.get("section"),
+                    "yaml_path": ctx.get("yaml_path"),
                     "platform": ctx.get("platform"),
                     "condition": ctx.get("condition"),
                     "service": ctx.get("service"),
@@ -408,6 +418,10 @@ def compact_devices_for_ai(devices: Dict[str, Any]) -> List[Dict[str, Any]]:
                     "node_excerpt": ctx.get("node_excerpt"),
                 }
             )
+        related_rules = []
+        for rule_uid in e.get("rules", [])[:12]:
+            if rule_uid in rules_by_uid:
+                related_rules.append(rules_by_uid[rule_uid])
         compact.append(
             {
                 "entity_id": e["entity_id"],
@@ -416,25 +430,96 @@ def compact_devices_for_ai(devices: Dict[str, Any]) -> List[Dict[str, Any]]:
                 "domain": e["domain"],
                 "value_type_hint": e.get("value_type_hint"),
                 "positions": e.get("positions", []),
+                "structural_role": e.get("primary_role"),
                 "primary_role": e.get("primary_role"),
                 "operations": e.get("operations", []),
                 "contexts": contexts,
+                "related_rules": related_rules,
             }
         )
     return compact
 
 
+def compact_rule_for_ai(rule: Dict[str, Any], idx: int) -> Dict[str, Any]:
+    """Build a compact Home Assistant rule skeleton for AI channel binding.
+
+    Step 1 does not have TCAE yet, so this keeps the original HA structure while
+    exposing action operation/post-state metadata needed for rule-scoped effects.
+    """
+    rule_uid = make_rule_uid(rule, idx)
+    triggers = []
+    for t_idx, trigger in enumerate(listify(rule.get("trigger"))):
+        if isinstance(trigger, dict):
+            triggers.append(
+                {
+                    "index": t_idx,
+                    "platform": trigger.get("platform"),
+                    "entity_refs": [eid for eid, _ in traverse_entity_references(trigger, f"trigger[{t_idx}]")],
+                    "node_excerpt": compact_node(trigger),
+                }
+            )
+    conditions = []
+    for c_idx, condition in enumerate(listify(rule.get("condition"))):
+        if isinstance(condition, dict):
+            conditions.append(
+                {
+                    "index": c_idx,
+                    "condition": condition.get("condition"),
+                    "entity_refs": [eid for eid, _ in traverse_entity_references(condition, f"condition[{c_idx}]")],
+                    "node_excerpt": compact_node(condition),
+                }
+            )
+    actions = []
+    for a_idx, action in enumerate(listify(rule.get("action"))):
+        if isinstance(action, dict):
+            data = action.get("data") if isinstance(action.get("data"), dict) else {}
+            actions.append(
+                {
+                    "index": a_idx,
+                    "service": action.get("service"),
+                    "operation": service_operation(action.get("service")),
+                    "post_value": post_value_from_service(action.get("service"), data),
+                    "target_entities": collect_action_targets(action),
+                    "entity_refs": [eid for eid, _ in traverse_entity_references(action, f"action[{a_idx}]")],
+                    "node_excerpt": compact_node(action),
+                }
+            )
+    return {
+        "rule_uid": rule_uid,
+        "rule_id": rule.get("id"),
+        "alias": rule.get("alias"),
+        "description": rule.get("description"),
+        "mode": rule.get("mode"),
+        "entity_refs": unique_list([eid for eid, _ in traverse_entity_references(rule, "rule")]),
+        "triggers": triggers,
+        "conditions": conditions,
+        "actions": actions,
+    }
+
+
+def compact_rules_for_ai(automations: Optional[List[Dict[str, Any]]]) -> List[Dict[str, Any]]:
+    if not automations:
+        return []
+    return [compact_rule_for_ai(rule, idx) for idx, rule in enumerate(automations, start=1) if isinstance(rule, dict)]
+
 def default_empty_binding(entity: Dict[str, Any]) -> Dict[str, Any]:
+    structural_role = entity.get("primary_role", "unknown")
     return {
         "entity_id": entity["entity_id"],
-        "role": entity.get("primary_role", "unknown"),
+        # Backward-compatible semantic role used by older scripts.
+        "role": structural_role,
+        # Structural role is derived from trigger/condition/action positions.
+        "structural_role": structural_role,
+        # Semantic role may be adjusted by AI for channel-binding purposes.
+        "semantic_role": structural_role,
         "observes": [],
+        # Legacy/global effects. Rule-scoped effects should use effects_by_rule.
         "effects": [],
         "effects_by_operation": {},
+        "effects_by_rule": {},
         "needs_human_review": True,
         "notes": "No AI binding available or no clear physical channel inferred.",
     }
-
 
 def normalize_direction(value: Any) -> str:
     s = str(value).strip() if value is not None else "unknown"
@@ -501,6 +586,19 @@ def build_entity_display_list(devices: Dict[str, Any]) -> List[Dict[str, Any]]:
     ]
 
 
+def build_rule_display_list(devices: Dict[str, Any]) -> List[Dict[str, Any]]:
+    return [
+        {
+            "rule_uid": r.get("rule_uid"),
+            "rule_id": r.get("rule_id"),
+            "alias": r.get("alias"),
+            "description": r.get("description"),
+        }
+        for r in devices.get("rules", [])
+        if isinstance(r, dict)
+    ]
+
+
 def validate_and_normalize_bindings(ai_data: Any, devices: Dict[str, Any], channels: List[str]) -> Dict[str, Any]:
     if not isinstance(ai_data, dict):
         raise ValueError("AI response must be a JSON object")
@@ -542,10 +640,17 @@ def validate_and_normalize_bindings(ai_data: Any, devices: Dict[str, Any], chann
         if eid not in device_map:
             continue
         binding = default_empty_binding(device_map[eid])
-        role = item.get("role") or binding["role"]
-        if role not in {"sensor", "actuator", "hybrid", "logical", "unknown"}:
-            role = binding["role"]
-        binding["role"] = role
+        allowed_roles = {"sensor", "actuator", "hybrid", "logical", "unknown"}
+        structural_role = device_map[eid].get("primary_role", "unknown")
+        if structural_role not in {"sensor", "actuator", "hybrid", "unknown"}:
+            structural_role = "unknown"
+        semantic_role = item.get("semantic_role") or item.get("role") or binding.get("semantic_role") or binding["role"]
+        if semantic_role not in allowed_roles:
+            semantic_role = binding.get("semantic_role", binding["role"])
+        binding["structural_role"] = structural_role
+        binding["semantic_role"] = semantic_role
+        # Keep role for backward compatibility; it now mirrors semantic_role.
+        binding["role"] = semantic_role
         binding["observes"] = []
         for obs in item.get("observes", []) or []:
             if not isinstance(obs, dict):
@@ -602,6 +707,43 @@ def validate_and_normalize_bindings(ai_data: Any, devices: Dict[str, Any], chann
                 if valid_effects:
                     effects_by_operation[str(op)] = valid_effects
         binding["effects_by_operation"] = effects_by_operation
+
+        effects_by_rule: Dict[str, List[Dict[str, Any]]] = {}
+        valid_rule_uids = set(device_map[eid].get("rules", []))
+
+        def append_rule_effect(rule_uid: Any, eff: Dict[str, Any], location: str) -> None:
+            if not isinstance(rule_uid, str) or rule_uid not in valid_rule_uids:
+                return
+            ch = eff.get("channel")
+            if ch not in channel_set:
+                mention_invalid(ch, eid, location)
+                return
+            effect_record = {
+                "channel": ch,
+                "direction": normalize_direction(eff.get("direction")),
+                "operation": str(eff.get("operation", "default")),
+                "service": eff.get("service"),
+                "post_value": eff.get("post_value"),
+                "confidence": float(eff.get("confidence", 0) or 0),
+                "reason": str(eff.get("reason", "")),
+            }
+            effects_by_rule.setdefault(rule_uid, []).append(effect_record)
+
+        raw_ebr = item.get("effects_by_rule") or {}
+        if isinstance(raw_ebr, dict):
+            for rule_uid, effects in raw_ebr.items():
+                for eff in effects or []:
+                    if isinstance(eff, dict):
+                        append_rule_effect(rule_uid, eff, f"effects_by_rule.{rule_uid}")
+
+        # Also accept list-style rule_effects for robustness, but normalize to effects_by_rule.
+        raw_rule_effects = item.get("rule_effects") or []
+        if isinstance(raw_rule_effects, list):
+            for eff in raw_rule_effects:
+                if isinstance(eff, dict):
+                    append_rule_effect(eff.get("rule_uid"), eff, "rule_effects")
+
+        binding["effects_by_rule"] = effects_by_rule
         binding["needs_human_review"] = bool(item.get("needs_human_review", True))
         binding["notes"] = str(item.get("notes", ""))
         out_map[eid] = binding
@@ -614,24 +756,37 @@ def validate_and_normalize_bindings(ai_data: Any, devices: Dict[str, Any], chann
         "method": "ai_with_validation",
         "candidate_channels": channels,
         "entity_display": build_entity_display_list(devices),
+        "rule_display": build_rule_display_list(devices),
         "bindings": [out_map[eid] for eid in sorted(out_map)],
         "proposed_channels": proposed,
         "invalid_channel_mentions": sorted(invalid_mentions.values(), key=lambda x: x["channel"]),
     }
 
 
-def bind_channels_with_ai(devices: Dict[str, Any], config: Dict[str, Any]) -> Dict[str, Any]:
+def bind_channels_with_ai(
+    devices: Dict[str, Any],
+    config: Dict[str, Any],
+    automations: Optional[List[Dict[str, Any]]] = None,
+) -> Dict[str, Any]:
     channels = config.get("channels", [])
     prompt = config.get("system_prompts", {}).get("channels_binding") or DEFAULT_CHANNEL_BINDING_PROMPT
+    compact_rules = compact_rules_for_ai(automations)
+    rules_by_uid = {r["rule_uid"]: r for r in compact_rules}
     payload = {
-        "task": "Bind Home Assistant entities to physical channels for TCAE modeling.",
+        "task": "Bind Home Assistant entities to physical/environmental channels for TCAE modeling. Use rule-scoped effects_by_rule for actuator directions.",
         "candidate_channels": channels,
-        "devices": compact_devices_for_ai(devices),
+        "schema_notes": {
+            "channel_ontology": "channels are environmental/resource-flow dimensions, not entity states",
+            "preferred_actuator_effect_schema": "effects_by_rule",
+            "direction_scope": "direction is determined under each specific rule context, not globally by device type or operation alone",
+            "proposed_channel_policy": "propose only explicitly required missing environmental channels; do not propose generic finer-grained channels from common sense alone",
+        },
+        "rules": compact_rules,
+        "devices": compact_devices_for_ai(devices, rules_by_uid=rules_by_uid),
         "output_language": "English for JSON keys; reasons may be concise English.",
     }
     ai_data = call_ai_json(prompt, payload, temperature=0.0)
     return validate_and_normalize_bindings(ai_data, devices, channels)
-
 
 def build_empty_channels(devices: Dict[str, Any], config: Dict[str, Any], method: str = "empty_fallback") -> Dict[str, Any]:
     return {
@@ -640,6 +795,7 @@ def build_empty_channels(devices: Dict[str, Any], config: Dict[str, Any], method
         "method": method,
         "candidate_channels": config.get("channels", []),
         "entity_display": build_entity_display_list(devices),
+        "rule_display": build_rule_display_list(devices),
         "bindings": [default_empty_binding(e) for e in sorted(devices.get("entities", []), key=lambda x: x["entity_id"])],
         "proposed_channels": [],
         "invalid_channel_mentions": [],
@@ -648,21 +804,106 @@ def build_empty_channels(devices: Dict[str, Any], config: Dict[str, Any], method
 
 def print_binding_review_hint(channels_data: Dict[str, Any], channels_path: str) -> None:
     print("\n[Channel Binding Summary]")
-    display_map = {e.get("entity_id"): e.get("display_name", e.get("entity_id")) for e in channels_data.get("entity_display", []) if isinstance(e, dict)}
+    display_map = {
+        e.get("entity_id"): e.get("display_name", e.get("entity_id"))
+        for e in channels_data.get("entity_display", [])
+        if isinstance(e, dict)
+    }
+    rule_map = {
+        r.get("rule_uid"): r
+        for r in channels_data.get("rule_display", [])
+        if isinstance(r, dict) and r.get("rule_uid")
+    }
+
+    def rule_label(rule_uid: str) -> str:
+        info = rule_map.get(rule_uid, {})
+        alias = info.get("alias")
+        if alias:
+            return f"{alias} [{rule_uid}]"
+        return rule_uid
+
+    def fmt_observes(binding: Dict[str, Any]) -> str:
+        parts = []
+        for obs in binding.get("observes", []) or []:
+            channel = obs.get("channel", "?")
+            value_type = obs.get("value_type", "unknown")
+            conf = obs.get("confidence")
+            suffix = f"/{value_type}"
+            if conf not in (None, ""):
+                suffix += f"/conf={conf}"
+            parts.append(f"{channel}({suffix.lstrip('/')})")
+        return ", ".join(parts) or "-"
+
+    def fmt_effect(effect: Dict[str, Any]) -> str:
+        channel = effect.get("channel", "?")
+        direction = effect.get("direction", "unknown")
+        fields = [f"channel={channel}", f"direction={direction}"]
+        operation = effect.get("operation")
+        service = effect.get("service")
+        post_value = effect.get("post_value")
+        confidence = effect.get("confidence")
+        if operation:
+            fields.append(f"op={operation}")
+        if service:
+            fields.append(f"service={service}")
+        if post_value is not None:
+            fields.append(f"post={post_value}")
+        if confidence not in (None, ""):
+            fields.append(f"conf={confidence}")
+        return " | ".join(fields)
+
     for b in channels_data.get("bindings", []):
-        observes = ", ".join(o["channel"] for o in b.get("observes", [])) or "-"
-        ebo_parts = []
-        for op, effects in (b.get("effects_by_operation") or {}).items():
-            ebo_parts.append(op + ":" + ",".join(f"{e['channel']}({e['direction']})" for e in effects))
-        effects = "; ".join(ebo_parts) or ", ".join(f"{e['channel']}({e['direction']})" for e in b.get("effects", [])) or "-"
+        if not isinstance(b, dict):
+            continue
+        entity_id = b.get("entity_id", "")
+        name = display_map.get(entity_id, entity_id)
+        semantic_role = b.get("semantic_role", b.get("role"))
+        structural_role = b.get("structural_role")
+        role_text = f"role={semantic_role}"
+        if structural_role and structural_role != semantic_role:
+            role_text += f" | structural_role={structural_role}"
+        observes = fmt_observes(b)
         review = " REVIEW" if b.get("needs_human_review") else ""
-        name = display_map.get(b["entity_id"], b["entity_id"])
-        print(f"- {name} | role={b.get('role')} | observes={observes} | effects={effects}{review}")
+        print(f"- {name} | {role_text} | observes={observes}{review}")
+
+        effects_by_rule = b.get("effects_by_rule") or {}
+        if effects_by_rule:
+            print("  rule_effects:")
+            for rule_uid in sorted(effects_by_rule):
+                effects = effects_by_rule.get(rule_uid) or []
+                if not effects:
+                    continue
+                print(f"    * {rule_label(rule_uid)}")
+                for eff in effects:
+                    if not isinstance(eff, dict):
+                        continue
+                    print(f"      - {fmt_effect(eff)}")
+                    reason = str(eff.get("reason", "")).strip()
+                    if reason:
+                        print(f"        reason: {reason}")
+        else:
+            # Legacy/global display is kept for backward compatibility, but rule_effects
+            # is the preferred rule-scoped semantics after this script update.
+            legacy_parts = []
+            for op, effects in (b.get("effects_by_operation") or {}).items():
+                for eff in effects or []:
+                    if isinstance(eff, dict):
+                        legacy_parts.append(f"operation[{op}] -> {fmt_effect(eff)}")
+            for eff in b.get("effects", []) or []:
+                if isinstance(eff, dict):
+                    legacy_parts.append(f"global -> {fmt_effect(eff)}")
+            if legacy_parts:
+                print("  legacy_effects:")
+                for part in legacy_parts:
+                    print(f"    - {part}")
+            else:
+                print("  rule_effects: -")
 
     proposals = channels_data.get("proposed_channels", []) or []
     if proposals:
         print("\n[Proposed Channels]")
         print("AI 发现当前 config.json.channels 可能不足，以下 channel 仅作为建议，不会自动参与绑定。")
+        print("注意：只有当规则语义明确依赖缺失的环境通道，且现有 candidate_channels 无法表达时，才建议扩展 channel。")
         print("如果确认需要，请手动加入 config.json 的 channels 后重新运行脚本 1。")
         for idx, p in enumerate(proposals, start=1):
             related = ", ".join(p.get("related_entities", [])) or "-"
@@ -682,7 +923,6 @@ def print_binding_review_hint(channels_data: Dict[str, Any], channels_path: str)
 
     print(f"\n已写入: {channels_path}")
     print("如需人工审核/修改 channel，请直接编辑 channels.json；后续 zone 与 TCAE 脚本会读取修改后的结果。")
-
 
 def main() -> None:
     parser = argparse.ArgumentParser(description="Extract entities and bind channels for HomeAgent.")
@@ -718,7 +958,7 @@ def main() -> None:
         channels_data = build_empty_channels(devices, config, method="empty_no_ai")
     else:
         try:
-            channels_data = bind_channels_with_ai(devices, config)
+            channels_data = bind_channels_with_ai(devices, config, automations=automations)
         except Exception as exc:
             print(f"[警告] AI channel 绑定失败: {exc}")
             print("将写入保守空绑定。可之后手动编辑 channels.json 或重新运行脚本。")

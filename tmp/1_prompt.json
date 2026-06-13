@@ -1,0 +1,1328 @@
+{
+    "task": "Bind Home Assistant entities to physical/environmental channels for TCAE modeling. Use rule-scoped effects_by_rule for actuator directions.",
+    "candidate_channels": [
+        "temperature",
+        "humidity",
+        "pressure",
+        "light",
+        "sound",
+        "motion",
+        "smoke",
+        "water_flow"
+    ],
+    "schema_notes": {
+        "channel_ontology": "channels are environmental/resource-flow dimensions, not entity states",
+        "preferred_actuator_effect_schema": "effects_by_rule",
+        "direction_scope": "direction is determined under each specific rule context, not globally by device type or operation alone",
+        "proposed_channel_policy": "propose only explicitly required missing environmental channels; do not propose generic finer-grained channels from common sense alone"
+    },
+    "rules": [
+        {
+            "rule_uid": "automation.r21_cleanmode_disablelatch",
+            "rule_id": "1780849082145",
+            "alias": "R21_CleanMode_DisableLatch",
+            "description": "清洁模式，关闭窗户童锁",
+            "mode": "single",
+            "entity_refs": [
+                "input_boolean.cleaning_mode_switch",
+                "input_boolean.nursery_window_latch"
+            ],
+            "triggers": [
+                {
+                    "index": 0,
+                    "platform": "state",
+                    "entity_refs": [
+                        "input_boolean.cleaning_mode_switch"
+                    ],
+                    "node_excerpt": {
+                        "platform": "state",
+                        "entity_id": [
+                            "input_boolean.cleaning_mode_switch"
+                        ],
+                        "from": "off",
+                        "to": "on"
+                    }
+                }
+            ],
+            "conditions": [],
+            "actions": [
+                {
+                    "index": 0,
+                    "service": "input_boolean.turn_on",
+                    "operation": "turn_on",
+                    "post_value": "on",
+                    "target_entities": [
+                        "input_boolean.nursery_window_latch"
+                    ],
+                    "entity_refs": [
+                        "input_boolean.nursery_window_latch"
+                    ],
+                    "node_excerpt": {
+                        "service": "input_boolean.turn_on",
+                        "metadata": {},
+                        "data": {},
+                        "target": {
+                            "entity_id": "input_boolean.nursery_window_latch"
+                        }
+                    }
+                }
+            ]
+        },
+        {
+            "rule_uid": "automation.r22_temphigh_windowopen",
+            "rule_id": "1780849846827",
+            "alias": "R22_TempHigh_WindowOpen",
+            "description": "温度高，童锁disabled，开窗",
+            "mode": "single",
+            "entity_refs": [
+                "input_number.nursery_temp_sensor",
+                "input_boolean.nursery_window_latch",
+                "input_boolean.nursery_window"
+            ],
+            "triggers": [
+                {
+                    "index": 0,
+                    "platform": "numeric_state",
+                    "entity_refs": [
+                        "input_number.nursery_temp_sensor"
+                    ],
+                    "node_excerpt": {
+                        "platform": "numeric_state",
+                        "entity_id": [
+                            "input_number.nursery_temp_sensor"
+                        ],
+                        "above": 30
+                    }
+                }
+            ],
+            "conditions": [
+                {
+                    "index": 0,
+                    "condition": "state",
+                    "entity_refs": [
+                        "input_boolean.nursery_window_latch"
+                    ],
+                    "node_excerpt": {
+                        "condition": "state",
+                        "entity_id": "input_boolean.nursery_window_latch",
+                        "state": "on"
+                    }
+                }
+            ],
+            "actions": [
+                {
+                    "index": 0,
+                    "service": "input_boolean.turn_on",
+                    "operation": "turn_on",
+                    "post_value": "on",
+                    "target_entities": [
+                        "input_boolean.nursery_window"
+                    ],
+                    "entity_refs": [
+                        "input_boolean.nursery_window"
+                    ],
+                    "node_excerpt": {
+                        "service": "input_boolean.turn_on",
+                        "metadata": {},
+                        "data": {},
+                        "target": {
+                            "entity_id": "input_boolean.nursery_window"
+                        }
+                    }
+                }
+            ]
+        },
+        {
+            "rule_uid": "automation.r23_charger_stopautoclose",
+            "rule_id": "1780849977378",
+            "alias": "R23_Charger_StopAutoClose",
+            "description": "刚开始充电，禁用自动关门",
+            "mode": "single",
+            "entity_refs": [
+                "input_boolean.ev_charger_status",
+                "input_boolean.garage_auto_close_enabled"
+            ],
+            "triggers": [
+                {
+                    "index": 0,
+                    "platform": "state",
+                    "entity_refs": [
+                        "input_boolean.ev_charger_status"
+                    ],
+                    "node_excerpt": {
+                        "platform": "state",
+                        "entity_id": [
+                            "input_boolean.ev_charger_status"
+                        ],
+                        "from": "off",
+                        "to": "on"
+                    }
+                }
+            ],
+            "conditions": [],
+            "actions": [
+                {
+                    "index": 0,
+                    "service": "input_boolean.turn_off",
+                    "operation": "turn_off",
+                    "post_value": "off",
+                    "target_entities": [
+                        "input_boolean.garage_auto_close_enabled"
+                    ],
+                    "entity_refs": [
+                        "input_boolean.garage_auto_close_enabled"
+                    ],
+                    "node_excerpt": {
+                        "service": "input_boolean.turn_off",
+                        "metadata": {},
+                        "data": {},
+                        "target": {
+                            "entity_id": "input_boolean.garage_auto_close_enabled"
+                        }
+                    }
+                }
+            ]
+        },
+        {
+            "rule_uid": "automation.r24_night_closegaragedoor",
+            "rule_id": "1780850451101",
+            "alias": "R24_Night_CloseGarageDoor",
+            "description": "晚上十一点关车库门",
+            "mode": "single",
+            "entity_refs": [
+                "input_datetime.systemtime",
+                "input_boolean.garage_auto_close_enabled",
+                "input_boolean.garage_door"
+            ],
+            "triggers": [
+                {
+                    "index": 0,
+                    "platform": "numeric_state",
+                    "entity_refs": [
+                        "input_datetime.systemtime"
+                    ],
+                    "node_excerpt": {
+                        "platform": "numeric_state",
+                        "entity_id": [
+                            "input_datetime.systemtime"
+                        ],
+                        "attribute": "hour",
+                        "above": 22,
+                        "below": 24
+                    }
+                }
+            ],
+            "conditions": [
+                {
+                    "index": 0,
+                    "condition": "state",
+                    "entity_refs": [
+                        "input_boolean.garage_auto_close_enabled"
+                    ],
+                    "node_excerpt": {
+                        "condition": "state",
+                        "entity_id": "input_boolean.garage_auto_close_enabled",
+                        "state": "on"
+                    }
+                },
+                {
+                    "index": 1,
+                    "condition": "state",
+                    "entity_refs": [
+                        "input_boolean.garage_door"
+                    ],
+                    "node_excerpt": {
+                        "condition": "state",
+                        "entity_id": "input_boolean.garage_door",
+                        "state": "on"
+                    }
+                }
+            ],
+            "actions": [
+                {
+                    "index": 0,
+                    "service": "input_boolean.turn_off",
+                    "operation": "turn_off",
+                    "post_value": "off",
+                    "target_entities": [
+                        "input_boolean.garage_door"
+                    ],
+                    "entity_refs": [
+                        "input_boolean.garage_door"
+                    ],
+                    "node_excerpt": {
+                        "service": "input_boolean.turn_off",
+                        "metadata": {},
+                        "data": {},
+                        "target": {
+                            "entity_id": "input_boolean.garage_door"
+                        }
+                    }
+                }
+            ]
+        }
+    ],
+    "devices": [
+        {
+            "entity_id": "input_boolean.cleaning_mode_switch",
+            "display_name": "cleaning_mode_switch (input_boolean.cleaning_mode_switch)",
+            "registry": {
+                "name": null,
+                "original_name": "cleaning_mode_switch",
+                "aliases": [],
+                "area_id": "nursery",
+                "device_class": null,
+                "original_device_class": null,
+                "platform": "input_boolean",
+                "unit_of_measurement": null
+            },
+            "domain": "input_boolean",
+            "value_type_hint": "state",
+            "positions": [
+                "trigger"
+            ],
+            "structural_role": "sensor",
+            "primary_role": "sensor",
+            "operations": [],
+            "contexts": [
+                {
+                    "rule_uid": "automation.r21_cleanmode_disablelatch",
+                    "rule_alias": "R21_CleanMode_DisableLatch",
+                    "rule_description": "清洁模式，关闭窗户童锁",
+                    "section": "trigger",
+                    "yaml_path": "trigger[0].entity_id",
+                    "platform": "state",
+                    "condition": null,
+                    "service": null,
+                    "operation": null,
+                    "post_value": null,
+                    "node_excerpt": {
+                        "platform": "state",
+                        "entity_id": [
+                            "input_boolean.cleaning_mode_switch"
+                        ],
+                        "from": "off",
+                        "to": "on"
+                    }
+                }
+            ],
+            "related_rules": [
+                {
+                    "rule_uid": "automation.r21_cleanmode_disablelatch",
+                    "rule_id": "1780849082145",
+                    "alias": "R21_CleanMode_DisableLatch",
+                    "description": "清洁模式，关闭窗户童锁",
+                    "mode": "single",
+                    "entity_refs": [
+                        "input_boolean.cleaning_mode_switch",
+                        "input_boolean.nursery_window_latch"
+                    ],
+                    "triggers": [
+                        {
+                            "index": 0,
+                            "platform": "state",
+                            "entity_refs": [
+                                "input_boolean.cleaning_mode_switch"
+                            ],
+                            "node_excerpt": {
+                                "platform": "state",
+                                "entity_id": [
+                                    "input_boolean.cleaning_mode_switch"
+                                ],
+                                "from": "off",
+                                "to": "on"
+                            }
+                        }
+                    ],
+                    "conditions": [],
+                    "actions": [
+                        {
+                            "index": 0,
+                            "service": "input_boolean.turn_on",
+                            "operation": "turn_on",
+                            "post_value": "on",
+                            "target_entities": [
+                                "input_boolean.nursery_window_latch"
+                            ],
+                            "entity_refs": [
+                                "input_boolean.nursery_window_latch"
+                            ],
+                            "node_excerpt": {
+                                "service": "input_boolean.turn_on",
+                                "metadata": {},
+                                "data": {},
+                                "target": {
+                                    "entity_id": "input_boolean.nursery_window_latch"
+                                }
+                            }
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "entity_id": "input_boolean.ev_charger_status",
+            "display_name": "ev_charger_status (input_boolean.ev_charger_status)",
+            "registry": {
+                "name": null,
+                "original_name": "ev_charger_status",
+                "aliases": [],
+                "area_id": "garage",
+                "device_class": null,
+                "original_device_class": null,
+                "platform": "input_boolean",
+                "unit_of_measurement": null
+            },
+            "domain": "input_boolean",
+            "value_type_hint": "state",
+            "positions": [
+                "trigger"
+            ],
+            "structural_role": "sensor",
+            "primary_role": "sensor",
+            "operations": [],
+            "contexts": [
+                {
+                    "rule_uid": "automation.r23_charger_stopautoclose",
+                    "rule_alias": "R23_Charger_StopAutoClose",
+                    "rule_description": "刚开始充电，禁用自动关门",
+                    "section": "trigger",
+                    "yaml_path": "trigger[0].entity_id",
+                    "platform": "state",
+                    "condition": null,
+                    "service": null,
+                    "operation": null,
+                    "post_value": null,
+                    "node_excerpt": {
+                        "platform": "state",
+                        "entity_id": [
+                            "input_boolean.ev_charger_status"
+                        ],
+                        "from": "off",
+                        "to": "on"
+                    }
+                }
+            ],
+            "related_rules": [
+                {
+                    "rule_uid": "automation.r23_charger_stopautoclose",
+                    "rule_id": "1780849977378",
+                    "alias": "R23_Charger_StopAutoClose",
+                    "description": "刚开始充电，禁用自动关门",
+                    "mode": "single",
+                    "entity_refs": [
+                        "input_boolean.ev_charger_status",
+                        "input_boolean.garage_auto_close_enabled"
+                    ],
+                    "triggers": [
+                        {
+                            "index": 0,
+                            "platform": "state",
+                            "entity_refs": [
+                                "input_boolean.ev_charger_status"
+                            ],
+                            "node_excerpt": {
+                                "platform": "state",
+                                "entity_id": [
+                                    "input_boolean.ev_charger_status"
+                                ],
+                                "from": "off",
+                                "to": "on"
+                            }
+                        }
+                    ],
+                    "conditions": [],
+                    "actions": [
+                        {
+                            "index": 0,
+                            "service": "input_boolean.turn_off",
+                            "operation": "turn_off",
+                            "post_value": "off",
+                            "target_entities": [
+                                "input_boolean.garage_auto_close_enabled"
+                            ],
+                            "entity_refs": [
+                                "input_boolean.garage_auto_close_enabled"
+                            ],
+                            "node_excerpt": {
+                                "service": "input_boolean.turn_off",
+                                "metadata": {},
+                                "data": {},
+                                "target": {
+                                    "entity_id": "input_boolean.garage_auto_close_enabled"
+                                }
+                            }
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "entity_id": "input_boolean.garage_auto_close_enabled",
+            "display_name": "garage_auto_close_enabled (input_boolean.garage_auto_close_enabled)",
+            "registry": {
+                "name": null,
+                "original_name": "garage_auto_close_enabled",
+                "aliases": [],
+                "area_id": "garage",
+                "device_class": null,
+                "original_device_class": null,
+                "platform": "input_boolean",
+                "unit_of_measurement": null
+            },
+            "domain": "input_boolean",
+            "value_type_hint": "state",
+            "positions": [
+                "action",
+                "condition"
+            ],
+            "structural_role": "hybrid",
+            "primary_role": "hybrid",
+            "operations": [
+                "turn_off"
+            ],
+            "contexts": [
+                {
+                    "rule_uid": "automation.r23_charger_stopautoclose",
+                    "rule_alias": "R23_Charger_StopAutoClose",
+                    "rule_description": "刚开始充电，禁用自动关门",
+                    "section": "action",
+                    "yaml_path": "action[0].target",
+                    "platform": null,
+                    "condition": null,
+                    "service": "input_boolean.turn_off",
+                    "operation": "turn_off",
+                    "post_value": "off",
+                    "node_excerpt": {
+                        "service": "input_boolean.turn_off",
+                        "metadata": {},
+                        "data": {},
+                        "target": {
+                            "entity_id": "input_boolean.garage_auto_close_enabled"
+                        }
+                    }
+                },
+                {
+                    "rule_uid": "automation.r24_night_closegaragedoor",
+                    "rule_alias": "R24_Night_CloseGarageDoor",
+                    "rule_description": "晚上十一点关车库门",
+                    "section": "condition",
+                    "yaml_path": "condition[0].entity_id",
+                    "platform": null,
+                    "condition": "state",
+                    "service": null,
+                    "operation": null,
+                    "post_value": null,
+                    "node_excerpt": {
+                        "condition": "state",
+                        "entity_id": "input_boolean.garage_auto_close_enabled",
+                        "state": "on"
+                    }
+                }
+            ],
+            "related_rules": [
+                {
+                    "rule_uid": "automation.r23_charger_stopautoclose",
+                    "rule_id": "1780849977378",
+                    "alias": "R23_Charger_StopAutoClose",
+                    "description": "刚开始充电，禁用自动关门",
+                    "mode": "single",
+                    "entity_refs": [
+                        "input_boolean.ev_charger_status",
+                        "input_boolean.garage_auto_close_enabled"
+                    ],
+                    "triggers": [
+                        {
+                            "index": 0,
+                            "platform": "state",
+                            "entity_refs": [
+                                "input_boolean.ev_charger_status"
+                            ],
+                            "node_excerpt": {
+                                "platform": "state",
+                                "entity_id": [
+                                    "input_boolean.ev_charger_status"
+                                ],
+                                "from": "off",
+                                "to": "on"
+                            }
+                        }
+                    ],
+                    "conditions": [],
+                    "actions": [
+                        {
+                            "index": 0,
+                            "service": "input_boolean.turn_off",
+                            "operation": "turn_off",
+                            "post_value": "off",
+                            "target_entities": [
+                                "input_boolean.garage_auto_close_enabled"
+                            ],
+                            "entity_refs": [
+                                "input_boolean.garage_auto_close_enabled"
+                            ],
+                            "node_excerpt": {
+                                "service": "input_boolean.turn_off",
+                                "metadata": {},
+                                "data": {},
+                                "target": {
+                                    "entity_id": "input_boolean.garage_auto_close_enabled"
+                                }
+                            }
+                        }
+                    ]
+                },
+                {
+                    "rule_uid": "automation.r24_night_closegaragedoor",
+                    "rule_id": "1780850451101",
+                    "alias": "R24_Night_CloseGarageDoor",
+                    "description": "晚上十一点关车库门",
+                    "mode": "single",
+                    "entity_refs": [
+                        "input_datetime.systemtime",
+                        "input_boolean.garage_auto_close_enabled",
+                        "input_boolean.garage_door"
+                    ],
+                    "triggers": [
+                        {
+                            "index": 0,
+                            "platform": "numeric_state",
+                            "entity_refs": [
+                                "input_datetime.systemtime"
+                            ],
+                            "node_excerpt": {
+                                "platform": "numeric_state",
+                                "entity_id": [
+                                    "input_datetime.systemtime"
+                                ],
+                                "attribute": "hour",
+                                "above": 22,
+                                "below": 24
+                            }
+                        }
+                    ],
+                    "conditions": [
+                        {
+                            "index": 0,
+                            "condition": "state",
+                            "entity_refs": [
+                                "input_boolean.garage_auto_close_enabled"
+                            ],
+                            "node_excerpt": {
+                                "condition": "state",
+                                "entity_id": "input_boolean.garage_auto_close_enabled",
+                                "state": "on"
+                            }
+                        },
+                        {
+                            "index": 1,
+                            "condition": "state",
+                            "entity_refs": [
+                                "input_boolean.garage_door"
+                            ],
+                            "node_excerpt": {
+                                "condition": "state",
+                                "entity_id": "input_boolean.garage_door",
+                                "state": "on"
+                            }
+                        }
+                    ],
+                    "actions": [
+                        {
+                            "index": 0,
+                            "service": "input_boolean.turn_off",
+                            "operation": "turn_off",
+                            "post_value": "off",
+                            "target_entities": [
+                                "input_boolean.garage_door"
+                            ],
+                            "entity_refs": [
+                                "input_boolean.garage_door"
+                            ],
+                            "node_excerpt": {
+                                "service": "input_boolean.turn_off",
+                                "metadata": {},
+                                "data": {},
+                                "target": {
+                                    "entity_id": "input_boolean.garage_door"
+                                }
+                            }
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "entity_id": "input_boolean.garage_door",
+            "display_name": "garage_door (input_boolean.garage_door)",
+            "registry": {
+                "name": null,
+                "original_name": "garage_door",
+                "aliases": [],
+                "area_id": "garage",
+                "device_class": null,
+                "original_device_class": null,
+                "platform": "input_boolean",
+                "unit_of_measurement": null
+            },
+            "domain": "input_boolean",
+            "value_type_hint": "state",
+            "positions": [
+                "action",
+                "condition"
+            ],
+            "structural_role": "hybrid",
+            "primary_role": "hybrid",
+            "operations": [
+                "turn_off"
+            ],
+            "contexts": [
+                {
+                    "rule_uid": "automation.r24_night_closegaragedoor",
+                    "rule_alias": "R24_Night_CloseGarageDoor",
+                    "rule_description": "晚上十一点关车库门",
+                    "section": "condition",
+                    "yaml_path": "condition[1].entity_id",
+                    "platform": null,
+                    "condition": "state",
+                    "service": null,
+                    "operation": null,
+                    "post_value": null,
+                    "node_excerpt": {
+                        "condition": "state",
+                        "entity_id": "input_boolean.garage_door",
+                        "state": "on"
+                    }
+                },
+                {
+                    "rule_uid": "automation.r24_night_closegaragedoor",
+                    "rule_alias": "R24_Night_CloseGarageDoor",
+                    "rule_description": "晚上十一点关车库门",
+                    "section": "action",
+                    "yaml_path": "action[0].target",
+                    "platform": null,
+                    "condition": null,
+                    "service": "input_boolean.turn_off",
+                    "operation": "turn_off",
+                    "post_value": "off",
+                    "node_excerpt": {
+                        "service": "input_boolean.turn_off",
+                        "metadata": {},
+                        "data": {},
+                        "target": {
+                            "entity_id": "input_boolean.garage_door"
+                        }
+                    }
+                }
+            ],
+            "related_rules": [
+                {
+                    "rule_uid": "automation.r24_night_closegaragedoor",
+                    "rule_id": "1780850451101",
+                    "alias": "R24_Night_CloseGarageDoor",
+                    "description": "晚上十一点关车库门",
+                    "mode": "single",
+                    "entity_refs": [
+                        "input_datetime.systemtime",
+                        "input_boolean.garage_auto_close_enabled",
+                        "input_boolean.garage_door"
+                    ],
+                    "triggers": [
+                        {
+                            "index": 0,
+                            "platform": "numeric_state",
+                            "entity_refs": [
+                                "input_datetime.systemtime"
+                            ],
+                            "node_excerpt": {
+                                "platform": "numeric_state",
+                                "entity_id": [
+                                    "input_datetime.systemtime"
+                                ],
+                                "attribute": "hour",
+                                "above": 22,
+                                "below": 24
+                            }
+                        }
+                    ],
+                    "conditions": [
+                        {
+                            "index": 0,
+                            "condition": "state",
+                            "entity_refs": [
+                                "input_boolean.garage_auto_close_enabled"
+                            ],
+                            "node_excerpt": {
+                                "condition": "state",
+                                "entity_id": "input_boolean.garage_auto_close_enabled",
+                                "state": "on"
+                            }
+                        },
+                        {
+                            "index": 1,
+                            "condition": "state",
+                            "entity_refs": [
+                                "input_boolean.garage_door"
+                            ],
+                            "node_excerpt": {
+                                "condition": "state",
+                                "entity_id": "input_boolean.garage_door",
+                                "state": "on"
+                            }
+                        }
+                    ],
+                    "actions": [
+                        {
+                            "index": 0,
+                            "service": "input_boolean.turn_off",
+                            "operation": "turn_off",
+                            "post_value": "off",
+                            "target_entities": [
+                                "input_boolean.garage_door"
+                            ],
+                            "entity_refs": [
+                                "input_boolean.garage_door"
+                            ],
+                            "node_excerpt": {
+                                "service": "input_boolean.turn_off",
+                                "metadata": {},
+                                "data": {},
+                                "target": {
+                                    "entity_id": "input_boolean.garage_door"
+                                }
+                            }
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "entity_id": "input_boolean.nursery_window",
+            "display_name": "nursery_window (input_boolean.nursery_window)",
+            "registry": {
+                "name": null,
+                "original_name": "nursery_window",
+                "aliases": [],
+                "area_id": "nursery",
+                "device_class": null,
+                "original_device_class": null,
+                "platform": "input_boolean",
+                "unit_of_measurement": null
+            },
+            "domain": "input_boolean",
+            "value_type_hint": "state",
+            "positions": [
+                "action"
+            ],
+            "structural_role": "actuator",
+            "primary_role": "actuator",
+            "operations": [
+                "turn_on"
+            ],
+            "contexts": [
+                {
+                    "rule_uid": "automation.r22_temphigh_windowopen",
+                    "rule_alias": "R22_TempHigh_WindowOpen",
+                    "rule_description": "温度高，童锁disabled，开窗",
+                    "section": "action",
+                    "yaml_path": "action[0].target",
+                    "platform": null,
+                    "condition": null,
+                    "service": "input_boolean.turn_on",
+                    "operation": "turn_on",
+                    "post_value": "on",
+                    "node_excerpt": {
+                        "service": "input_boolean.turn_on",
+                        "metadata": {},
+                        "data": {},
+                        "target": {
+                            "entity_id": "input_boolean.nursery_window"
+                        }
+                    }
+                }
+            ],
+            "related_rules": [
+                {
+                    "rule_uid": "automation.r22_temphigh_windowopen",
+                    "rule_id": "1780849846827",
+                    "alias": "R22_TempHigh_WindowOpen",
+                    "description": "温度高，童锁disabled，开窗",
+                    "mode": "single",
+                    "entity_refs": [
+                        "input_number.nursery_temp_sensor",
+                        "input_boolean.nursery_window_latch",
+                        "input_boolean.nursery_window"
+                    ],
+                    "triggers": [
+                        {
+                            "index": 0,
+                            "platform": "numeric_state",
+                            "entity_refs": [
+                                "input_number.nursery_temp_sensor"
+                            ],
+                            "node_excerpt": {
+                                "platform": "numeric_state",
+                                "entity_id": [
+                                    "input_number.nursery_temp_sensor"
+                                ],
+                                "above": 30
+                            }
+                        }
+                    ],
+                    "conditions": [
+                        {
+                            "index": 0,
+                            "condition": "state",
+                            "entity_refs": [
+                                "input_boolean.nursery_window_latch"
+                            ],
+                            "node_excerpt": {
+                                "condition": "state",
+                                "entity_id": "input_boolean.nursery_window_latch",
+                                "state": "on"
+                            }
+                        }
+                    ],
+                    "actions": [
+                        {
+                            "index": 0,
+                            "service": "input_boolean.turn_on",
+                            "operation": "turn_on",
+                            "post_value": "on",
+                            "target_entities": [
+                                "input_boolean.nursery_window"
+                            ],
+                            "entity_refs": [
+                                "input_boolean.nursery_window"
+                            ],
+                            "node_excerpt": {
+                                "service": "input_boolean.turn_on",
+                                "metadata": {},
+                                "data": {},
+                                "target": {
+                                    "entity_id": "input_boolean.nursery_window"
+                                }
+                            }
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "entity_id": "input_boolean.nursery_window_latch",
+            "display_name": "nursery_window_latch (input_boolean.nursery_window_latch)",
+            "registry": {
+                "name": null,
+                "original_name": "nursery_window_latch",
+                "aliases": [],
+                "area_id": "nursery",
+                "device_class": null,
+                "original_device_class": null,
+                "platform": "input_boolean",
+                "unit_of_measurement": null
+            },
+            "domain": "input_boolean",
+            "value_type_hint": "state",
+            "positions": [
+                "action",
+                "condition"
+            ],
+            "structural_role": "hybrid",
+            "primary_role": "hybrid",
+            "operations": [
+                "turn_on"
+            ],
+            "contexts": [
+                {
+                    "rule_uid": "automation.r21_cleanmode_disablelatch",
+                    "rule_alias": "R21_CleanMode_DisableLatch",
+                    "rule_description": "清洁模式，关闭窗户童锁",
+                    "section": "action",
+                    "yaml_path": "action[0].target",
+                    "platform": null,
+                    "condition": null,
+                    "service": "input_boolean.turn_on",
+                    "operation": "turn_on",
+                    "post_value": "on",
+                    "node_excerpt": {
+                        "service": "input_boolean.turn_on",
+                        "metadata": {},
+                        "data": {},
+                        "target": {
+                            "entity_id": "input_boolean.nursery_window_latch"
+                        }
+                    }
+                },
+                {
+                    "rule_uid": "automation.r22_temphigh_windowopen",
+                    "rule_alias": "R22_TempHigh_WindowOpen",
+                    "rule_description": "温度高，童锁disabled，开窗",
+                    "section": "condition",
+                    "yaml_path": "condition[0].entity_id",
+                    "platform": null,
+                    "condition": "state",
+                    "service": null,
+                    "operation": null,
+                    "post_value": null,
+                    "node_excerpt": {
+                        "condition": "state",
+                        "entity_id": "input_boolean.nursery_window_latch",
+                        "state": "on"
+                    }
+                }
+            ],
+            "related_rules": [
+                {
+                    "rule_uid": "automation.r21_cleanmode_disablelatch",
+                    "rule_id": "1780849082145",
+                    "alias": "R21_CleanMode_DisableLatch",
+                    "description": "清洁模式，关闭窗户童锁",
+                    "mode": "single",
+                    "entity_refs": [
+                        "input_boolean.cleaning_mode_switch",
+                        "input_boolean.nursery_window_latch"
+                    ],
+                    "triggers": [
+                        {
+                            "index": 0,
+                            "platform": "state",
+                            "entity_refs": [
+                                "input_boolean.cleaning_mode_switch"
+                            ],
+                            "node_excerpt": {
+                                "platform": "state",
+                                "entity_id": [
+                                    "input_boolean.cleaning_mode_switch"
+                                ],
+                                "from": "off",
+                                "to": "on"
+                            }
+                        }
+                    ],
+                    "conditions": [],
+                    "actions": [
+                        {
+                            "index": 0,
+                            "service": "input_boolean.turn_on",
+                            "operation": "turn_on",
+                            "post_value": "on",
+                            "target_entities": [
+                                "input_boolean.nursery_window_latch"
+                            ],
+                            "entity_refs": [
+                                "input_boolean.nursery_window_latch"
+                            ],
+                            "node_excerpt": {
+                                "service": "input_boolean.turn_on",
+                                "metadata": {},
+                                "data": {},
+                                "target": {
+                                    "entity_id": "input_boolean.nursery_window_latch"
+                                }
+                            }
+                        }
+                    ]
+                },
+                {
+                    "rule_uid": "automation.r22_temphigh_windowopen",
+                    "rule_id": "1780849846827",
+                    "alias": "R22_TempHigh_WindowOpen",
+                    "description": "温度高，童锁disabled，开窗",
+                    "mode": "single",
+                    "entity_refs": [
+                        "input_number.nursery_temp_sensor",
+                        "input_boolean.nursery_window_latch",
+                        "input_boolean.nursery_window"
+                    ],
+                    "triggers": [
+                        {
+                            "index": 0,
+                            "platform": "numeric_state",
+                            "entity_refs": [
+                                "input_number.nursery_temp_sensor"
+                            ],
+                            "node_excerpt": {
+                                "platform": "numeric_state",
+                                "entity_id": [
+                                    "input_number.nursery_temp_sensor"
+                                ],
+                                "above": 30
+                            }
+                        }
+                    ],
+                    "conditions": [
+                        {
+                            "index": 0,
+                            "condition": "state",
+                            "entity_refs": [
+                                "input_boolean.nursery_window_latch"
+                            ],
+                            "node_excerpt": {
+                                "condition": "state",
+                                "entity_id": "input_boolean.nursery_window_latch",
+                                "state": "on"
+                            }
+                        }
+                    ],
+                    "actions": [
+                        {
+                            "index": 0,
+                            "service": "input_boolean.turn_on",
+                            "operation": "turn_on",
+                            "post_value": "on",
+                            "target_entities": [
+                                "input_boolean.nursery_window"
+                            ],
+                            "entity_refs": [
+                                "input_boolean.nursery_window"
+                            ],
+                            "node_excerpt": {
+                                "service": "input_boolean.turn_on",
+                                "metadata": {},
+                                "data": {},
+                                "target": {
+                                    "entity_id": "input_boolean.nursery_window"
+                                }
+                            }
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "entity_id": "input_datetime.systemtime",
+            "display_name": "SystemTime (input_datetime.systemtime)",
+            "registry": {
+                "name": null,
+                "original_name": "SystemTime",
+                "aliases": [],
+                "area_id": "system",
+                "device_class": null,
+                "original_device_class": null,
+                "platform": "input_datetime",
+                "unit_of_measurement": null
+            },
+            "domain": "input_datetime",
+            "value_type_hint": "datetime",
+            "positions": [
+                "trigger"
+            ],
+            "structural_role": "sensor",
+            "primary_role": "sensor",
+            "operations": [],
+            "contexts": [
+                {
+                    "rule_uid": "automation.r24_night_closegaragedoor",
+                    "rule_alias": "R24_Night_CloseGarageDoor",
+                    "rule_description": "晚上十一点关车库门",
+                    "section": "trigger",
+                    "yaml_path": "trigger[0].entity_id",
+                    "platform": "numeric_state",
+                    "condition": null,
+                    "service": null,
+                    "operation": null,
+                    "post_value": null,
+                    "node_excerpt": {
+                        "platform": "numeric_state",
+                        "entity_id": [
+                            "input_datetime.systemtime"
+                        ],
+                        "attribute": "hour",
+                        "above": 22,
+                        "below": 24
+                    }
+                }
+            ],
+            "related_rules": [
+                {
+                    "rule_uid": "automation.r24_night_closegaragedoor",
+                    "rule_id": "1780850451101",
+                    "alias": "R24_Night_CloseGarageDoor",
+                    "description": "晚上十一点关车库门",
+                    "mode": "single",
+                    "entity_refs": [
+                        "input_datetime.systemtime",
+                        "input_boolean.garage_auto_close_enabled",
+                        "input_boolean.garage_door"
+                    ],
+                    "triggers": [
+                        {
+                            "index": 0,
+                            "platform": "numeric_state",
+                            "entity_refs": [
+                                "input_datetime.systemtime"
+                            ],
+                            "node_excerpt": {
+                                "platform": "numeric_state",
+                                "entity_id": [
+                                    "input_datetime.systemtime"
+                                ],
+                                "attribute": "hour",
+                                "above": 22,
+                                "below": 24
+                            }
+                        }
+                    ],
+                    "conditions": [
+                        {
+                            "index": 0,
+                            "condition": "state",
+                            "entity_refs": [
+                                "input_boolean.garage_auto_close_enabled"
+                            ],
+                            "node_excerpt": {
+                                "condition": "state",
+                                "entity_id": "input_boolean.garage_auto_close_enabled",
+                                "state": "on"
+                            }
+                        },
+                        {
+                            "index": 1,
+                            "condition": "state",
+                            "entity_refs": [
+                                "input_boolean.garage_door"
+                            ],
+                            "node_excerpt": {
+                                "condition": "state",
+                                "entity_id": "input_boolean.garage_door",
+                                "state": "on"
+                            }
+                        }
+                    ],
+                    "actions": [
+                        {
+                            "index": 0,
+                            "service": "input_boolean.turn_off",
+                            "operation": "turn_off",
+                            "post_value": "off",
+                            "target_entities": [
+                                "input_boolean.garage_door"
+                            ],
+                            "entity_refs": [
+                                "input_boolean.garage_door"
+                            ],
+                            "node_excerpt": {
+                                "service": "input_boolean.turn_off",
+                                "metadata": {},
+                                "data": {},
+                                "target": {
+                                    "entity_id": "input_boolean.garage_door"
+                                }
+                            }
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "entity_id": "input_number.nursery_temp_sensor",
+            "display_name": "nursery_temp_sensor (input_number.nursery_temp_sensor)",
+            "registry": {
+                "name": null,
+                "original_name": "nursery_temp_sensor",
+                "aliases": [],
+                "area_id": "nursery",
+                "device_class": null,
+                "original_device_class": null,
+                "platform": "input_number",
+                "unit_of_measurement": null
+            },
+            "domain": "input_number",
+            "value_type_hint": "numeric",
+            "positions": [
+                "trigger"
+            ],
+            "structural_role": "sensor",
+            "primary_role": "sensor",
+            "operations": [],
+            "contexts": [
+                {
+                    "rule_uid": "automation.r22_temphigh_windowopen",
+                    "rule_alias": "R22_TempHigh_WindowOpen",
+                    "rule_description": "温度高，童锁disabled，开窗",
+                    "section": "trigger",
+                    "yaml_path": "trigger[0].entity_id",
+                    "platform": "numeric_state",
+                    "condition": null,
+                    "service": null,
+                    "operation": null,
+                    "post_value": null,
+                    "node_excerpt": {
+                        "platform": "numeric_state",
+                        "entity_id": [
+                            "input_number.nursery_temp_sensor"
+                        ],
+                        "above": 30
+                    }
+                }
+            ],
+            "related_rules": [
+                {
+                    "rule_uid": "automation.r22_temphigh_windowopen",
+                    "rule_id": "1780849846827",
+                    "alias": "R22_TempHigh_WindowOpen",
+                    "description": "温度高，童锁disabled，开窗",
+                    "mode": "single",
+                    "entity_refs": [
+                        "input_number.nursery_temp_sensor",
+                        "input_boolean.nursery_window_latch",
+                        "input_boolean.nursery_window"
+                    ],
+                    "triggers": [
+                        {
+                            "index": 0,
+                            "platform": "numeric_state",
+                            "entity_refs": [
+                                "input_number.nursery_temp_sensor"
+                            ],
+                            "node_excerpt": {
+                                "platform": "numeric_state",
+                                "entity_id": [
+                                    "input_number.nursery_temp_sensor"
+                                ],
+                                "above": 30
+                            }
+                        }
+                    ],
+                    "conditions": [
+                        {
+                            "index": 0,
+                            "condition": "state",
+                            "entity_refs": [
+                                "input_boolean.nursery_window_latch"
+                            ],
+                            "node_excerpt": {
+                                "condition": "state",
+                                "entity_id": "input_boolean.nursery_window_latch",
+                                "state": "on"
+                            }
+                        }
+                    ],
+                    "actions": [
+                        {
+                            "index": 0,
+                            "service": "input_boolean.turn_on",
+                            "operation": "turn_on",
+                            "post_value": "on",
+                            "target_entities": [
+                                "input_boolean.nursery_window"
+                            ],
+                            "entity_refs": [
+                                "input_boolean.nursery_window"
+                            ],
+                            "node_excerpt": {
+                                "service": "input_boolean.turn_on",
+                                "metadata": {},
+                                "data": {},
+                                "target": {
+                                    "entity_id": "input_boolean.nursery_window"
+                                }
+                            }
+                        }
+                    ]
+                }
+            ]
+        }
+    ],
+    "output_language": "English for JSON keys; reasons may be concise English."
+}

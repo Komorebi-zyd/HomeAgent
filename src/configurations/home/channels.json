@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0",
-  "generated_at": "2026-06-12T16:00:19.403301+00:00",
+  "generated_at": "2026-06-13T07:58:23.186295+00:00",
   "method": "ai_with_validation",
   "candidate_channels": [
     "temperature",
@@ -62,108 +62,149 @@
       "name": null
     }
   ],
+  "rule_display": [
+    {
+      "rule_uid": "automation.r21_cleanmode_disablelatch",
+      "rule_id": "1780849082145",
+      "alias": "R21_CleanMode_DisableLatch",
+      "description": "清洁模式，关闭窗户童锁"
+    },
+    {
+      "rule_uid": "automation.r22_temphigh_windowopen",
+      "rule_id": "1780849846827",
+      "alias": "R22_TempHigh_WindowOpen",
+      "description": "温度高，童锁disabled，开窗"
+    },
+    {
+      "rule_uid": "automation.r23_charger_stopautoclose",
+      "rule_id": "1780849977378",
+      "alias": "R23_Charger_StopAutoClose",
+      "description": "刚开始充电，禁用自动关门"
+    },
+    {
+      "rule_uid": "automation.r24_night_closegaragedoor",
+      "rule_id": "1780850451101",
+      "alias": "R24_Night_CloseGarageDoor",
+      "description": "晚上十一点关车库门"
+    }
+  ],
   "bindings": [
     {
       "entity_id": "input_boolean.cleaning_mode_switch",
       "role": "logical",
+      "structural_role": "sensor",
+      "semantic_role": "logical",
       "observes": [],
       "effects": [],
       "effects_by_operation": {},
+      "effects_by_rule": {},
       "needs_human_review": false,
-      "notes": "Virtual helper switch representing cleaning mode."
+      "notes": "Logical helper switch representing cleaning mode."
     },
     {
       "entity_id": "input_boolean.ev_charger_status",
       "role": "logical",
+      "structural_role": "sensor",
+      "semantic_role": "logical",
       "observes": [],
       "effects": [],
       "effects_by_operation": {},
+      "effects_by_rule": {},
       "needs_human_review": false,
-      "notes": "Virtual helper representing EV charger status."
+      "notes": "Logical status flag representing EV charger state."
     },
     {
       "entity_id": "input_boolean.garage_auto_close_enabled",
       "role": "logical",
+      "structural_role": "hybrid",
+      "semantic_role": "logical",
       "observes": [],
       "effects": [],
       "effects_by_operation": {},
+      "effects_by_rule": {},
       "needs_human_review": false,
-      "notes": "Automation helper flag for enabling/disabling auto-close."
+      "notes": "Logical helper for enabling or disabling auto-close logic."
     },
     {
       "entity_id": "input_boolean.garage_door",
       "role": "actuator",
+      "structural_role": "hybrid",
+      "semantic_role": "actuator",
       "observes": [],
       "effects": [],
       "effects_by_operation": {},
+      "effects_by_rule": {},
       "needs_human_review": false,
-      "notes": "Garage door actuator. No clear environmental channel effects are supported by the context."
+      "notes": "Garage door actuator. Closing it in R24 has no direct environmental channel effect defined in candidate_channels."
     },
     {
       "entity_id": "input_boolean.nursery_window",
       "role": "actuator",
+      "structural_role": "actuator",
+      "semantic_role": "actuator",
       "observes": [],
       "effects": [],
-      "effects_by_operation": {
-        "turn_on": [
+      "effects_by_operation": {},
+      "effects_by_rule": {
+        "automation.r22_temphigh_windowopen": [
           {
             "channel": "temperature",
-            "direction": "unknown",
-            "confidence": 0.8,
-            "reason": "Opening the window (turn_on) allows outdoor air exchange, which physically affects the nursery temperature depending on outdoor conditions."
+            "direction": "-1",
+            "operation": "turn_on",
+            "service": "input_boolean.turn_on",
+            "post_value": "on",
+            "confidence": 0.85,
+            "reason": "Opening the nursery window when temperature is high (above 30C) is intended to decrease the nursery temperature."
           }
         ]
       },
-      "needs_human_review": true,
-      "notes": "Nursery window actuator. Opening it affects temperature via outdoor air exchange."
+      "needs_human_review": false,
+      "notes": "Nursery window actuator. In R22, opening it mitigates high temperature."
     },
     {
       "entity_id": "input_boolean.nursery_window_latch",
       "role": "logical",
+      "structural_role": "hybrid",
+      "semantic_role": "logical",
       "observes": [],
       "effects": [],
       "effects_by_operation": {},
+      "effects_by_rule": {},
       "needs_human_review": false,
-      "notes": "Child lock/latch helper for the nursery window."
+      "notes": "Logical helper representing the nursery window child lock latch."
     },
     {
       "entity_id": "input_datetime.systemtime",
       "role": "logical",
+      "structural_role": "sensor",
+      "semantic_role": "logical",
       "observes": [],
       "effects": [],
       "effects_by_operation": {},
+      "effects_by_rule": {},
       "needs_human_review": false,
-      "notes": "System time helper used for scheduling."
+      "notes": "System time helper for scheduling triggers."
     },
     {
       "entity_id": "input_number.nursery_temp_sensor",
       "role": "sensor",
+      "structural_role": "sensor",
+      "semantic_role": "sensor",
       "observes": [
         {
           "channel": "temperature",
           "value_type": "numeric",
           "confidence": 1.0,
-          "reason": "Explicitly named nursery temperature sensor measuring temperature."
+          "reason": "Explicitly measures the nursery room temperature."
         }
       ],
       "effects": [],
       "effects_by_operation": {},
+      "effects_by_rule": {},
       "needs_human_review": false,
       "notes": "Temperature sensor in the nursery."
     }
   ],
-  "proposed_channels": [
-    {
-      "channel": "air_flow",
-      "description": "The rate or presence of air exchange/ventilation between indoor and outdoor environments.",
-      "reason": "Opening a window directly affects ventilation/air flow, which is not fully captured by temperature alone.",
-      "related_entities": [
-        "input_boolean.nursery_window"
-      ],
-      "suggested_value_type": "numeric",
-      "confidence": 0.9,
-      "status": "proposed_only_not_in_config"
-    }
-  ],
+  "proposed_channels": [],
   "invalid_channel_mentions": []
 }
