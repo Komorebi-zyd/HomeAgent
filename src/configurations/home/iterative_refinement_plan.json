@@ -1,0 +1,152 @@
+{
+  "schema_version": "1.0",
+  "generated_at": "2026-06-28T14:47:37.659309+00:00",
+  "method": "graph_level_iterative_refinement_no_ai",
+  "rpm": 10,
+  "workers": null,
+  "max_iterations": 1,
+  "base_automations": "E:\\Programming\\MyWork\\HomeAgent\\src\\configurations\\automations.yaml",
+  "iterations_root": "E:\\Programming\\MyWork\\HomeAgent\\src\\configurations\\home\\iterations",
+  "iterations": [
+    {
+      "index": 0,
+      "files": {
+        "automations": "E:\\Programming\\MyWork\\HomeAgent\\src\\configurations\\home\\iterations\\it0\\automations-it0.yaml",
+        "tcae": "E:\\Programming\\MyWork\\HomeAgent\\src\\configurations\\home\\iterations\\it0\\tcae-it0.json",
+        "rule_association_graph": "E:\\Programming\\MyWork\\HomeAgent\\src\\configurations\\home\\iterations\\it0\\rule_association_graph-it0.json",
+        "unexpected_state_transition_graph": "E:\\Programming\\MyWork\\HomeAgent\\src\\configurations\\home\\iterations\\it0\\unexpected_state_transition_graph-it0.json"
+      },
+      "graph_summary": {
+        "rule_count": 4,
+        "rag_summary": {
+          "node_count": 11,
+          "edge_count": 11,
+          "nodes_by_type": {
+            "action": 4,
+            "condition": 2,
+            "environment": 1,
+            "trigger": 4
+          },
+          "edges_by_kind": {
+            "direct-condition-allow": 1,
+            "direct-condition-disable": 1,
+            "env-association": 1,
+            "env-trigger": 1,
+            "flow": 6,
+            "indirect-action": 1
+          },
+          "edges_by_group": {
+            "assoc": 5,
+            "intra": 6
+          },
+          "rule_count": 4
+        },
+        "ustg_summary": {
+          "normal_entity_count": 2,
+          "action_node_count": 4,
+          "normal_related_action_node_count": 2,
+          "weak_unexpected_action_node_count": 1,
+          "unexpected_path_count": 6,
+          "node_count": 11,
+          "edge_count": 10,
+          "nodes_by_type": {
+            "action": 4,
+            "condition": 2,
+            "environment": 1,
+            "trigger": 4
+          },
+          "edges_by_kind": {
+            "direct-condition-allow": 1,
+            "direct-condition-disable": 1,
+            "env-trigger": 1,
+            "flow": 6,
+            "indirect-action": 1
+          },
+          "paths_by_terminal_action": {
+            "automation.r22_temphigh_windowopen::A": 4,
+            "automation.r24_night_closegaragedoor::A": 2
+          },
+          "paths_by_polarity": {
+            "-1": 3,
+            "1": 3
+          },
+          "skipped_uncertain_post_count": 0
+        }
+      },
+      "candidate_count": 2,
+      "pair_discovery_reports": [
+        {
+          "candidate_key": "automation.r21_cleanmode_disablelatch->automation.r22_temphigh_windowopen|condition|direct-condition-allow",
+          "scenario_instances": [],
+          "needs_human_review": true,
+          "candidate_id": "ra00001",
+          "source_rule_uid": "automation.r21_cleanmode_disablelatch",
+          "target_rule_uid": "automation.r22_temphigh_windowopen",
+          "association_kind": "direct-condition-allow"
+        },
+        {
+          "candidate_key": "automation.r23_charger_stopautoclose->automation.r24_night_closegaragedoor|condition|direct-condition-disable",
+          "scenario_instances": [],
+          "needs_human_review": true,
+          "candidate_id": "ra00002",
+          "source_rule_uid": "automation.r23_charger_stopautoclose",
+          "target_rule_uid": "automation.r24_night_closegaragedoor",
+          "association_kind": "direct-condition-disable"
+        }
+      ],
+      "scenario_audit_rounds": [
+        {
+          "round": 1,
+          "is_complete": false,
+          "reason": "AI disabled; scenario audit not performed.",
+          "revised_candidate_scenarios": [
+            {
+              "candidate_key": "automation.r21_cleanmode_disablelatch->automation.r22_temphigh_windowopen|condition|direct-condition-allow",
+              "scenario_instances": []
+            },
+            {
+              "candidate_key": "automation.r23_charger_stopautoclose->automation.r24_night_closegaragedoor|condition|direct-condition-disable",
+              "scenario_instances": []
+            }
+          ]
+        }
+      ],
+      "final_candidate_scenarios": [
+        {
+          "candidate_key": "automation.r21_cleanmode_disablelatch->automation.r22_temphigh_windowopen|condition|direct-condition-allow",
+          "scenario_instances": []
+        },
+        {
+          "candidate_key": "automation.r23_charger_stopautoclose->automation.r24_night_closegaragedoor|condition|direct-condition-disable",
+          "scenario_instances": []
+        }
+      ],
+      "rule_update_plan": {
+        "candidate_reports": [],
+        "rule_updates": [],
+        "needs_human_review": true
+      },
+      "accepted_updates": [],
+      "invalid_updates": [],
+      "stopped_reason": "no_valid_rule_updates"
+    }
+  ],
+  "final_iteration_index": 0,
+  "final_files": {
+    "automations": "E:\\Programming\\MyWork\\HomeAgent\\src\\configurations\\home\\iterations\\it0\\automations-it0.yaml",
+    "tcae": "E:\\Programming\\MyWork\\HomeAgent\\src\\configurations\\home\\iterations\\it0\\tcae-it0.json",
+    "rule_association_graph": "E:\\Programming\\MyWork\\HomeAgent\\src\\configurations\\home\\iterations\\it0\\rule_association_graph-it0.json",
+    "unexpected_state_transition_graph": "E:\\Programming\\MyWork\\HomeAgent\\src\\configurations\\home\\iterations\\it0\\unexpected_state_transition_graph-it0.json"
+  },
+  "final_candidate_reports": [],
+  "summary": {
+    "iteration_count": 1,
+    "final_candidate_count": 2,
+    "total_scenario_instance_count": 0,
+    "invalid_scenario_predicate_count": 0,
+    "accepted_rule_update_count": 0,
+    "invalid_rule_update_count": 0,
+    "coverage_status_counts": {},
+    "final_stopped_reason": "no_valid_rule_updates"
+  }
+}

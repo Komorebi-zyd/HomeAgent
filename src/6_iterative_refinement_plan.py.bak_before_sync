@@ -54,20 +54,18 @@ PAIR_SCENARIO_DISCOVERY_PROMPT = r"""
 You are the pairwise boundary-scenario discovery module of HomeAgent.
 
 Background reasoning framework:
-1. A rule association does NOT always imply an unexpected state. The same association can be acceptable in one scenario and unexpected in another.
-2. A scenario is s=<q, Phi_s, O_s>: q is the current rule-association candidate, Phi_s is a set of discriminative context predicates related to q, and O_s is the association-induced result.
-3. Do NOT enumerate all state combinations. Only propose scenarios whose predicates may change expected/unexpected judgment, rule-update need, user-confirmation need, or runtime handling.
-4. Focus on four scenario types: boundary_timing, stale_virtual_state, missing_reset, and safety_boundary_uncertain. Use other only when necessary.
-5. A valid scenario predicate must come from the supplied relevant_predicate_pool or be a duration/event-order refinement of an entity/time/environment predicate in that pool. Irrelevant predicates, e.g. a bedroom light predicate for a garage-door association, are invalid.
+1. Unexpected states arise from: (a) rule-association patterns, (b) special boundary scenarios, and (c) possible drift between virtual states/modes and real-world situations.
+2. The same rule association can be normal in one situation and dangerous in another.
+3. The goal is not to treat every association as dangerous, but to explicitly distinguish acceptable scenarios from dangerous ones.
+4. Notification fallback means proposing a Home Assistant rule that sends a notification under a specific condition, NOT merely writing a free-text note.
 
 Task:
-Given ONE rule-association candidate, generate all meaningful boundary scenarios for that candidate only, and provide machine-checkable scenario_predicates.
+Given the current smart-home system information and ONE terminal pairwise association candidate, determine whether this same association has both normal and dangerous situations. Generate concrete scenario instances for that candidate only.
 
 Constraints:
-- Use only supplied rules, entities, environment nodes, normal configuration and relevant_predicate_pool.
-- Do NOT invent devices/helpers/entities/channels.
-- Do NOT output predicates unrelated to the current candidate.
-- If a safety boundary is ambiguous, mark label="needs_user_confirmation" and provide a natural-language user_question.
+- Use only the supplied structured information.
+- Do NOT rely on any specific human language or hard-coded entity-name patterns.
+- Do NOT invent new devices/helpers.
 - Return strict JSON only.
 
 Output schema:
@@ -77,26 +75,22 @@ Output schema:
     {
       "scenario_id": "s1",
       "title": "short title",
-      "scenario_type": "boundary_timing|stale_virtual_state|missing_reset|safety_boundary_uncertain|other",
-      "label": "expected|unexpected|needs_user_confirmation",
+      "scenario_type": "boundary_timing|stale_virtual_state|missing_reset|presence_context_gap|resource_conflict|other",
       "normal_situation": "when the same association is acceptable",
-      "dangerous_situation": "when the same association becomes unexpected",
-      "scenario_predicates": [
+      "dangerous_situation": "when the same association becomes dangerous",
+      "activation_conditions": [
         {
-          "kind": "state|environment|time|duration|event_order|outcome",
-          "subject": "existing entity_id or zone.channel or rule_uid",
-          "operator": "=|!=|>|>=|<|<=|for|before|after|leads_to",
-          "value": "on/off/value/time/duration/target",
-          "source": "one key from relevant_predicate_pool if directly grounded; empty only for duration/event_order refinements"
+          "kind": "state|time|duration|absence|other",
+          "description": "plain structured description"
         }
       ],
-      "activation_conditions": [
-        {"kind": "state|time|duration|event_order|other", "description": "plain description"}
-      ],
       "unexpected_outcomes": [
-        {"entity_id": "existing entity_id", "post_value": "on/off/value", "why_unexpected": "reason"}
+        {
+          "entity_id": "existing entity_id",
+          "post_value": "on/off/value",
+          "why_unexpected": "reason"
+        }
       ],
-      "user_question": "natural-language question when label is needs_user_confirmation, otherwise empty",
       "confidence": 0.0,
       "needs_rule_refinement": true
     }
@@ -110,13 +104,12 @@ SCENARIO_AUDIT_PROMPT = r"""
 You are the scenario-catalog audit module of HomeAgent.
 
 Task:
-Review the CURRENT scenario catalog discovered from all terminal pairwise candidates. Judge whether the catalog captures the important expected/unexpected/needs-user-confirmation boundary scenarios.
+Review the CURRENT scenario catalog discovered from all terminal pairwise candidates in the current iteration. Your goal is to judge whether the catalog already captures the important normal-vs-dangerous boundary situations for the current system.
 
 Principles:
-- Do NOT add unrelated predicates.
-- Do NOT enumerate all state combinations.
-- Each scenario_predicate must be grounded in the supplied candidate_predicate_pools, or be a duration/event-order refinement of such a predicate.
-- Focus on boundary_timing, stale_virtual_state, missing_reset, and safety_boundary_uncertain.
+- A good catalog distinguishes normal and dangerous situations for the same association.
+- Focus on missing boundary timing, stale mode, missing reset, missing exit rules, and context persistence.
+- Do NOT invent new devices/helpers.
 - Return strict JSON only.
 
 Output schema:
@@ -130,14 +123,22 @@ Output schema:
         {
           "scenario_id": "s1",
           "title": "short title",
-          "scenario_type": "boundary_timing|stale_virtual_state|missing_reset|safety_boundary_uncertain|other",
-          "label": "expected|unexpected|needs_user_confirmation",
+          "scenario_type": "boundary_timing|stale_virtual_state|missing_reset|presence_context_gap|resource_conflict|other",
           "normal_situation": "when the same association is acceptable",
-          "dangerous_situation": "when the same association becomes unexpected",
-          "scenario_predicates": [],
-          "activation_conditions": [],
-          "unexpected_outcomes": [],
-          "user_question": "natural-language question if needed",
+          "dangerous_situation": "when the same association becomes dangerous",
+          "activation_conditions": [
+            {
+              "kind": "state|time|duration|absence|other",
+              "description": "plain structured description"
+            }
+          ],
+          "unexpected_outcomes": [
+            {
+              "entity_id": "existing entity_id",
+              "post_value": "on/off/value",
+              "why_unexpected": "reason"
+            }
+          ],
           "confidence": 0.0,
           "needs_rule_refinement": true
         }
@@ -152,19 +153,22 @@ RULE_UPDATE_SYNTHESIS_PROMPT = r"""
 You are the graph-level rule-update synthesis module of HomeAgent.
 
 Background reasoning framework:
-1. Unexpected states arise from rule associations under special scenarios, not from every association.
-2. The primary solution is to refine the rule set so that expected scenarios, unexpected scenarios, and user-confirmation scenarios are distinguished using existing entities.
-3. If a scenario cannot be safely distinguished with existing entities, propose a notification guard rather than inventing a new entity or unsafe auto-restore.
-4. A restoration rule is valid only when its trigger predicates are sufficiently discriminative. If an event is ambiguous, use notify_guard/manual_review instead of auto_restore.
+1. Unexpected states arise from rule associations, special boundary scenarios, and insufficient distinction between virtual states and real situations.
+2. The primary solution is to refine the rule set so that it better distinguishes normal scenarios from dangerous scenarios.
+3. Only if distinction cannot be adequately improved should notification-style fallback rules be proposed.
+4. Notification fallback MUST be expressed as a Home Assistant-style rule in rule_updates, not just as free text.
 
 Task:
-Given the audited scenario catalog and current rule set, propose rule completions/modifications. If no valid update is needed, return an empty rule_updates list and mark candidate_reports as covered or manual_review_only.
+Given the current smart-home system information, the current iteration graph, the initial graph/rules, and the audited scenario catalog, propose rule updates that improve scenario distinction.
+
+Allowed update types:
+- rule_completion: add a new rule
+- rule_modification: modify an existing rule
 
 Constraints:
 - Reuse ONLY existing entity_ids/services.
-- Do NOT invent devices/helpers/sensors/switches/channels.
+- Do NOT invent new devices/helpers.
 - For rule_modification, target_rule_uid must be an existing rule in the current iteration.
-- Notification fallback MUST be expressed as a Home Assistant-style rule in rule_updates.
 - Return strict JSON only.
 
 Output schema:
@@ -174,7 +178,12 @@ Output schema:
       "candidate_key": "string",
       "coverage_status": "needs_more_iteration|covered_with_rules|notify_only|manual_review_only",
       "reason": "brief explanation",
-      "remaining_context_gaps": [{"scenario_id": "s1", "reason": "what still cannot be cleanly distinguished"}],
+      "remaining_context_gaps": [
+        {
+          "scenario_id": "s1",
+          "reason": "what still cannot be cleanly distinguished"
+        }
+      ],
       "needs_human_review": true
     }
   ],
@@ -183,10 +192,17 @@ Output schema:
       "update_id": "u1",
       "update_type": "rule_completion|rule_modification",
       "goal": "distinguish_context|timeout_reset|auto_restore|guard_condition|notify_guard|state_alignment|other",
-      "reused_entity_ids": ["existing.entity_1"],
+      "reused_entity_ids": ["existing.entity_1", "existing.entity_2"],
       "target_rule_uid": "existing rule uid if update_type is rule_modification",
-      "candidate_rule": {"alias": "rule alias", "description": "why this update exists", "trigger": [], "condition": [], "action": [], "mode": "single"},
-      "expected_effect": "how this update improves scenario distinction",
+      "candidate_rule": {
+        "alias": "rule alias",
+        "description": "why this update exists",
+        "trigger": [],
+        "condition": [],
+        "action": [],
+        "mode": "single"
+      },
+      "expected_effect": "how this update improves distinction",
       "confidence": 0.0,
       "reason": "brief reason"
     }
@@ -208,13 +224,13 @@ def ensure_config_extensions(config: Dict[str, Any]) -> bool:
         output_files["iterative_refinement_plan"] = "iterative_refinement_plan.json"
         changed = True
     prompts = config.setdefault("system_prompts", {})
-    if not prompts.get("iterative_pair_scenario_discovery") or "scenario_predicates" not in str(prompts.get("iterative_pair_scenario_discovery")):
+    if not prompts.get("iterative_pair_scenario_discovery"):
         prompts["iterative_pair_scenario_discovery"] = PAIR_SCENARIO_DISCOVERY_PROMPT
         changed = True
-    if not prompts.get("iterative_scenario_audit") or "scenario_predicates" not in str(prompts.get("iterative_scenario_audit")):
+    if not prompts.get("iterative_scenario_audit"):
         prompts["iterative_scenario_audit"] = SCENARIO_AUDIT_PROMPT
         changed = True
-    if not prompts.get("iterative_rule_update") or "sufficiently discriminative" not in str(prompts.get("iterative_rule_update")):
+    if not prompts.get("iterative_rule_update"):
         prompts["iterative_rule_update"] = RULE_UPDATE_SYNTHESIS_PROMPT
         changed = True
     return changed
@@ -292,7 +308,6 @@ def build_home_context(devices: Dict[str, Any], channels: Dict[str, Any], zones:
                     "role": channel.get("role"),
                     "observes": channel.get("observes", []),
                     "effects": channel.get("effects", []),
-                    "effects_by_rule": channel.get("effects_by_rule", {}),
                     "effects_by_operation": channel.get("effects_by_operation", {}),
                 },
                 "zone_binding": {
@@ -371,10 +386,10 @@ ALLOWED_SCENARIO_TYPES = {
     "boundary_timing",
     "stale_virtual_state",
     "missing_reset",
-    "safety_boundary_uncertain",
+    "presence_context_gap",
+    "resource_conflict",
     "other",
 }
-ALLOWED_SCENARIO_LABELS = {"expected", "unexpected", "needs_user_confirmation"}
 ALLOWED_UPDATE_TYPES = {"rule_completion", "rule_modification"}
 ALLOWED_COVERAGE_STATUS = {
     "needs_more_iteration",
@@ -393,207 +408,34 @@ def compact_graph_for_ai(graph: Dict[str, Any]) -> Dict[str, Any]:
     }
 
 
-def predicate_value_key(value: Any) -> str:
-    if isinstance(value, dict):
-        return stable_json(value)
-    if isinstance(value, list):
-        return stable_json(value)
-    return str(value)
-
-
-def make_predicate_key(kind: str, subject: Any, operator: Any, value: Any) -> str:
-    return f"{kind}|{subject}|{operator}|{predicate_value_key(value)}"
-
-
-def add_predicate(pool: List[Dict[str, Any]], seen: Set[str], kind: str, subject: Any, operator: Any, value: Any, source: str, reason: str = "") -> None:
-    if subject is None or subject == "":
-        return
-    key = make_predicate_key(str(kind), subject, operator, value)
-    if key in seen:
-        return
-    seen.add(key)
-    pool.append({
-        "key": key,
-        "kind": str(kind),
-        "subject": str(subject),
-        "operator": str(operator),
-        "value": value,
-        "source": source,
-        "reason": reason,
-    })
-
-
-def collect_rule_predicates(rule: Dict[str, Any], prefix: str) -> List[Dict[str, Any]]:
-    pool: List[Dict[str, Any]] = []
-    seen: Set[str] = set()
-    rid = str(rule.get("rule_uid") or prefix)
-    for idx, t in enumerate(rule.get("T", []) or []):
-        if not isinstance(t, dict):
-            continue
-        src = f"{rid}.T.{idx}"
-        if t.get("type") == "state":
-            add_predicate(pool, seen, "state_transition", t.get("entity_id"), "->", {"from": t.get("from"), "to": t.get("to")}, src, "rule trigger")
-            if t.get("to") is not None:
-                add_predicate(pool, seen, "state", t.get("entity_id"), "=", t.get("to"), src, "trigger target state")
-        elif t.get("type") == "numeric_state":
-            if t.get("above") is not None:
-                add_predicate(pool, seen, "state", t.get("entity_id"), ">", t.get("above"), src, "numeric trigger")
-            if t.get("below") is not None:
-                add_predicate(pool, seen, "state", t.get("entity_id"), "<", t.get("below"), src, "numeric trigger")
-        elif t.get("type") == "time":
-            add_predicate(pool, seen, "time", rid, "=", t.get("at"), src, "time trigger")
-        elif t.get("entity_id"):
-            add_predicate(pool, seen, "state", t.get("entity_id"), "triggered", t.get("type", "unknown"), src, "trigger")
-    for idx, c in enumerate(rule.get("C", []) or []):
-        if not isinstance(c, dict):
-            continue
-        src = f"{rid}.C.{idx}"
-        if c.get("type") == "state":
-            add_predicate(pool, seen, "state", c.get("entity_id"), "=", c.get("state"), src, "state condition")
-        elif c.get("type") == "numeric_state":
-            if c.get("above") is not None:
-                add_predicate(pool, seen, "state", c.get("entity_id"), ">", c.get("above"), src, "numeric condition")
-            if c.get("below") is not None:
-                add_predicate(pool, seen, "state", c.get("entity_id"), "<", c.get("below"), src, "numeric condition")
-        elif c.get("type") == "time":
-            if c.get("after") is not None:
-                add_predicate(pool, seen, "time", rid, "after", c.get("after"), src, "time condition")
-            if c.get("before") is not None:
-                add_predicate(pool, seen, "time", rid, "before", c.get("before"), src, "time condition")
-        elif c.get("entity_id"):
-            add_predicate(pool, seen, "state", c.get("entity_id"), "condition", c.get("type", "unknown"), src, "condition")
-    for idx, a in enumerate(rule.get("A", []) or []):
-        if not isinstance(a, dict):
-            continue
-        src = f"{rid}.A.{idx}"
-        add_predicate(pool, seen, "outcome", a.get("target_entity"), "=", a.get("post"), src, "rule action post-state")
-    for env_key in ["E_T", "E_C"]:
-        for idx, ref in enumerate(((rule.get("E") or {}).get(env_key) or [])):
-            if not isinstance(ref, dict):
-                continue
-            subject = f"{ref.get('zone')}.{ref.get('channel')}"
-            add_predicate(pool, seen, "environment", subject, ref.get("relation"), ref.get("threshold"), f"{rid}.{env_key}.{idx}", "environment reference")
-    for idx, eff in enumerate(((rule.get("E") or {}).get("E_A") or [])):
-        if not isinstance(eff, dict):
-            continue
-        for z in eff.get("reachable_zones") or eff.get("source_zones") or []:
-            subject = f"{z}.{eff.get('channel')}"
-            add_predicate(pool, seen, "environment", subject, "direction", eff.get("direction"), f"{rid}.E_A.{idx}", "action environment effect")
-    return pool
-
-
-def build_relevant_predicate_pool(candidate: Dict[str, Any], source_rule: Dict[str, Any], target_rule: Dict[str, Any]) -> Dict[str, Any]:
-    pool: List[Dict[str, Any]] = []
-    seen: Set[str] = set()
-    for pred in collect_rule_predicates(source_rule, "source") + collect_rule_predicates(target_rule, "target"):
-        add_predicate(pool, seen, pred.get("kind"), pred.get("subject"), pred.get("operator"), pred.get("value"), pred.get("key") or pred.get("source"), pred.get("reason", ""))
-    for idx, out in enumerate(candidate.get("unexpected_outcomes", []) or []):
-        if isinstance(out, dict):
-            add_predicate(pool, seen, "outcome", out.get("entity_id"), "=", out.get("post") if "post" in out else out.get("post_value"), f"candidate.outcome.{idx}", "candidate unexpected outcome")
-    for idx, edge in enumerate(candidate.get("edge_evidence", []) or []):
-        meta = edge.get("metadata") or {}
-        if meta.get("zone") and meta.get("channel"):
-            add_predicate(pool, seen, "environment", f"{meta.get('zone')}.{meta.get('channel')}", "associated", edge.get("kind"), f"candidate.edge.{idx}", "association environment evidence")
-    subjects = sorted({p["subject"] for p in pool if p.get("subject")})
-    return {
-        "predicates": pool,
-        "predicate_keys": [p["key"] for p in pool],
-        "subjects": subjects,
-        "description": "Scenario predicates must be grounded in these predicates, or be duration/event-order refinements of these subjects.",
-    }
-
-
-def normalize_scenario_predicate(item: Any, idx: int) -> Dict[str, Any]:
-    if not isinstance(item, dict):
-        return {"kind": "other", "subject": "", "operator": "", "value": "", "source": "", "raw": item}
-    return {
-        "kind": str(item.get("kind") or "other"),
-        "subject": str(item.get("subject") or ""),
-        "operator": str(item.get("operator") or ""),
-        "value": item.get("value"),
-        "source": str(item.get("source") or ""),
-        "raw": item,
-        "index": idx,
-    }
-
-
-def validate_scenario_predicates(predicates: List[Dict[str, Any]], predicate_pool: Optional[Dict[str, Any]]) -> Dict[str, Any]:
-    if not predicate_pool:
-        return {"checked": False, "valid": True, "invalid_predicates": [], "grounded_count": 0, "reason": "no predicate pool supplied"}
-    pool_keys = set(predicate_pool.get("predicate_keys", []) or [])
-    subjects = set(predicate_pool.get("subjects", []) or [])
-    pool_exact = {make_predicate_key(p.get("kind"), p.get("subject"), p.get("operator"), p.get("value")) for p in predicate_pool.get("predicates", []) or []}
-    invalid = []
-    grounded = 0
-    for pred in predicates:
-        source = pred.get("source")
-        exact = make_predicate_key(pred.get("kind"), pred.get("subject"), pred.get("operator"), pred.get("value"))
-        if source and source in pool_keys:
-            grounded += 1
-            continue
-        if exact in pool_exact:
-            grounded += 1
-            continue
-        if pred.get("kind") in {"duration", "event_order"} and pred.get("subject") in subjects:
-            grounded += 1
-            continue
-        invalid.append(pred)
-    return {
-        "checked": True,
-        "valid": len(invalid) == 0,
-        "invalid_predicates": invalid,
-        "grounded_count": grounded,
-        "reason": "all predicates grounded" if not invalid else "some predicates are not grounded in the candidate predicate pool",
-    }
-
-
-def normalize_scenario_instance(item: Dict[str, Any], idx: int, predicate_pool: Optional[Dict[str, Any]] = None) -> Dict[str, Any]:
+def normalize_scenario_instance(item: Dict[str, Any], idx: int) -> Dict[str, Any]:
     scenario_type = str(item.get("scenario_type") or "other")
     if scenario_type not in ALLOWED_SCENARIO_TYPES:
         scenario_type = "other"
-    label = str(item.get("label") or "unexpected")
-    if label not in ALLOWED_SCENARIO_LABELS:
-        label = "needs_user_confirmation" if item.get("needs_human_review") else "unexpected"
-    predicates = [
-        normalize_scenario_predicate(pred, pidx)
-        for pidx, pred in enumerate(listify(item.get("scenario_predicates", [])), start=1)
-    ]
-    validation = validate_scenario_predicates(predicates, predicate_pool)
-    try:
-        confidence = float(item.get("confidence", 0) or 0)
-    except (TypeError, ValueError):
-        confidence = 0.0
     return {
         "scenario_id": str(item.get("scenario_id") or f"s{idx}"),
         "title": str(item.get("title") or f"Scenario {idx}"),
         "scenario_type": scenario_type,
-        "label": label,
         "normal_situation": str(item.get("normal_situation") or ""),
         "dangerous_situation": str(item.get("dangerous_situation") or ""),
-        "scenario_predicates": predicates,
-        "predicate_validation": validation,
         "activation_conditions": listify(item.get("activation_conditions", [])),
         "unexpected_outcomes": listify(item.get("unexpected_outcomes", [])),
-        "user_question": str(item.get("user_question") or ""),
-        "confidence": max(0.0, min(1.0, confidence)),
+        "confidence": max(0.0, min(1.0, float(item.get("confidence", 0) or 0))),
         "needs_rule_refinement": bool(item.get("needs_rule_refinement", True)),
     }
 
 
-def normalize_pair_discovery_response(raw: Any, candidate_key: str, predicate_pool: Optional[Dict[str, Any]] = None) -> Dict[str, Any]:
+def normalize_pair_discovery_response(raw: Any, candidate_key: str) -> Dict[str, Any]:
     if not isinstance(raw, dict):
         raw = {}
     scenarios = [
-        normalize_scenario_instance(item, idx, predicate_pool=predicate_pool)
+        normalize_scenario_instance(item, idx)
         for idx, item in enumerate(listify(raw.get("scenario_instances", [])), start=1)
         if isinstance(item, dict)
     ]
-    valid_count = sum(1 for s in scenarios if (s.get("predicate_validation") or {}).get("valid", True))
     return {
         "candidate_key": candidate_key,
         "scenario_instances": scenarios,
-        "valid_scenario_count": valid_count,
-        "invalid_scenario_count": len(scenarios) - valid_count,
         "needs_human_review": bool(raw.get("needs_human_review", True)),
     }
 
@@ -803,8 +645,7 @@ def edge_brief(edge: Dict[str, Any]) -> Dict[str, Any]:
 
 
 def build_pair_payload(candidate: Dict[str, Any], source_rule: Dict[str, Any], target_rule: Dict[str, Any], home_context: Dict[str, Any], base_iteration: Dict[str, Any], current_iteration: Dict[str, Any]) -> Dict[str, Any]:
-    predicate_pool = build_relevant_predicate_pool(candidate, source_rule, target_rule)
-    relevant_ids = set(predicate_pool.get("subjects", []))
+    relevant_ids = set()
     for rule in [source_rule, target_rule]:
         for section in [rule.get("T", []), rule.get("C", []), rule.get("A", [])]:
             for node in section or []:
@@ -841,14 +682,6 @@ def build_pair_payload(candidate: Dict[str, Any], source_rule: Dict[str, Any], t
         "source_rule": compact_rule(source_rule),
         "target_rule": compact_rule(target_rule),
         "association_candidate": candidate,
-        "relevant_predicate_pool": predicate_pool,
-        "scenario_generation_constraints": {
-            "do_not_enumerate_all_states": True,
-            "only_discriminative_predicates": True,
-            "scenario_predicates_must_be_grounded_in_relevant_predicate_pool": True,
-            "allowed_scenario_types": sorted(ALLOWED_SCENARIO_TYPES),
-            "allowed_labels": sorted(ALLOWED_SCENARIO_LABELS),
-        },
     }
 
 
@@ -870,7 +703,6 @@ def build_audit_payload(base_iteration: Dict[str, Any], current_iteration: Dict[
         "zones": home_context.get("zones", []),
         "normal_entities": home_context.get("normal_entities", {}),
         "candidate_scenarios": candidate_scenarios,
-        "candidate_predicate_pools": current_iteration.get("candidate_predicate_pools", {}),
     }
 
 
@@ -892,7 +724,6 @@ def build_rule_update_payload(base_iteration: Dict[str, Any], current_iteration:
         "all_entities": home_context.get("entities", []),
         "normal_entities": home_context.get("normal_entities", {}),
         "candidate_scenarios": candidate_scenarios,
-        "candidate_predicate_pools": current_iteration.get("candidate_predicate_pools", {}),
         "accepted_rule_updates_so_far": accepted_updates_so_far,
     }
 
@@ -944,36 +775,6 @@ def apply_updates_to_automations(automations: List[Dict[str, Any]], updates: Lis
     return new_automations
 
 
-def attach_predicate_pools_to_iteration(iteration: Dict[str, Any], candidates: List[Dict[str, Any]]) -> Dict[str, Dict[str, Any]]:
-    rules = iteration.get("tcae", {}).get("rules", []) or []
-    rule_map = {r.get("rule_uid"): r for r in rules if isinstance(r, dict) and r.get("rule_uid")}
-    pools: Dict[str, Dict[str, Any]] = {}
-    for candidate in candidates:
-        ckey = candidate.get("candidate_key")
-        if not ckey:
-            continue
-        source_rule = rule_map.get(candidate.get("source_rule_uid"), {})
-        target_rule = rule_map.get(candidate.get("target_rule_uid"), {})
-        pools[str(ckey)] = build_relevant_predicate_pool(candidate, source_rule, target_rule)
-    iteration["candidate_predicate_pools"] = pools
-    return pools
-
-
-def revalidate_scenario_catalog(scenario_catalog: List[Dict[str, Any]], predicate_pools: Dict[str, Dict[str, Any]]) -> List[Dict[str, Any]]:
-    out: List[Dict[str, Any]] = []
-    for item in scenario_catalog:
-        if not isinstance(item, dict):
-            continue
-        ckey = str(item.get("candidate_key") or "")
-        pool = predicate_pools.get(ckey)
-        scenarios = []
-        for idx, scenario in enumerate(listify(item.get("scenario_instances", [])), start=1):
-            if isinstance(scenario, dict):
-                scenarios.append(normalize_scenario_instance(scenario, idx, predicate_pool=pool))
-        out.append({"candidate_key": ckey, "scenario_instances": scenarios})
-    return out
-
-
 # ---------------------------------------------------------------------------
 # Main iterative engine
 # ---------------------------------------------------------------------------
@@ -1005,7 +806,6 @@ def build_iterative_refinement_plan(devices: Dict[str, Any], channels: Dict[str,
             base_iteration = current_iteration
 
         candidates = step7.extract_pairwise_candidates(current_iteration["ustg"])
-        predicate_pools = attach_predicate_pools_to_iteration(current_iteration, candidates)
         iter_record: Dict[str, Any] = {
             "index": iter_index,
             "files": current_iteration["files"],
@@ -1045,7 +845,7 @@ def build_iterative_refinement_plan(devices: Dict[str, Any], channels: Dict[str,
                     if rate_limiter:
                         rate_limiter.wait()
                     raw = call_ai_json(prompts["pair_discovery"], payload, temperature=0.0)
-                    report = normalize_pair_discovery_response(raw, candidate.get("candidate_key"), predicate_pool=payload.get("relevant_predicate_pool"))
+                    report = normalize_pair_discovery_response(raw, candidate.get("candidate_key"))
                 except Exception as exc:
                     report = {"candidate_key": candidate.get("candidate_key"), "scenario_instances": [], "needs_human_review": True, "error": str(exc)}
             report.update({
@@ -1074,7 +874,6 @@ def build_iterative_refinement_plan(devices: Dict[str, Any], channels: Dict[str,
         ordered_pair_reports = [pair_reports[idx] for idx in sorted(pair_reports)]
         iter_record["pair_discovery_reports"] = ordered_pair_reports
         scenario_catalog = [{"candidate_key": r.get("candidate_key"), "scenario_instances": r.get("scenario_instances", [])} for r in ordered_pair_reports]
-        scenario_catalog = revalidate_scenario_catalog(scenario_catalog, predicate_pools)
 
         # Phase 2: global scenario audit
         if no_ai:
@@ -1101,7 +900,7 @@ def build_iterative_refinement_plan(devices: Dict[str, Any], channels: Dict[str,
                     }
                 iter_record["scenario_audit_rounds"].append({"round": audit_round, **audit_result})
                 if audit_result.get("revised_candidate_scenarios"):
-                    scenario_catalog = revalidate_scenario_catalog(audit_result["revised_candidate_scenarios"], predicate_pools)
+                    scenario_catalog = audit_result["revised_candidate_scenarios"]
                 if audit_result.get("is_complete"):
                     audit_complete = True
                     break
@@ -1175,13 +974,6 @@ def build_iterative_refinement_plan(devices: Dict[str, Any], channels: Dict[str,
             "iteration_count": len(all_iterations),
             "final_candidate_count": final_iteration.get("candidate_count", 0),
             "total_scenario_instance_count": total_scenarios,
-            "invalid_scenario_predicate_count": sum(
-                1
-                for it in all_iterations
-                for item in it.get("final_candidate_scenarios", [])
-                for sc in item.get("scenario_instances", [])
-                if not (sc.get("predicate_validation") or {}).get("valid", True)
-            ),
             "accepted_rule_update_count": total_updates,
             "invalid_rule_update_count": total_invalid_updates,
             "coverage_status_counts": dict(sorted(coverage_counts.items())),

@@ -1,0 +1,233 @@
+{
+  "schema_version": "1.0",
+  "generated_at": "2026-06-28T14:48:22.300427+00:00",
+  "method": "runtime_resolution_no_ai",
+  "rpm": 10,
+  "workers": 1,
+  "candidate_extraction": {
+    "mode": "terminal_only",
+    "description": "Only associations targeting the terminal unexpected-action rule are converted into runtime-resolution candidates."
+  },
+  "strategy_templates": [
+    {
+      "strategy_id": 0,
+      "strategy_name": "default",
+      "description": "Default execution without intervention.",
+      "runtime_effect": "Let Home Assistant execute the rule normally."
+    },
+    {
+      "strategy_id": 1,
+      "strategy_name": "only_first_triggered",
+      "description": "Only execute the first-triggered rule and block the later rule.",
+      "runtime_effect": "Stop the later rule when runtime evidence shows the association is active."
+    },
+    {
+      "strategy_id": 2,
+      "strategy_name": "only_later_triggered",
+      "description": "Only execute the later-triggered rule and compensate earlier effects if needed.",
+      "runtime_effect": "Allow the later rule and cancel/restore earlier effects when possible."
+    },
+    {
+      "strategy_id": 3,
+      "strategy_name": "force_lexicographic_first",
+      "description": "Force the lexicographically smaller rule_uid to prevail.",
+      "runtime_effect": "Preserve the lexicographic-first rule and block/compensate the other."
+    },
+    {
+      "strategy_id": 4,
+      "strategy_name": "force_lexicographic_second",
+      "description": "Force the lexicographically larger rule_uid to prevail.",
+      "runtime_effect": "Preserve the lexicographic-second rule and block/compensate the other."
+    },
+    {
+      "strategy_id": 5,
+      "strategy_name": "both_end_with_lexicographic_second",
+      "description": "Allow both rules but end with the lexicographically larger rule's state.",
+      "runtime_effect": "Re-run/restore the lexicographic-second rule after the other if needed."
+    },
+    {
+      "strategy_id": 6,
+      "strategy_name": "both_end_with_lexicographic_first",
+      "description": "Allow both rules but end with the lexicographically smaller rule's state.",
+      "runtime_effect": "Re-run/restore the lexicographic-first rule after the other if needed."
+    },
+    {
+      "strategy_id": 7,
+      "strategy_name": "cancel_both",
+      "description": "Cancel both rules when neither action should proceed automatically.",
+      "runtime_effect": "Stop current rule and compensate any already-executed associated action when possible."
+    },
+    {
+      "strategy_id": 8,
+      "strategy_name": "decided_by_user",
+      "description": "Ask the user before executing or compensating actions.",
+      "runtime_effect": "Notify user with the scenario-specific question and execute only after confirmation."
+    }
+  ],
+  "resolution_rules": [
+    {
+      "resolution_rule_id": "rr00001",
+      "candidate_id": "ra00001",
+      "candidate_key": "automation.r21_cleanmode_disablelatch->automation.r22_temphigh_windowopen|condition|direct-condition-allow",
+      "source_rule_uid": "automation.r21_cleanmode_disablelatch",
+      "target_rule_uid": "automation.r22_temphigh_windowopen",
+      "target_component": "condition",
+      "association_kind": "direct-condition-allow",
+      "association_mode": "direct",
+      "via_environment": null,
+      "unexpected_outcomes": [
+        {
+          "entity_id": "input_boolean.nursery_window",
+          "post": "on",
+          "post_normalized": "on",
+          "operation": "turn_on",
+          "service": "input_boolean.turn_on",
+          "rule_uid": "automation.r22_temphigh_windowopen",
+          "rule_alias": "R22_TempHigh_WindowOpen",
+          "action_index": 0,
+          "raw_action": {
+            "type": "service",
+            "service": "input_boolean.turn_on",
+            "operation": "turn_on",
+            "target_entity": "input_boolean.nursery_window",
+            "post": "on",
+            "data": {}
+          },
+          "normal_values": [
+            "off"
+          ],
+          "normal_value_keys": [
+            "str:off"
+          ],
+          "post_key": "str:on",
+          "relationship_to_normal": "away_from_normal",
+          "weak_unexpected": true,
+          "safety_level": "high",
+          "normal_reason": "Test seed: nursery window should normally remain closed."
+        }
+      ],
+      "path_ids": [
+        "p00002",
+        "p00003"
+      ],
+      "edge_ids": [
+        "e00001"
+      ],
+      "iterative_refinement_used": true,
+      "coverage_status": null,
+      "remaining_context_gaps": [],
+      "scenario_instances": [],
+      "policy": {
+        "strategy_id": 0,
+        "strategy_name": "default",
+        "confidence": 0.0,
+        "reason": "AI disabled by --no-ai. Runtime policy requires human review.",
+        "runtime_notes": "Let Home Assistant execute the rule normally.",
+        "needs_human_review": true,
+        "template": {
+          "strategy_id": 0,
+          "strategy_name": "default",
+          "description": "Default execution without intervention.",
+          "runtime_effect": "Let Home Assistant execute the rule normally."
+        },
+        "source": "fallback",
+        "scenario_policies": []
+      },
+      "scenario_policies": []
+    },
+    {
+      "resolution_rule_id": "rr00002",
+      "candidate_id": "ra00002",
+      "candidate_key": "automation.r23_charger_stopautoclose->automation.r24_night_closegaragedoor|condition|direct-condition-disable",
+      "source_rule_uid": "automation.r23_charger_stopautoclose",
+      "target_rule_uid": "automation.r24_night_closegaragedoor",
+      "target_component": "condition",
+      "association_kind": "direct-condition-disable",
+      "association_mode": "direct",
+      "via_environment": null,
+      "unexpected_outcomes": [
+        {
+          "entity_id": "input_boolean.garage_door",
+          "post": "off",
+          "post_normalized": "off",
+          "operation": "turn_off",
+          "service": "input_boolean.turn_off",
+          "rule_uid": "automation.r24_night_closegaragedoor",
+          "rule_alias": "R24_Night_CloseGarageDoor",
+          "action_index": 0,
+          "raw_action": {
+            "type": "service",
+            "service": "input_boolean.turn_off",
+            "operation": "turn_off",
+            "target_entity": "input_boolean.garage_door",
+            "post": "off",
+            "data": {}
+          },
+          "normal_values": [
+            "off"
+          ],
+          "normal_value_keys": [
+            "str:off"
+          ],
+          "post_key": "str:off",
+          "relationship_to_normal": "toward_normal",
+          "weak_unexpected": false,
+          "safety_level": "high",
+          "normal_reason": "Test seed: garage door should normally remain closed."
+        }
+      ],
+      "path_ids": [
+        "p00005",
+        "p00006"
+      ],
+      "edge_ids": [
+        "e00006"
+      ],
+      "iterative_refinement_used": true,
+      "coverage_status": null,
+      "remaining_context_gaps": [],
+      "scenario_instances": [],
+      "policy": {
+        "strategy_id": 0,
+        "strategy_name": "default",
+        "confidence": 0.0,
+        "reason": "AI disabled by --no-ai. Runtime policy requires human review.",
+        "runtime_notes": "Let Home Assistant execute the rule normally.",
+        "needs_human_review": true,
+        "template": {
+          "strategy_id": 0,
+          "strategy_name": "default",
+          "description": "Default execution without intervention.",
+          "runtime_effect": "Let Home Assistant execute the rule normally."
+        },
+        "source": "fallback",
+        "scenario_policies": []
+      },
+      "scenario_policies": []
+    }
+  ],
+  "source": {
+    "devices_generated_at": "2026-06-28T14:41:34.248229+00:00",
+    "channels_generated_at": "2026-06-28T14:42:13.036555+00:00",
+    "zones_generated_at": "2026-06-28T00:00:00+00:00",
+    "tcae_generated_at": "2026-06-28T14:45:07.970835+00:00",
+    "normal_config_generated_at": "2026-06-28T00:00:00+00:00",
+    "ustg_generated_at": "2026-06-28T14:46:55.702967+00:00",
+    "iterative_refinement_plan_generated_at": "2026-06-28T14:47:37.659309+00:00"
+  },
+  "summary": {
+    "candidate_association_count": 2,
+    "resolution_rule_count": 2,
+    "association_kinds": {
+      "direct-condition-allow": 1,
+      "direct-condition-disable": 1
+    },
+    "coverage_status_counts": {
+      "null": 2
+    },
+    "strategy_counts": {
+      "default": 2
+    },
+    "needs_human_review_count": 2
+  }
+}

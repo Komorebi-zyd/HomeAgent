@@ -3,3 +3,5 @@ ex-paper.pdf
 __pycache__/
 *.py[cod]
 src/.env
+
+进度.md

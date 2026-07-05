@@ -1,0 +1,76 @@
+{
+  "schema_version": "1.0",
+  "generated_at": "2026-07-01T03:39:09.390896+00:00",
+  "method": "ai_with_human_review",
+  "normal_entities": {
+    "input_boolean.garage_auto_close_enabled": {
+      "entity_id": "input_boolean.garage_auto_close_enabled",
+      "normal_values": [
+        "on"
+      ],
+      "abnormal_values": [
+        "off"
+      ],
+      "category": "security",
+      "safety_level": "high",
+      "confidence": 0.9,
+      "reason": "Auto close garage door should be enabled for security; condition requires it on for night closure; disabled only during charging.",
+      "needs_human_review": false,
+      "source": "ai"
+    },
+    "input_boolean.garage_door": {
+      "entity_id": "input_boolean.garage_door",
+      "normal_values": [
+        "off"
+      ],
+      "abnormal_values": [
+        "on"
+      ],
+      "category": "security",
+      "safety_level": "high",
+      "confidence": 1.0,
+      "reason": "Test seed: garage door should normally remain closed.",
+      "needs_human_review": false,
+      "source": "ai"
+    },
+    "input_boolean.nursery_window": {
+      "entity_id": "input_boolean.nursery_window",
+      "normal_values": [
+        "off"
+      ],
+      "abnormal_values": [
+        "on"
+      ],
+      "category": "safety",
+      "safety_level": "high",
+      "confidence": 1.0,
+      "reason": "Test seed: nursery window should normally remain closed.",
+      "needs_human_review": false,
+      "source": "ai"
+    },
+    "input_boolean.nursery_window_latch": {
+      "entity_id": "input_boolean.nursery_window_latch",
+      "normal_values": [
+        "off"
+      ],
+      "abnormal_values": [
+        "on"
+      ],
+      "category": "safety",
+      "safety_level": "high",
+      "confidence": 0.6,
+      "reason": "Child lock should be engaged (off) for safety; rule disables lock in clean mode, condition uses on to allow window open.",
+      "needs_human_review": false,
+      "source": "ai"
+    }
+  },
+  "summary": {
+    "normal_entity_count": 4,
+    "levels": {
+      "critical": 0,
+      "high": 4,
+      "low": 0,
+      "medium": 0
+    }
+  }
+}

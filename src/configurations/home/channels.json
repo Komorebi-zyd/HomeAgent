@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0",
-  "generated_at": "2026-06-13T07:58:23.186295+00:00",
+  "generated_at": "2026-07-01T03:31:12.568966+00:00",
   "method": "ai_with_validation",
   "candidate_channels": [
     "temperature",
@@ -99,7 +99,7 @@
       "effects_by_operation": {},
       "effects_by_rule": {},
       "needs_human_review": false,
-      "notes": "Logical helper switch representing cleaning mode."
+      "notes": "Cleaning mode switch; logical helper, no environmental channel."
     },
     {
       "entity_id": "input_boolean.ev_charger_status",
@@ -111,7 +111,7 @@
       "effects_by_operation": {},
       "effects_by_rule": {},
       "needs_human_review": false,
-      "notes": "Logical status flag representing EV charger state."
+      "notes": "EV charger status helper; logical status flag, no environmental channel."
     },
     {
       "entity_id": "input_boolean.garage_auto_close_enabled",
@@ -123,19 +123,19 @@
       "effects_by_operation": {},
       "effects_by_rule": {},
       "needs_human_review": false,
-      "notes": "Logical helper for enabling or disabling auto-close logic."
+      "notes": "Auto-close permission flag; logical, no environmental channel."
     },
     {
       "entity_id": "input_boolean.garage_door",
-      "role": "actuator",
+      "role": "logical",
       "structural_role": "hybrid",
-      "semantic_role": "actuator",
+      "semantic_role": "logical",
       "observes": [],
       "effects": [],
       "effects_by_operation": {},
       "effects_by_rule": {},
       "needs_human_review": false,
-      "notes": "Garage door actuator. Closing it in R24 has no direct environmental channel effect defined in candidate_channels."
+      "notes": "Garage door status flag; logical, no environmental channel."
     },
     {
       "entity_id": "input_boolean.nursery_window",
@@ -153,13 +153,13 @@
             "operation": "turn_on",
             "service": "input_boolean.turn_on",
             "post_value": "on",
-            "confidence": 0.85,
-            "reason": "Opening the nursery window when temperature is high (above 30C) is intended to decrease the nursery temperature."
+            "confidence": 0.9,
+            "reason": "Rule triggered by high temperature (above 30) and opens window; opening window typically decreases temperature in the zone, supported by rule semantics."
           }
         ]
       },
       "needs_human_review": false,
-      "notes": "Nursery window actuator. In R22, opening it mitigates high temperature."
+      "notes": "Window open/close actuator; in high temperature rule, opening window reduces temperature."
     },
     {
       "entity_id": "input_boolean.nursery_window_latch",
@@ -171,7 +171,7 @@
       "effects_by_operation": {},
       "effects_by_rule": {},
       "needs_human_review": false,
-      "notes": "Logical helper representing the nursery window child lock latch."
+      "notes": "Window latch (child lock) helper; logical, no environmental channel."
     },
     {
       "entity_id": "input_datetime.systemtime",
@@ -183,7 +183,7 @@
       "effects_by_operation": {},
       "effects_by_rule": {},
       "needs_human_review": false,
-      "notes": "System time helper for scheduling triggers."
+      "notes": "System time helper; logical datetime, no environmental channel."
     },
     {
       "entity_id": "input_number.nursery_temp_sensor",
@@ -195,14 +195,14 @@
           "channel": "temperature",
           "value_type": "numeric",
           "confidence": 1.0,
-          "reason": "Explicitly measures the nursery room temperature."
+          "reason": "Trigger in rule R22 with numeric_state above 30, used as temperature threshold; entity name suggests temperature sensor."
         }
       ],
       "effects": [],
       "effects_by_operation": {},
       "effects_by_rule": {},
       "needs_human_review": false,
-      "notes": "Temperature sensor in the nursery."
+      "notes": "Temperature sensor input_number; observes temperature channel."
     }
   ],
   "proposed_channels": [],

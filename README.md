@@ -3,13 +3,13 @@
 ### 思考
 
 1. 非预期状态为什么会发生？
-  1. 规则关联模式角度：规则之间存在多样的关联模式，可能会导致非预期状态的发生
-  2. 特殊情境：即使相同的规则关联模式，在不同情况下表现不同，例如R21与R22育儿室清洁模式开启后，如果是正常清洁，R22的开窗规则是没有问题的，但是如果是已经境界完成，但是忘记关闭清洁模式，那么R22的开窗规则就出现了问题
-  3. 虚拟与现实的映射：R21如果是清洁模式，是否始终保持清洁模式？本工作前提是虚拟与现实的映射是正确的，但是规则对情景定义的不足会导致虚拟与现实的映射出现偏差，因此在这一方面应当避免
-2. 解决方案：
-  1. 规则关联模式：更新规则列表，迭代更新足够详细的情境，细化得到非预期状态的情境，从而进行避免，新设置的规则只能够依赖已有的设备，而不能新增,规则补全的目的是使得当前的规则能够很好地区分所有情境与非预期状态情境，因此判断标准也是如此，每次迭代都要给出当前的图，当前已经区分的情境，让AI查看是否还有特殊情景没有发现，如果有的话再尝试规则补全以进行情境区分
-  2. 对于无法避免的情境，则使用处理策略,非预期状态处理策略的目的是处理发生的非预期状态情境
-  3. 对于以上两种解决方案，都有个保底方案，即通知用户，例如长时间没有更改清洁模式，则设一个清洁模式半小时后，童锁如果disabled状态，则enable童锁，然后通知用户；对于处理策略，则是通知用户预期执行某个操作，是否同意，还是执行器其他操作
+2. 规则关联模式角度：规则之间存在多样的关联模式，可能会导致非预期状态的发生
+3. 特殊情境：即使相同的规则关联模式，在不同情况下表现不同，例如R21与R22育儿室清洁模式开启后，如果是正常清洁，R22的开窗规则是没有问题的，但是如果是已经境界完成，但是忘记关闭清洁模式，那么R22的开窗规则就出现了问题
+4. 虚拟与现实的映射：R21如果是清洁模式，是否始终保持清洁模式？本工作前提是虚拟与现实的映射是正确的，但是规则对情景定义的不足会导致虚拟与现实的映射出现偏差，因此在这一方面应当避免
+5. 解决方案：
+6. 规则关联模式：更新规则列表，迭代更新足够详细的情境，细化得到非预期状态的情境，从而进行避免，新设置的规则只能够依赖已有的设备，而不能新增,规则补全的目的是使得当前的规则能够很好地区分所有情境与非预期状态情境，因此判断标准也是如此，每次迭代都要给出当前的图，当前已经区分的情境，让AI查看是否还有特殊情景没有发现，如果有的话再尝试规则补全以进行情境区分
+7. 对于无法避免的情境，则使用处理策略,非预期状态处理策略的目的是处理发生的非预期状态情境
+8. 对于以上两种解决方案，都有个保底方案，即通知用户，例如长时间没有更改清洁模式，则设一个清洁模式半小时后，童锁如果disabled状态，则enable童锁，然后通知用户；对于处理策略，则是通知用户预期执行某个操作，是否同意，还是执行器其他操作
 
 ### TODO
 
@@ -31,10 +31,10 @@
   - [X] TCAE建模
   - [X] 规则关联图生成算法（静态代码分析）
   - [X] 非预期状态转换图生成算法（规则关联图根据实体常态配置得到的结果）
-  - [ ] 非预期状态转换图迭代算法
-    - [ ] 实例生成（寻找会产生非预期状态的情境实例）：相同的规则关联不一定会导致非预期状态，一些非预期结果仅仅实在特殊情况下发生，需要AI根据图与冲突处理策略生成仍旧存在的异常状态实例
-    - [ ] 规则补全（包括**情境进行补齐**，用规则补全的方法对情境进行区分，从而避免情境补全导致的非预期状态的发生），例如R21与R22育儿室清洁模式开启后，久久没关闭，那么是否会出现是用户忘记关闭清洁模式，设定对应的规则避免这种情况，补全规则时只能复用已有的设备，而不能定义新的设备，如果设备实在不支持情境补齐，例如这里的车库自动关门模式没法通过定义打开，则采用保底规则：触发器是变成充电状态10分钟后，条件是车库门不允许自动关闭，动作是通知用户改变“车库门自动关闭许可”，然后图关联算法和非预期转换图生成要重新执行
-    - [ ] 迭代以上两步流程直到所有的情境被查出且都有规则进行详细区分
+  - [X] 非预期状态转换图迭代算法
+    - [X] 实例生成（寻找会产生非预期状态的情境实例）：相同的规则关联不一定会导致非预期状态，一些非预期结果仅仅实在特殊情况下发生，需要AI根据图与非预期结果处理策略生成仍旧存在的异常状态实例
+    - [X] 规则补全（包括**情境进行补齐**，用规则补全的方法对情境进行区分，从而避免情境补全导致的非预期状态的发生），例如R21与R22育儿室清洁模式开启后，久久没关闭，那么是否会出现是用户忘记关闭清洁模式，设定对应的规则避免这种情况，补全规则时只能复用已有的设备，而不能定义新的设备，如果设备实在不支持情境补齐，例如这里的车库自动关门模式没法通过定义打开，则采用保底规则：触发器是变成充电状态10分钟后，条件是车库门不允许自动关闭，动作是通知用户改变“车库门自动关闭许可”，然后图关联算法和非预期转换图生成要重新执行
+    - [X] 迭代以上两步流程直到所有的情境被查出且都有规则进行详细区分
   - [X] 规则补全不能够保证非预期状态不再出现，还是要搭配非预期状态处理策略，即预期状态处理策略生成算法（家庭环境上下文+产生关联的规则事件上下文+模板+AI判断），处理策略也有个保底：通知用户默认执行某个操作
   - [X] 图游走算法
 - [X] 规则关联边定义与非预期状态实例设计（8+8）
@@ -42,9 +42,9 @@
   - [X] 条件（使允许/使禁用）（直接/间接） $\rightarrow 2\times 2=4$
   - [X] 执行动作（直接/间接）$\rightarrow 2$
 - [ ] 实验与优化（反哺设计）
-  - [ ] 之前定义的判断标准是：规则交互/冲突类型是否检测到，但是不同方案设计并不相同，因此结果展示效果不好
+  - [ ] 之前定义的判断标准是：规则关联/非预期结果类型是否检测到，但是不同方案设计并不相同，因此结果展示效果不好
 - [ ] 其他实验比对
-  - [ ] 检测结果（设计的冲突是否检测出来）
+  - [ ] 检测结果（设计的非预期结果是否检测出来）
   - [ ] 应对效果
   - [ ] 性能
 
@@ -145,7 +145,7 @@ $$
 - $\mathcal{C}$：物理通道（channel）的有限集合；
 - $\mathcal{E}$：实体（entity）的有限集合;
   - 对于每个实体 $e \in \mathcal{E}$，定义其状态域为：$\mathcal{V}_e$，例如：
-    - 开关类实体：$\mathcal{V}_e = \{\texttt{on}, \texttt{off}\}$；
+    - 开关类实体：$\mathcal{V}_e = \{\texttt{on}, \texttt{off}\}$；=
     - 数值类实体：$\mathcal{V}_e \subseteq \mathbb{R}$。
 - $\mathcal{E}_a \subseteq \mathcal{E}$：可执行动作的实体集合；
 - $\mathcal{E}_s \subseteq \mathcal{E}$：可观测实体集合。
@@ -310,7 +310,7 @@ Action 不是谓词，而是状态变换。
 
 ##### 环境摘要
 
-> 为了后续定义规则交互公式，我们还需要把环境引用与环境效应统一映射成可比较的“摘要”。
+> 为了后续定义规则关联判定公式，我们还需要把环境引用与环境效应统一映射成可比较的“摘要”。
 
 - 环境引用摘要（来自 Trigger / Condition 对环境的依赖）
 
@@ -960,13 +960,57 @@ Output:
 - 相同的规则关联不一定总会导致非预期状态；
 - 非预期状态往往只在**特殊情境**下发生，例如：
   - 时间边界；
-  - 模式长期未恢复；
+  - 模式或权限位长期未恢复；
   - 虚拟状态与现实情境不再一致；
   - 缺少恢复规则或退出规则；
+  - 安全边界或用户偏好不明确，需要向用户确认；
 - 因此系统不能只看“关联是否存在”，还要继续问：
-  - 该关联在什么情况下是正常的？
-  - 在什么情况下会变成危险的？
+  - 该关联在什么情况下是符合预期的？
+  - 在什么情况下会诱导非预期结果？
   - 当前规则是否已经足够区分这两类情境？
+
+##### 情境定义
+
+对于规则关联候选 $q$，情境不是全局状态组合的穷举，而是与 $q$ 相关、且可能改变该关联结果解释的一组判别性上下文谓词。定义为：
+
+$$
+s=\langle q,\Phi_s,O_s\rangle
+$$
+
+其中：
+
+- $q$：待分析的规则关联候选；
+- $\Phi_s$：情境谓词集合，包括实体状态、环境状态、时间约束、持续时间、事件顺序等；
+- $O_s$：该情境下由规则关联诱导的结果，例如某个实体后态或非预期状态转换。
+
+情境标签 $L_s\in\{\text{符合预期},\text{非预期},\text{待确认}\}$ 由 AI 判断或用户确认得到，但不作为情境本身的必要组成部分。
+
+情境谓词必须与 $q$ 相关，至少满足以下之一：
+
+- 涉及 $q$ 中源规则或目标规则的触发器、条件或执行动作实体；
+- 涉及 $q$ 关联路径上的环境参数；
+- 涉及终点非预期结果相关的实体；
+- 涉及上述实体或环境参数的时间、持续时间或事件顺序。
+
+与 $q$ 无关的谓词应删除，例如卧室灯是否开启通常不应进入“清洁模式关闭童锁、温度升高开启儿童房窗户”这一规则关联候选的情境谓词。
+
+##### 情境关系
+
+- **情境等价**：两个情境对应同一 $q$，规范化后的相关谓词集合相同，且结果 $O_s$ 相同，则视为同一情境；标签不参与等价判定。
+- **情境包含**：若两个情境对应同一 $q$ 和相同结果，且一个情境的相关谓词集合严格包含另一个，则二者是泛化与细化关系，不直接合并；只有额外谓词与 $q$ 无关时，删除后才可合并。
+- **情境待确认**：若 AI 无法仅凭规则、设备、常态配置判断某个边界是否符合用户预期，则以自然语言诘问用户，而不是在定义中预设优先级。
+
+##### 情境细化停止标准
+
+情境细化不是遍历所有相关谓词的所有状态，而是搜索**判别性谓词**。只有当新增谓词可能改变以下任一结果时，才继续细化：
+
+- 是否符合预期；
+- 是否诱导非预期状态转换；
+- 是否需要规则补全或规则修改；
+- 是否需要用户确认；
+- 是否需要运行时处理策略。
+
+若新增谓词与当前规则关联无关、现有设备不可观测，或只是对已有情境作同标签细化且不改变处理方式，则停止继续细化。
 
 算法流程如下：
 
@@ -1038,17 +1082,17 @@ Output:
 
 策略模板示意如下：
 
-| 编号 | 策略名 | 含义 |
-|---:|---|---|
-| 0 | `default` | 默认执行，不干预 |
-| 1 | `only_first_triggered` | 只执行先触发规则，阻止后触发规则 |
-| 2 | `only_later_triggered` | 只执行后触发规则，补偿先触发规则 |
-| 3 | `force_lexicographic_first` | 强制保留规则 ID 字典序较小的规则 |
-| 4 | `force_lexicographic_second` | 强制保留规则 ID 字典序较大的规则 |
-| 5 | `both_end_with_lexicographic_second` | 两条规则都执行，但以后者状态为准 |
-| 6 | `both_end_with_lexicographic_first` | 两条规则都执行，但以前者状态为准 |
-| 7 | `cancel_both` | 取消两条规则执行 |
-| 8 | `decided_by_user` | 由用户确认后执行 |
+| 编号 | 策略名                                 | 含义                             |
+| ---: | -------------------------------------- | -------------------------------- |
+|    0 | `default`                            | 默认执行，不干预                 |
+|    1 | `only_first_triggered`               | 只执行先触发规则，阻止后触发规则 |
+|    2 | `only_later_triggered`               | 只执行后触发规则，补偿先触发规则 |
+|    3 | `force_lexicographic_first`          | 强制保留规则 ID 字典序较小的规则 |
+|    4 | `force_lexicographic_second`         | 强制保留规则 ID 字典序较大的规则 |
+|    5 | `both_end_with_lexicographic_second` | 两条规则都执行，但以后者状态为准 |
+|    6 | `both_end_with_lexicographic_first`  | 两条规则都执行，但以前者状态为准 |
+|    7 | `cancel_both`                        | 取消两条规则执行                 |
+|    8 | `decided_by_user`                    | 由用户确认后执行                 |
 
 算法流程如下：
 
@@ -1515,47 +1559,47 @@ Output:
 
 ##### 物理设备
 
-| 实体 ID                       | Zone       | 类型                | 主要作用 / 通道关系                             |
-| ----------------------------- | ---------- | ------------------- | ----------------------------------------------- |
-| `front_door_lock`           | Entry      | actuator+observable | 门锁，状态可观测                                |
-| `porch_light`               | Entry      | actuator            | 开启后提高 Entry 的 `light`                   |
-| `driveway_camera_prerecord` | Entry      | actuator            | 摄像机预录制开关                                |
-| `entry_illuminance_sensor`  | Entry      | sensor              | 观测 Entry 的 `light`                         |
-| `entry_motion_sensor`       | Entry      | sensor              | 运动检测                                        |
-| `accent_light`              | Entry      | actuator            | 开启后提高 Entry 的 `light`                   |
-| `package_pickup_mode`       | Entry      | actuator            | 取件提示灯                                      |
-| `side_gate_lock`            | Entry      | actuator+observable | 侧门门锁，安全敏感                              |
-| `tv_power`                  | LivingRoom | actuator+observable | 电视开关                                        |
-| `livingroom_curtains`       | LivingRoom | actuator+observable | 窗帘开合                                        |
-| `livingroom_ceiling_light`  | LivingRoom | actuator            | 灯光                                            |
-| `livingroom_main_light`     | LivingRoom | actuator            | 主灯                                            |
-| `livingroom_temp_sensor`    | LivingRoom | sensor              | 观测 LivingRoom 的 `temperature`              |
-| `livingroom_heater`         | LivingRoom | actuator            | 开启后提高 LivingRoom 的 `temperature`        |
-| `livingroom_ac`             | LivingRoom | actuator            | 开启后降低 LivingRoom 的 `temperature`        |
-| `projector_power`           | Bedroom    | actuator+observable | 投影仪开关                                      |
-| `projector_screen`          | Bedroom    | actuator            | 投影幕布                                        |
-| `bedroom_curtains`          | Bedroom    | actuator+observable | 主卧窗帘                                        |
-| `bedroom_temp_sensor`       | Bedroom    | sensor              | 观测 Bedroom 的 `temperature`                 |
-| `bedroom_heater`            | Bedroom    | actuator            | 开启后提高 Bedroom 的 `temperature`           |
-| `bedroom_window`            | Bedroom    | actuator+observable | 主卧窗户，安全敏感                              |
-| `nursery_humidity_sensor`   | Nursery    | sensor              | 观测 Nursery 的 `humidity`                    |
-| `nursery_humidifier`        | Nursery    | actuator            | 开启后提高 Nursery 的 `humidity`              |
-| `nursery_exhaust_fan`       | Nursery    | actuator            | 开启后降低 Nursery 的 `humidity`              |
-| `nursery_temp_sensor`       | Nursery    | sensor              | 观测 Nursery 的 `temperature`                 |
-| `nursery_heater`            | Nursery    | actuator            | 开启后提高 Nursery 的 `temperature`           |
-| `nursery_window_latch`      | Nursery    | actuator+ovservable | 是否允许儿童房窗户被开启，儿童房窗锁/窗扣       |
-| `nursery_window`            | Nursery    | actuator+observable | 儿童房窗户，安全敏感                            |
-| `greenhouse_temp_sensor`    | Greenhouse | sensor              | 观测 Greenhouse 的 `temperature`              |
-| `greenhouse_heater`         | Greenhouse | actuator            | 开启后提高 Greenhouse 的 `temperature`        |
-| `nutrient_valve`            | Greenhouse | actuator            | 营养液阀门                                      |
-| `garage_door`               | Garage     | actuator+observable | 车库门，安全敏感                                |
-| `garage_motion_sensor`      | Garage     | sensor              | 车库内运动传感器                                |
-| `kitchen_smoke_sensor`      | Kitchen    | sensor              | 厨房烟雾检测                                    |
-| `stove_runaway_sensor`      | Kitchen    | sensor              | 灶具失控告警                                    |
-| `sprinkler_pump`            | Utility    | actuator            | 开启后提高全屋消防支路 `water_flow`           |
-| `utility_water_flow_sensor` | Utility    | sensor              | 观测 Utility 的 `water_flow`                  |
-| `main_water_valve`          | Utility    | actuator+observable | 主水阀，安全敏感；关闭后降低全屋 `water_flow` |
-| `basement_leak_sensor`      | Utility    | sensor              | 杂物间漏水检测                                  |
+| 实体 ID                       | Zone       | 类型                | 主要作用 / 通道关系                            |
+| ----------------------------- | ---------- | ------------------- | ---------------------------------------------- |
+| `front_door_lock`           | Entry      | actuator+observable | 门锁，状态可观测                               |
+| `porch_light`               | Entry      | actuator            | 开启后提高 Entry 的`light`                   |
+| `driveway_camera_prerecord` | Entry      | actuator            | 摄像机预录制开关                               |
+| `entry_illuminance_sensor`  | Entry      | sensor              | 观测 Entry 的`light`                         |
+| `entry_motion_sensor`       | Entry      | sensor              | 运动检测                                       |
+| `accent_light`              | Entry      | actuator            | 开启后提高 Entry 的`light`                   |
+| `package_pickup_mode`       | Entry      | actuator            | 取件提示灯                                     |
+| `side_gate_lock`            | Entry      | actuator+observable | 侧门门锁，安全敏感                             |
+| `tv_power`                  | LivingRoom | actuator+observable | 电视开关                                       |
+| `livingroom_curtains`       | LivingRoom | actuator+observable | 窗帘开合                                       |
+| `livingroom_ceiling_light`  | LivingRoom | actuator            | 灯光                                           |
+| `livingroom_main_light`     | LivingRoom | actuator            | 主灯                                           |
+| `livingroom_temp_sensor`    | LivingRoom | sensor              | 观测 LivingRoom 的`temperature`              |
+| `livingroom_heater`         | LivingRoom | actuator            | 开启后提高 LivingRoom 的`temperature`        |
+| `livingroom_ac`             | LivingRoom | actuator            | 开启后降低 LivingRoom 的`temperature`        |
+| `projector_power`           | Bedroom    | actuator+observable | 投影仪开关                                     |
+| `projector_screen`          | Bedroom    | actuator            | 投影幕布                                       |
+| `bedroom_curtains`          | Bedroom    | actuator+observable | 主卧窗帘                                       |
+| `bedroom_temp_sensor`       | Bedroom    | sensor              | 观测 Bedroom 的`temperature`                 |
+| `bedroom_heater`            | Bedroom    | actuator            | 开启后提高 Bedroom 的`temperature`           |
+| `bedroom_window`            | Bedroom    | actuator+observable | 主卧窗户，安全敏感                             |
+| `nursery_humidity_sensor`   | Nursery    | sensor              | 观测 Nursery 的`humidity`                    |
+| `nursery_humidifier`        | Nursery    | actuator            | 开启后提高 Nursery 的`humidity`              |
+| `nursery_exhaust_fan`       | Nursery    | actuator            | 开启后降低 Nursery 的`humidity`              |
+| `nursery_temp_sensor`       | Nursery    | sensor              | 观测 Nursery 的`temperature`                 |
+| `nursery_heater`            | Nursery    | actuator            | 开启后提高 Nursery 的`temperature`           |
+| `nursery_window_latch`      | Nursery    | actuator+ovservable | 是否允许儿童房窗户被开启，儿童房窗锁/窗扣      |
+| `nursery_window`            | Nursery    | actuator+observable | 儿童房窗户，安全敏感                           |
+| `greenhouse_temp_sensor`    | Greenhouse | sensor              | 观测 Greenhouse 的`temperature`              |
+| `greenhouse_heater`         | Greenhouse | actuator            | 开启后提高 Greenhouse 的`temperature`        |
+| `nutrient_valve`            | Greenhouse | actuator            | 营养液阀门                                     |
+| `garage_door`               | Garage     | actuator+observable | 车库门，安全敏感                               |
+| `garage_motion_sensor`      | Garage     | sensor              | 车库内运动传感器                               |
+| `kitchen_smoke_sensor`      | Kitchen    | sensor              | 厨房烟雾检测                                   |
+| `stove_runaway_sensor`      | Kitchen    | sensor              | 灶具失控告警                                   |
+| `sprinkler_pump`            | Utility    | actuator            | 开启后提高全屋消防支路`water_flow`           |
+| `utility_water_flow_sensor` | Utility    | sensor              | 观测 Utility 的`water_flow`                  |
+| `main_water_valve`          | Utility    | actuator+observable | 主水阀，安全敏感；关闭后降低全屋`water_flow` |
+| `basement_leak_sensor`      | Utility    | sensor              | 杂物间漏水检测                                 |
 
 ##### 逻辑辅助设备
 
@@ -1584,40 +1628,40 @@ Output:
 
 ### 自动化规则列表
 
-| 规则          | Trigger                                  | Condition                                                    | Action                                  | 设计目的                                                                          |
-| ------------- | ---------------------------------------- | ------------------------------------------------------------ | --------------------------------------- | --------------------------------------------------------------------------------- |
-| **R01** | `front_door_lock: locked -> unlocked`  | 夜间                                                         | `porch_light = on`                    | 与 R02 构成**直接触发**                                                     |
-| R02           | `porch_light: off -> on`               | 无                                                           | `driveway_camera_prerecord = on`      | 普通直接触发                                                                      |
-| R03           | `nursery_humidity < 40%`               | `nursery_humidifier = off`                                 | `nursery_humidifier = on`             | 与 R04 构成**间接触发**                                                     |
-| R04           | `nursery_humidity > 60%`               | 无                                                           | `nursery_exhaust_fan = on`            | 普通间接触发                                                                      |
-| R05           | `movie_mode_button pressed`            | 无                                                           | `livingroom_curtains = closed`        | 与 R06 构成**直接条件允许**                                                 |
-| R06           | `tv_power: off -> on`                  | `livingroom_curtains = closed`                             | `livingroom_ceiling_light = dim(20%)` | 普通 direct condition allow                                                       |
-| R07           | `wake_scene_switch = on`               | 无                                                           | `bedroom_curtains = open`             | 与 R08 构成**直接条件禁用**                                                 |
-| R08           | `projector_power: off -> on`           | `bedroom_curtains = closed`                                | `projector_screen = down`             | 普通 direct condition disable                                                     |
-| R09           | `greenhouse_temp < 18°C`              | `greenhouse_heater = off`                                  | `greenhouse_heater = on`              | 与 R10 构成**间接条件允许**                                                 |
-| R10           | `irrigation_timer fired`               | `greenhouse_temp > 18°C`                                  | `nutrient_valve = open`               | 普通 indirect condition allow                                                     |
-| **R11** | `front_door_lock: locked -> unlocked`  | 无                                                           | `porch_light = on`                    | 与 R12 构成**间接条件禁用**                                                 |
-| R12           | `entry_motion_sensor detected`         | `entry_illuminance_sensor < 30 lux`                        | `accent_light = on`                   | 普通 indirect condition disable                                                   |
-| R13           | `away_mode_switch = on`                | 无                                                           | `livingroom_main_light = off`         | 与 R14 构成**直接动作关联**                                                 |
-| R14           | `tv_power: off -> on`                  | 无                                                           | `livingroom_main_light = on`          | 普通 direct action                                                                |
-| R15           | `livingroom_temp < 20°C`              | `livingroom_heater = off`                                  | `livingroom_heater = on`              | 与 R16 构成**间接动作关联**                                                 |
-| R16           | `livingroom_temp > 28°C`              | `livingroom_ac = off`                                      | `livingroom_ac = on`                  | 普通 indirect action                                                              |
-| R17           | `away_mode_switch = on`                | 无                                                           | `package_pickup_mode = off`           | 与 R18 构成**直接触发型安全冲突**                                           |
-| R18           | `package_pickup_mode: on -> off`       | 无                                                           | `side_gate_lock = unlocked`           | 目标非预期：侧门解锁                                                              |
-| R19           | `kitchen_smoke_sensor triggered`       | 无                                                           | `sprinkler_pump = on`                 | 与 R20 构成**间接触发型安全冲突**                                           |
-| R20           | `utility_water_flow_sensor > 20 L/min` | 无                                                           | `main_water_valve = off`              | 目标非预期：消防时主水阀关闭                                                      |
-| R21           | `cleaning_mode_switch = on`            | 无                                                           | `nursery_window_latch = on`           | 清洁时允许临时童锁关闭，可以手动开窗，与 R22 构成**直接条件允许型安全冲突** |
-| R22           | `nursery_temp >= 30°C`                | `nursery_window_latch = on`                                | `nursery_window = open`               | 目标非预期：儿童房窗户打开                                                        |
-| **R23** | `ev_charger_status: off -> on`         | 无                                                           | `garage_auto_close_enabled = off`     | 不希望被意外锁住，与 R24 构成**直接条件禁用型安全冲突**                     |
-| **R24** | `23:00 reached`                        | `garage_auto_close_enabled = on` 且 `garage_door = open` | `garage_door = closed`                | 条件被禁用后，车库门无法自动关上                                                  |
-| R25           | `nursery_temp < 22°C`                 | `nursery_heater = off`                                     | `nursery_heater = on`                 | 与 R26 构成**间接条件允许型安全冲突**                                       |
-| R26           | `fresh_air_button pressed`             | `nursery_temp > 29°C`                                     | `nursery_window = open`               | 目标非预期：儿童房窗户打开                                                        |
-| R27           | `bedroom_temp < 20°C`                 | `bedroom_heater = off`                                     | `bedroom_heater = on`                 | 与 R28 构成**间接条件禁用型安全冲突**                                       |
-| R28           | `22:30 reached`                        | `bedroom_window = open` 且 `bedroom_temp < 26°C`        | `bedroom_window = closed`             | 条件被禁用后，主卧窗户无法自动关闭                                                |
-| R29           | `security_bedtime_switch = on`         | 无                                                           | `nursery_window = closed`             | 与 R30 构成**直接动作型安全冲突**                                           |
-| R30           | `nursery_temp >= 31°C`                | 无                                                           | `nursery_window = open`               | 目标非预期：儿童房窗户打开                                                        |
-| R31           | `basement_leak_sensor triggered`       | 无                                                           | `main_water_valve = off`              | 与 R32 构成**间接动作型安全冲突**                                           |
-| R32           | `stove_runaway_sensor triggered`       | 无                                                           | `sprinkler_pump = on`                 | 目标风险：灭火需要水，但 R31 会切断水流                                           |
+| 规则          | Trigger                                  | Condition                                                    | Action                                  | 设计目的                                                                                |
+| ------------- | ---------------------------------------- | ------------------------------------------------------------ | --------------------------------------- | --------------------------------------------------------------------------------------- |
+| **R01** | `front_door_lock: locked -> unlocked`  | 夜间                                                         | `porch_light = on`                    | 与 R02 构成**直接触发**                                                           |
+| R02           | `porch_light: off -> on`               | 无                                                           | `driveway_camera_prerecord = on`      | 普通直接触发                                                                            |
+| R03           | `nursery_humidity < 40%`               | `nursery_humidifier = off`                                 | `nursery_humidifier = on`             | 与 R04 构成**间接触发**                                                           |
+| R04           | `nursery_humidity > 60%`               | 无                                                           | `nursery_exhaust_fan = on`            | 普通间接触发                                                                            |
+| R05           | `movie_mode_button pressed`            | 无                                                           | `livingroom_curtains = closed`        | 与 R06 构成**直接条件允许**                                                       |
+| R06           | `tv_power: off -> on`                  | `livingroom_curtains = closed`                             | `livingroom_ceiling_light = dim(20%)` | 普通 direct condition allow                                                             |
+| R07           | `wake_scene_switch = on`               | 无                                                           | `bedroom_curtains = open`             | 与 R08 构成**直接条件禁用**                                                       |
+| R08           | `projector_power: off -> on`           | `bedroom_curtains = closed`                                | `projector_screen = down`             | 普通 direct condition disable                                                           |
+| R09           | `greenhouse_temp < 18°C`              | `greenhouse_heater = off`                                  | `greenhouse_heater = on`              | 与 R10 构成**间接条件允许**                                                       |
+| R10           | `irrigation_timer fired`               | `greenhouse_temp > 18°C`                                  | `nutrient_valve = open`               | 普通 indirect condition allow                                                           |
+| **R11** | `front_door_lock: locked -> unlocked`  | 无                                                           | `porch_light = on`                    | 与 R12 构成**间接条件禁用**                                                       |
+| R12           | `entry_motion_sensor detected`         | `entry_illuminance_sensor < 30 lux`                        | `accent_light = on`                   | 普通 indirect condition disable                                                         |
+| R13           | `away_mode_switch = on`                | 无                                                           | `livingroom_main_light = off`         | 与 R14 构成**直接动作关联**                                                       |
+| R14           | `tv_power: off -> on`                  | 无                                                           | `livingroom_main_light = on`          | 普通 direct action                                                                      |
+| R15           | `livingroom_temp < 20°C`              | `livingroom_heater = off`                                  | `livingroom_heater = on`              | 与 R16 构成**间接动作关联**                                                       |
+| R16           | `livingroom_temp > 28°C`              | `livingroom_ac = off`                                      | `livingroom_ac = on`                  | 普通 indirect action                                                                    |
+| R17           | `away_mode_switch = on`                | 无                                                           | `package_pickup_mode = off`           | 与 R18 构成**直接触发型安全非预期结果**                                           |
+| R18           | `package_pickup_mode: on -> off`       | 无                                                           | `side_gate_lock = unlocked`           | 目标非预期：侧门解锁                                                                    |
+| R19           | `kitchen_smoke_sensor triggered`       | 无                                                           | `sprinkler_pump = on`                 | 与 R20 构成**间接触发型安全非预期结果**                                           |
+| R20           | `utility_water_flow_sensor > 20 L/min` | 无                                                           | `main_water_valve = off`              | 目标非预期：消防时主水阀关闭                                                            |
+| R21           | `cleaning_mode_switch = on`            | 无                                                           | `nursery_window_latch = on`           | 清洁时允许临时童锁关闭，可以手动开窗，与 R22 构成**直接条件允许型安全非预期结果** |
+| R22           | `nursery_temp >= 30°C`                | `nursery_window_latch = on`                                | `nursery_window = open`               | 目标非预期：儿童房窗户打开                                                              |
+| **R23** | `ev_charger_status: off -> on`         | 无                                                           | `garage_auto_close_enabled = off`     | 不希望被意外锁住，与 R24 构成**直接条件禁用型安全非预期结果**                     |
+| **R24** | `23:00 reached`                        | `garage_auto_close_enabled = on` 且 `garage_door = open` | `garage_door = closed`                | 条件被禁用后，车库门无法自动关上                                                        |
+| R25           | `nursery_temp < 22°C`                 | `nursery_heater = off`                                     | `nursery_heater = on`                 | 与 R26 构成**间接条件允许型安全非预期结果**                                       |
+| R26           | `fresh_air_button pressed`             | `nursery_temp > 29°C`                                     | `nursery_window = open`               | 目标非预期：儿童房窗户打开                                                              |
+| R27           | `bedroom_temp < 20°C`                 | `bedroom_heater = off`                                     | `bedroom_heater = on`                 | 与 R28 构成**间接条件禁用型安全非预期结果**                                       |
+| R28           | `22:30 reached`                        | `bedroom_window = open` 且 `bedroom_temp < 26°C`        | `bedroom_window = closed`             | 条件被禁用后，主卧窗户无法自动关闭                                                      |
+| R29           | `security_bedtime_switch = on`         | 无                                                           | `nursery_window = closed`             | 与 R30 构成**直接动作型安全非预期结果**                                           |
+| R30           | `nursery_temp >= 31°C`                | 无                                                           | `nursery_window = open`               | 目标非预期：儿童房窗户打开                                                              |
+| R31           | `basement_leak_sensor triggered`       | 无                                                           | `main_water_valve = off`              | 与 R32 构成**间接动作型安全非预期结果**                                           |
+| R32           | `stove_runaway_sensor triggered`       | 无                                                           | `sprinkler_pump = on`                 | 目标风险：灭火需要水，但 R31 会切断水流                                                 |
 
 #### 规则关联实例
 
@@ -1629,44 +1673,43 @@ Output:
 | 直接条件禁用 | **R07 -> R08** | `R07` 打开窗帘，使 `R08` 的条件“窗帘已关闭”失效                     | 只是阻止投影场景，不危险       |
 | 间接条件允许 | **R09 -> R10** | `R09` 升高温室温度，使 `R10` 的条件“温度 > 18°C”成立               | 灌溉与温室保温联动，合理       |
 | 间接条件禁用 | **R11 -> R12** | `R11` 打开门厅灯，提高 `Entry.light`，使 `R12` 的“低照度”条件失效 | 只是减少重复开灯               |
-| 直接动作     | **R13 ↔ R14** | 两条规则对 `livingroom_main_light` 执行相反动作                         | 普通设备竞争，不是安全问题     |
-| 间接动作     | **R15 ↔ R16** | 地暖和空调分别提高/降低 `LivingRoom.temperature`                        | 舒适性上的温控竞争             |
+| 直接动作     | **R13 ↔ R14** | 两条规则对`livingroom_main_light` 执行相反动作                          | 普通设备竞争，不是安全问题     |
+| 间接动作     | **R15 ↔ R16** | 地暖和空调分别提高/降低`LivingRoom.temperature`                         | 舒适性上的温控竞争             |
 
 #### 规则关联导致的非预期状态实例
 
 ##### 触发类（2个）
 
-| 类别     | 冲突实例             | 路径                                         | 非预期状态                    | 安全影响                                                                |
+| 类别     | 非预期结果实例       | 路径                                         | 非预期状态                    | 安全影响                                                                |
 | -------- | -------------------- | -------------------------------------------- | ----------------------------- | ----------------------------------------------------------------------- |
 | 直接触发 | **R17 -> R18** | `package_pickup_mode off` 直接触发 `R18` | `side_gate_lock = unlocked` | 外出模式下关闭取件模式，但是快递取件从on变为off被设定为去取快递自动开门 |
 | 间接触发 | **R19 -> R20** | `R19:A -> water_flow↑ -> R20:T`           | `main_water_valve = off`    | 厨房烟雾触发喷淋后，漏水保护误以为异常用水，切断消防供水                |
 
 ##### 条件类（4个）
 
-| 类别         | 冲突实例               | 机制                                                                        | 非预期状态                        | 安全影响                                      |
-| ------------ | ---------------------- | --------------------------------------------------------------------------- | --------------------------------- | --------------------------------------------- |
-| 直接条件允许 | **R21 -> R22**   | `R21` 解锁窗扣，使 `R22` 的条件成立                                     | `nursery_window = open`         | 高温时儿童房窗户被自动打开，存在坠落/入侵风险 |
-| 直接条件禁用 | **R23 -/-> R24** | `R23` 将 `garage_auto_close_enabled = off`，使 `R24` 条件失效         | `garage_door` 夜间保持 `open` | 车库门无法在 23:00 自动关闭，存在入侵风险     |
-| 间接条件允许 | **R25 -> R26**   | `R25` 提高 `Nursery.temperature`，使 `R26` 条件 `temp > 29°C` 成立 | `nursery_window = open`         | 儿童房因为加热而被误触发开窗                  |
-| 间接条件禁用 | **R27 -/-> R28** | `R27` 提高 `Bedroom.temperature`，使 `R28` 条件 `temp < 26°C` 失效 | `bedroom_window` 保持 `open`  | 主卧夜间本应自动关窗，却因加热导致规则失效    |
-
-> 注：其中“条件禁用型”本质上是**保护性关闭规则未执行**，从而导致异常状态持续存在。这类实例非常适合作为后续“运行时图游走验证”的重点。
+| 类别         | 非预期结果实例         | 机制                                                                        | 非预期状态                        | 安全影响                                            |
+| ------------ | ---------------------- | --------------------------------------------------------------------------- | --------------------------------- | --------------------------------------------------- |
+| 直接条件允许 | **R21 -> R22**   | `R21` 解锁窗扣，使 `R22` 的条件成立                                     | `nursery_window = open`         | 清洁时高温时儿童房窗户被自动打开，存在坠落/入侵风险 |
+| 直接条件禁用 | **R23 -/-> R24** | `R23` 将 `garage_auto_close_enabled = off`，使 `R24` 条件失效         | `garage_door` 夜间保持 `open` | 车库门无法在 23:00 自动关闭，存在入侵风险           |
+| 间接条件允许 | **R25 -> R26**   | `R25` 提高 `Nursery.temperature`，使 `R26` 条件 `temp > 29°C` 成立 | `nursery_window = open`         | 儿童房因为加热而被误触发开窗                        |
+| 间接条件禁用 | **R27 -/-> R28** | `R27` 提高 `Bedroom.temperature`，使 `R28` 条件 `temp < 26°C` 失效 | `bedroom_window` 保持 `open`  | 主卧夜间本应自动关窗，却因加热导致规则失效          |
 
 ##### 动作类（2个）
 
-| 类别     | 冲突实例             | 路径/关系                                                | 非预期状态                                        | 安全影响                                   |
-| -------- | -------------------- | -------------------------------------------------------- | ------------------------------------------------- | ------------------------------------------ |
-| 直接动作 | **R29 ↔ R30** | 两条规则都直接控制 `nursery_window`，一个关、一个开    | 若 `R30` 最终生效，则 `nursery_window = open` | 安防就寝后儿童房窗户又被打开               |
-| 间接动作 | **R31 ↔ R32** | `R31` 令 `water_flow↓`，`R32` 令 `water_flow↑` | `main_water_valve = off` 且消防水流不足         | 漏水保护与灭火喷淋在同一供水通道上互相对抗 |
+| 类别     | 非预期结果实例       | 路径/关系                                                | 非预期状态                                       | 安全影响                                   |
+| -------- | -------------------- | -------------------------------------------------------- | ------------------------------------------------ | ------------------------------------------ |
+| 直接动作 | **R29 ↔ R30** | 两条规则都直接控制`nursery_window`，一个关、一个开     | 若`R30` 最终生效，则 `nursery_window = open` | 安防就寝后儿童房窗户又被打开               |
+| 间接动作 | **R31 ↔ R32** | `R31` 令 `water_flow↓`，`R32` 令 `water_flow↑` | `main_water_valve = off` 且消防水流不足        | 漏水保护与灭火喷淋在同一供水通道上互相对抗 |
 
 ### 新问题发现：
 
 1. 无法和解的安全问题：相同的规则关联不一定会导致非预期状态，一些非预期结果仅仅实在特殊情况下发生
 
 - 例如R23与R24，用户如果在22:59回车库，那么R23成功阻止了R24的执行，避免伤害车与人，但是如果实在其他时间，则可能会导致R24未执行，车库门没有关闭（预期之外）
-- 【解决方案】找到非预期状态边界（实例生成），然后进行规则补丁与冲突处理策略迭代
+- 【解决方案】找到非预期状态边界（实例生成），然后进行规则补丁与非预期结果处理策略迭代
 - Agent主动检查非预期状态转移图，进行非预期状态实例生成
 
 3. 现实情况与虚拟映射不对应是新的问题
 
 - 本工作考虑的情况为现实情况与虚拟映射的情况，为了更好地工作，因此会对情境进行补齐，例如育儿室清洁模式开启后，久久没关闭，那么是否会出现是用户忘记关闭清洁模式
+- 可以使用SMT辅助

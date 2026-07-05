@@ -51,6 +51,59 @@ from common import (
 )
 
 
+DEFAULT_RESOLUTION_RULES_PROMPT = r"""
+You are the scenario-aware runtime resolution-policy generation module of HomeAgent.
+
+Task:
+For ONE pairwise rule-association candidate, generate handling policies for the residual unexpected-state scenarios supplied by the iterative refinement step.
+
+Important principles:
+1. Do NOT rely on hard-coded entity-name words. Use only structured rules, association evidence, normal configuration, scenario predicates, and user-confirmation gaps.
+2. The same association may have multiple scenarios. Select a policy for each residual scenario when scenario_instances are supplied.
+3. If iterative refinement says a candidate is covered_with_rules and has no remaining gap, choose default and do not over-intervene.
+4. If a scenario label is needs_user_confirmation or safety boundary is ambiguous, prefer decided_by_user.
+5. Do not invent new strategies. Select strategy_id only from strategy_templates.
+6. Return strict JSON only.
+
+Output schema:
+{
+  "default_policy": {
+    "strategy_id": 0,
+    "strategy_name": "one strategy_name from strategy_templates",
+    "confidence": 0.0,
+    "reason": "brief reason",
+    "runtime_notes": "how to apply when no more specific scenario matches",
+    "needs_human_review": true
+  },
+  "scenario_policies": [
+    {
+      "scenario_id": "s1",
+      "label": "expected|unexpected|needs_user_confirmation",
+      "strategy_id": 0,
+      "strategy_name": "one strategy_name from strategy_templates",
+      "confidence": 0.0,
+      "reason": "brief reason grounded in scenario_predicates and unexpected_outcomes",
+      "runtime_notes": "how to apply for this scenario",
+      "needs_human_review": true
+    }
+  ]
+}
+""".strip()
+
+
+RESOLUTION_STRATEGY_TEMPLATES: List[Dict[str, Any]] = [
+    {"strategy_id": 0, "strategy_name": "default", "description": "Default execution without intervention.", "runtime_effect": "Let Home Assistant execute the rule normally."},
+    {"strategy_id": 1, "strategy_name": "only_first_triggered", "description": "Only execute the first-triggered rule and block the later rule.", "runtime_effect": "Stop the later rule when runtime evidence shows the association is active."},
+    {"strategy_id": 2, "strategy_name": "only_later_triggered", "description": "Only execute the later-triggered rule and compensate earlier effects if needed.", "runtime_effect": "Allow the later rule and cancel/restore earlier effects when possible."},
+    {"strategy_id": 3, "strategy_name": "force_lexicographic_first", "description": "Force the lexicographically smaller rule_uid to prevail.", "runtime_effect": "Preserve the lexicographic-first rule and block/compensate the other."},
+    {"strategy_id": 4, "strategy_name": "force_lexicographic_second", "description": "Force the lexicographically larger rule_uid to prevail.", "runtime_effect": "Preserve the lexicographic-second rule and block/compensate the other."},
+    {"strategy_id": 5, "strategy_name": "both_end_with_lexicographic_second", "description": "Allow both rules but end with the lexicographically larger rule's state.", "runtime_effect": "Re-run/restore the lexicographic-second rule after the other if needed."},
+    {"strategy_id": 6, "strategy_name": "both_end_with_lexicographic_first", "description": "Allow both rules but end with the lexicographically smaller rule's state.", "runtime_effect": "Re-run/restore the lexicographic-first rule after the other if needed."},
+    {"strategy_id": 7, "strategy_name": "cancel_both", "description": "Cancel both rules when neither action should proceed automatically.", "runtime_effect": "Stop current rule and compensate any already-executed associated action when possible."},
+    {"strategy_id": 8, "strategy_name": "decided_by_user", "description": "Ask the user before executing or compensating actions.", "runtime_effect": "Notify user with the scenario-specific question and execute only after confirmation."},
+]
+
+
 def stable_json(value: Any) -> str:
     return json.dumps(value, ensure_ascii=False, sort_keys=True, default=str)
 
@@ -252,7 +305,7 @@ ALLOWED_UPDATE_TYPES = {"rule_completion", "rule_modification"}
 def ensure_system_prompts(config: Dict[str, Any]) -> bool:
     changed = False
     prompts = config.setdefault("system_prompts", {})
-    if not prompts.get("resolution_rules"):
+    if not prompts.get("resolution_rules") or "scenario_policies" not in str(prompts.get("resolution_rules")):
         prompts["resolution_rules"] = DEFAULT_RESOLUTION_RULES_PROMPT
         changed = True
     return changed
@@ -372,6 +425,7 @@ def build_home_context(devices: Dict[str, Any], channels: Dict[str, Any], zones:
                     "role": channel.get("role"),
                     "observes": channel.get("observes", []),
                     "effects": channel.get("effects", []),
+                    "effects_by_rule": channel.get("effects_by_rule", {}),
                     "effects_by_operation": channel.get("effects_by_operation", {}),
                 },
                 "zone_binding": {
@@ -548,6 +602,7 @@ def build_all_entities_compact(home_context: Dict[str, Any]) -> List[Dict[str, A
                 "reachable_zones": (e.get("zone_binding") or {}).get("reachable_zones", []),
                 "observes": ((e.get("channel_binding") or {}).get("observes") or []),
                 "effects": ((e.get("channel_binding") or {}).get("effects") or []),
+                "effects_by_rule": ((e.get("channel_binding") or {}).get("effects_by_rule") or {}),
                 "effects_by_operation": ((e.get("channel_binding") or {}).get("effects_by_operation") or {}),
                 "normal_config": e.get("normal_config", {}),
             }
@@ -610,6 +665,8 @@ def compact_iteration_refinement_report(report: Optional[Dict[str, Any]]) -> Dic
         "remaining_context_gaps": report.get("remaining_context_gaps", []),
         "notify_fallbacks": report.get("notify_fallbacks", []),
         "iteration_count": report.get("iteration_count"),
+        "needs_human_review": report.get("needs_human_review"),
+        "reason": report.get("reason"),
     }
 
 
@@ -625,7 +682,7 @@ def normalize_strategy_id(value: Any) -> Optional[int]:
     return sid if sid in template_map() else None
 
 
-def normalize_ai_policy(ai_data: Any, fallback_strategy: int = 0) -> Dict[str, Any]:
+def normalize_single_policy(ai_data: Any, fallback_strategy: int = 0, source: str = "ai") -> Dict[str, Any]:
     templates = template_map()
     if not isinstance(ai_data, dict):
         ai_data = {}
@@ -648,8 +705,24 @@ def normalize_ai_policy(ai_data: Any, fallback_strategy: int = 0) -> Dict[str, A
         "runtime_notes": str(ai_data.get("runtime_notes") or template.get("runtime_effect") or ""),
         "needs_human_review": bool(ai_data.get("needs_human_review", False)) or confidence < 0.75,
         "template": template,
-        "source": "ai",
+        "source": source,
     }
+
+
+def normalize_ai_policy(ai_data: Any, fallback_strategy: int = 0) -> Dict[str, Any]:
+    if isinstance(ai_data, dict) and ("default_policy" in ai_data or "scenario_policies" in ai_data):
+        default_policy = normalize_single_policy(ai_data.get("default_policy"), fallback_strategy=fallback_strategy, source="ai")
+        scenario_policies = []
+        for item in listify(ai_data.get("scenario_policies", [])):
+            if not isinstance(item, dict):
+                continue
+            pol = normalize_single_policy(item, fallback_strategy=default_policy.get("strategy_id", fallback_strategy), source="ai")
+            pol["scenario_id"] = str(item.get("scenario_id") or "")
+            pol["label"] = str(item.get("label") or "")
+            scenario_policies.append(pol)
+        default_policy["scenario_policies"] = scenario_policies
+        return default_policy
+    return normalize_single_policy(ai_data, fallback_strategy=fallback_strategy, source="ai")
 
 
 def fallback_policy(reason: str, strategy_id: int = 0) -> Dict[str, Any]:
@@ -663,6 +736,7 @@ def fallback_policy(reason: str, strategy_id: int = 0) -> Dict[str, Any]:
         "needs_human_review": True,
         "template": template,
         "source": "fallback",
+        "scenario_policies": [],
     }
 
 
@@ -678,6 +752,8 @@ def build_runtime_payload(candidate: Dict[str, Any], source_rule: Dict[str, Any]
         "target_rule": compact_rule(target_rule),
         "association_candidate": candidate,
         "iterative_refinement_report": compact_iteration_refinement_report(refinement_report),
+        "scenario_instances": (refinement_report or {}).get("scenario_instances", []),
+        "residual_risks": (refinement_report or {}).get("remaining_context_gaps", []),
         "strategy_templates": RESOLUTION_STRATEGY_TEMPLATES,
         "constraints": {
             "select_exactly_one_strategy": True,
@@ -691,9 +767,25 @@ def iterative_report_map(plan: Optional[Dict[str, Any]]) -> Dict[str, Dict[str, 
     if not isinstance(plan, dict):
         return {}
     out: Dict[str, Dict[str, Any]] = {}
-    for item in plan.get("candidate_reports", []) or []:
+    for item in plan.get("final_candidate_reports", []) or plan.get("candidate_reports", []) or []:
         if isinstance(item, dict) and item.get("candidate_key"):
-            out[str(item["candidate_key"])] = item
+            out[str(item["candidate_key"])] = dict(item)
+    # Enrich with final scenario instances from each iteration. This is required
+    # because Step 6 stores scenarios separately from candidate_reports.
+    for it in plan.get("iterations", []) or []:
+        if not isinstance(it, dict):
+            continue
+        accepted_updates = it.get("accepted_updates", [])
+        for item in it.get("final_candidate_scenarios", []) or []:
+            if not isinstance(item, dict) or not item.get("candidate_key"):
+                continue
+            ckey = str(item["candidate_key"])
+            rec = out.setdefault(ckey, {"candidate_key": ckey})
+            rec["scenario_instances"] = item.get("scenario_instances", [])
+            rec["iteration_index"] = it.get("index")
+            rec["accepted_rule_updates"] = accepted_updates
+            if not rec.get("coverage_status"):
+                rec["coverage_status"] = (it.get("rule_update_plan") or {}).get("coverage_status")
     return out
 
 
@@ -718,6 +810,7 @@ def generate_policy_for_candidate(candidate: Dict[str, Any], refinement_report: 
             "needs_human_review": True,
             "template": template_map()[0],
             "source": "derived_from_iterative_refinement",
+            "scenario_policies": [],
         }
 
     if no_ai:
@@ -763,7 +856,9 @@ def build_runtime_resolution_rules(devices: Dict[str, Any], channels: Dict[str, 
             "iterative_refinement_used": bool(refinement),
             "coverage_status": (refinement or {}).get("coverage_status"),
             "remaining_context_gaps": (refinement or {}).get("remaining_context_gaps", []),
+            "scenario_instances": (refinement or {}).get("scenario_instances", []),
             "policy": policy,
+            "scenario_policies": policy.get("scenario_policies", []),
         }
 
     results: Dict[int, Dict[str, Any]] = {}

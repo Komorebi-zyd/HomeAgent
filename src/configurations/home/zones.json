@@ -1,0 +1,51 @@
+{
+  "schema_version": "1.0",
+  "generated_at": "2026-07-01T03:32:55.918162+00:00",
+  "method": "human_cli",
+  "zones": [
+    {
+      "zone_id": 0,
+      "name": "育儿室"
+    },
+    {
+      "zone_id": 1,
+      "name": "车库"
+    }
+  ],
+  "bindings": {
+    "input_boolean.nursery_window": {
+      "entity_id": "input_boolean.nursery_window",
+      "display_name": "nursery_window (input_boolean.nursery_window)",
+      "source_zones": [
+        "育儿室"
+      ],
+      "reachable_zones": [
+        "育儿室"
+      ],
+      "source_zone_ids": [
+        0
+      ],
+      "reachable_zone_ids": [
+        0
+      ],
+      "notes": "human_bound"
+    },
+    "input_number.nursery_temp_sensor": {
+      "entity_id": "input_number.nursery_temp_sensor",
+      "display_name": "nursery_temp_sensor (input_number.nursery_temp_sensor)",
+      "source_zones": [
+        "育儿室"
+      ],
+      "reachable_zones": [
+        "育儿室"
+      ],
+      "source_zone_ids": [
+        0
+      ],
+      "reachable_zone_ids": [
+        0
+      ],
+      "notes": "human_bound"
+    }
+  }
+}
